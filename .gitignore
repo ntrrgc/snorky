@@ -1,0 +1,7 @@
+__pycache__
+*~
+*.swp
+*.pyc
+*.pyo
+.coverage
+miau/doc/build
