@@ -1,7 +1,7 @@
 Miau Server
 ===========
 
-*Miau* is an data notification server intended to ease development of data-driven web applications with real-time functionality like notifications and automatic updates.
+*Miau* is a data notification server intended to ease development of data-driven web applications with real-time functionality like notifications and automatic updates.
 
 These capabilities rely on either `WebSocket <http://www.websocket.org/>`_, which provides full-duplex long-lived communication between the browser and the server, or `SockJS <https://github.com/mrjoes/sockjs-tornado>`_, which provides a WebSocket emulation for ancient, yet still used browsers like IE8.
 
