@@ -1,4 +1,6 @@
 import abc
+from collections import namedtuple
+from functools import wraps
 from miau.common.delta import Delta, DeltaItem, DeltaItemCreation, \
         DeltaItemUpdate, DeltaItemDeletion
 
@@ -151,3 +153,122 @@ class SimpleDealer(Dealer):
         # Return the set of items with this model_key, or an empty set if
         # there is none.
         return self.items_by_model_key.get(model_key, set())
+
+
+FilterAssociation = namedtuple('FilterAssociation', 
+                               ('filter', 'subscription_item'))
+
+"""
+Filter syntax
+=============
+
+['=', 'color', 'blue']
+color is 'blue'
+
+['<', 'age', 21]
+age is less than 21
+
+['>=', 'age', 21]
+age is greater than or equal to 21
+
+['and', ['=', 'service', 'prosody'], ['>=', 'severity_level', 3]]
+service is 'prosody' and severity_level is greater than or equal to 3
+
+['or', ['not', ['=', 'service', 'java']], ['>=', 'severity_level', 3]]
+service is not 'java' or severity_level is greater than or equal to 3
+
+['=', 'player.color', 'blue']
+color of player is 'blue'
+"""
+
+def get_field(model, name):
+    """
+    Given a dictionary for `model` and a dot separated string for `name`,
+    accesses the named properties in model.
+
+    e.g. get_field(model, 'service.name') returns model['service']['name']
+    """
+    prop = model
+    for prop_name in name.split('.'):
+        prop = model[prop_name]
+    return prop
+
+def false_on_raise(function):
+    @wraps(function)
+    def _false_on_raise(*args):
+        try:
+            return function(*args)
+        except (KeyError, TypeError):
+            # KeyError: missing property
+            # TypeError: unorderable types (e.g. compared str with int)
+            return False
+    return _false_on_raise
+
+@false_on_raise
+def filter_eq(model, field, value):
+    return get_field(model, field) == value
+
+@false_on_raise
+def filter_lt(model, field, value):
+    return get_field(model, field) < value
+
+@false_on_raise
+def filter_lte(model, field, value):
+    return get_field(model, field) <= value
+
+@false_on_raise
+def filter_gt(model, field, value):
+    return get_field(model, field) > value
+
+@false_on_raise
+def filter_gte(model, field, value):
+    return get_field(model, field) >= value
+
+@false_on_raise
+def filter_not(model, expr):
+    return not filter_matches(model, expr)
+
+@false_on_raise
+def filter_and(model, *expressions):
+    return all(filter_matches(model, expr)
+               for expr in expressions)
+
+@false_on_raise
+def filter_or(model, *expressions):
+    return any(filter_matches(model, expr)
+               for expr in expressions)
+
+operator_functions = {
+    '==': filter_eq,
+    '<': filter_lt,
+    '<=': filter_lte,
+    '>': filter_gt,
+    '>=': filter_gte,
+    'and': filter_and,
+    'or': filter_or,
+    'not': filter_not,
+}
+
+def filter_matches(model, filter):
+    op = filter[0]
+    args = filter[1:]
+    return operator_functions[op](model, *args)
+
+class FilterDealer(Dealer):
+    __slots__ = ('filters',)
+
+    def __init__(self):
+        super(FilterDealer, self).__init__()
+        self.filters = {}
+
+    def add_subscription_item(self, item):
+        filter = item.model_key
+        self.filters[item] = filter
+
+    def remove_subscription_item(self, item):
+        self.filters.remove(item)
+    
+    def get_subscription_items_for_model(self, model):
+        for subs_item, filter in self.filters.items():
+            if filter_matches(filter, model):
+                yield subs_item
