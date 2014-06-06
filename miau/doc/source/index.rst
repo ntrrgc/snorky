@@ -62,6 +62,7 @@ Contents
 --------
 
 .. toctree::
+   services
    :maxdepth: 2
 
 Indices tables
