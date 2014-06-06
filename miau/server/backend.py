@@ -7,6 +7,7 @@ from miau.server.facade import Facade
 from miau.common.forcejson import fstr
 from tornado.web import Application, RequestHandler, HTTPError
 from tornado.ioloop import IOLoop
+from hmac import compare_digest
 
 from miau.server.managers.dealer import DealerManager, UnknownDealer
 from miau.server.managers.subscription import SubscriptionManager
@@ -84,8 +85,10 @@ class BackendRequestHandler(RequestHandler):
                 auth_decoded = base64.decodebytes(auth_header[6:].encode())
                 username, password = auth_decoded.decode().split(':', 2)
                 
-                # Secret key should be specified in the username field
-                if username == self.backend.secret_key and password == '':
+                # Secret key should be specified in the username field.
+                # Use compare_digest instead of == to avoid timing attacks.
+                if compare_digest(username, self.backend.secret_key) \
+                   and password == '':
                     # Authorized
                     return super(BackendRequestHandler, self)._execute_method()
 
