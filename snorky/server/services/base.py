@@ -3,6 +3,7 @@ try:
 except ImportError:
     from funcsigs import signature
 from tornado.log import gen_log
+from miau.common.types import with_metaclass
 
 
 class Service(object):
@@ -25,8 +26,10 @@ class Service(object):
 class InvalidMessage(Exception):
     pass
 
+
 class RPCException(Exception):
     pass
+
 
 class Request(object):
     __slots__ = ("service", "client", "command", "call_id", "params",
@@ -66,8 +69,31 @@ class Request(object):
         self.resolved = True
 
 
-class RPCService(Service):
-    allowed_commands = set()
+def allowed_command(method):
+    method.is_allowed_command = True
+    return method
+
+
+class RPCMeta(type):
+    def __new__(cls, name, bases, attrs):
+        new_class = super(RPCMeta, cls).__new__(cls, name, bases, attrs)
+
+        # Create a new set based on the allowed commands of the superclass.
+        new_allowed_commands = set(new_class.allowed_commands)
+
+        # Add each method decorated with @allowed_command
+        for name, value in attrs.items():
+            if getattr(value, "is_allowed_command", False):
+                new_allowed_commands.add(name)
+
+        # Froze the set and put it in the new class
+        new_class.allowed_commands = frozenset(new_allowed_commands)
+
+        return new_class
+
+
+class RPCService(with_metaclass(RPCMeta, Service)):
+    allowed_commands = frozenset()
 
     def process_message_from(self, client, msg):
         try:
