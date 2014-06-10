@@ -27,6 +27,7 @@ class CalculatorService(RPCService):
     def buggy_type_error(self, req):
         raise TypeError
 
+
 class TestRPC(unittest.TestCase):
     def setUp(self):
         self.client = MockClient(self)
