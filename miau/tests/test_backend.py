@@ -21,7 +21,7 @@ json_headers = {
 class PlayersWithColor(SimpleDealer):
     name = 'players_with_color'
     model_class_name = 'Player'
-    
+
     def get_key_for_model(self, model):
         return model['color']
 
@@ -236,7 +236,7 @@ class TestBackend(AsyncHTTPTestCase):
             "updated": [],
             "deleted": []
         }
-            
+
         with ExpectLog('tornado.access', '422 POST'):
             with ExpectLog('tornado.general', '.* Unprocessable entity'):
                 response = self.fetch('/notify_delta',
@@ -260,7 +260,7 @@ class TestBackend(AsyncHTTPTestCase):
             "updated": [],
             "deleted": []
         }
-            
+
         with ExpectLog('tornado.access', '422 POST'):
             with ExpectLog('tornado.general', '.* Unprocessable entity'):
                 response = self.fetch('/notify_delta',

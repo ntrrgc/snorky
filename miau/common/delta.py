@@ -24,7 +24,7 @@ class Delta(object):
             'deleted': self.deleted,
         }
 
-        
+
 class DeltaItem(object):
     """The base class for DeltaItemCreation, DeltaItemUpdate and
     DeltaItemDeletion"""

@@ -18,11 +18,11 @@ class TestDealerManager(unittest.TestCase):
             self._delta_item = delta_item
         self._delta_item = None
 
-        self.dealer1 = FakeDealer('test_dealer1', 'test_model', 
+        self.dealer1 = FakeDealer('test_dealer1', 'test_model',
                 deliver_delta_item)
-        self.dealer2 = FakeDealer('test_dealer2', 'test_model', 
+        self.dealer2 = FakeDealer('test_dealer2', 'test_model',
                 deliver_delta_item)
-    
+
     def test_register_dealer(self):
         dm = DealerManager()
 

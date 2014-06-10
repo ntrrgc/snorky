@@ -11,7 +11,7 @@ class FakeSubscriptionItem(object):
         self.model_key = model_key
         self.callback = callback
         self.subscription = subscription
-        
+
     def deliver_delta(self, delta):
         self.callback(delta)
 
@@ -38,7 +38,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
         dealer.add_subscription_item(self.subscription_item)
 
         # Alice record is created with color blue
-        origin_delta = DeltaItemCreation('player', 
+        origin_delta = DeltaItemCreation('player',
                 {'id': 1, 'name': 'Alice', 'color': 'blue'})
 
         dealer.deliver_delta_item(origin_delta)
@@ -50,7 +50,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
         dealer.add_subscription_item(self.subscription_item)
 
         # Alice changes her color
-        origin_delta = DeltaItemUpdate('player', 
+        origin_delta = DeltaItemUpdate('player',
                 old_data={'id': 1, 'name': 'Alice', 'color': 'blue'},
                 new_data={'id': 1, 'name': 'Alice', 'color': 'red'})
 
@@ -76,7 +76,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
         dealer.add_subscription_item(self.subscription_item)
 
         # Alice changes her player name
-        origin_delta = DeltaItemUpdate('player', 
+        origin_delta = DeltaItemUpdate('player',
                 old_data={'id': 1, 'name': 'Alice', 'color': 'red'},
                 new_data={'id': 1, 'name': 'SuperAlice', 'color': 'red'})
 
@@ -107,7 +107,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
         dealer.add_subscription_item(self.subscription_item)
 
         # Alice changes her color
-        origin_delta = DeltaItemUpdate('player', 
+        origin_delta = DeltaItemUpdate('player',
                 old_data={'id': 1, 'name': 'SuperAlice', 'color': 'red'},
                 new_data={'id': 1, 'name': 'SuperAlice', 'color': 'blue'})
 
@@ -133,7 +133,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
         dealer.add_subscription_item(self.subscription_item)
 
         # Alice record is deleted
-        origin_delta = DeltaItemDeletion('player', 
+        origin_delta = DeltaItemDeletion('player',
                 {'id': 1, 'name': 'SuperAlice', 'color': 'blue'})
 
         dealer.deliver_delta_item(origin_delta)

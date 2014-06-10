@@ -28,7 +28,7 @@ class DealerManager(object):
     def __init__(self):
         self.dealers_by_name = {}
         self.dealers_by_model_class = {}
-        
+
     def register_dealer(self, dealer):
         """Registers a new dealer."""
         name = dealer.name

@@ -22,7 +22,7 @@ class TestSubscription(unittest.TestCase):
         self.subscription_item = SubscriptionItem('test_dealer', 'red')
         self.client = FakeClient(lambda d: setattr(self, '_received_delta', d))
         self.delta = FakeDelta()
-    
+
     def test_got_client(self):
         subscription = Subscription([self.subscription_item])
 

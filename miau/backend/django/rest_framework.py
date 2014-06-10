@@ -45,13 +45,13 @@ def subscription_in_response(method):
         else:
             return method(self, *args, **kwargs)
     return _subscription_in_response
-    
+
 
 class ListSubscribeModelMixin(SubscribeModelMixin,
                               mixins.ListModelMixin):
     @subscription_in_response
     def list(self, request, *args, **kwargs):
-        return super(ListSubscribeModelMixin, self).list(request, *args, 
+        return super(ListSubscribeModelMixin, self).list(request, *args,
                                                          **kwargs)
 
 

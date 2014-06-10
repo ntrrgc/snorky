@@ -24,7 +24,7 @@ class TestAttachToDealers(unittest.TestCase):
         self._item_remove = None
         self.callback_add = lambda i: setattr(self, '_item_add', i)
         self.callback_remove = lambda i: setattr(self, '_item_remove', i)
-        
+
     def test_attach(self):
         dealer_manager = DealerManager()
 

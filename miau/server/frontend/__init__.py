@@ -15,7 +15,7 @@ class JSONError(Exception):
             self.details = details % args
         else:
             self.details = None
-    
+
     def jsonify(self, extra={}):
         data = {
             'type': 'error',
@@ -26,12 +26,12 @@ class JSONError(Exception):
             data['details'] = self.details
         data.update(extra)
         return json.dumps(data)
-    
+
 
 class FrontendHandler(object):
     def __init__(self, facade):
         self.facade = facade
-    
+
     def get_json_request(self, message):
         try:
             return json.loads(message, encoding="UTF-8")
@@ -71,7 +71,7 @@ class FrontendHandler(object):
 
     def on_close(self):
         self.facade.client_disconnected(self.client)
-    
+
     @treat_errors
     def on_message(self, message):
         r = self.get_json_request(message)

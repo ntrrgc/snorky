@@ -40,7 +40,7 @@ class Subscription(object):
     @property
     def acquired(self):
         return self.client is not None
-        
+
     def got_client(self, client):
         """Links this subscription with a client. If there were deltas received
         before, they will be sent now."""
@@ -54,12 +54,12 @@ class Subscription(object):
     def lost_client(self):
         """Unlinks this subscription from its client. New arrived deltas will
         no further be delivered to it."""
-        
+
         self.client = None
 
     def deliver_delta(self, delta):
         """Sends a JSON encoded delta to the associated client.
-        
+
         If there is currently no associated client the delta will be stored to
         be sent when a client arrives."""
 
@@ -76,7 +76,7 @@ class Subscription(object):
             self.deliver_delta(delta)
 
         # Clear buffer
-        self._awaited_client_buffer[:] = [] 
+        self._awaited_client_buffer[:] = []
 
     def attach_to_dealers(self, dealer_manager):
         """Registers each subscription item in its associated dealer."""
@@ -103,7 +103,7 @@ class Subscription(object):
     def cancel_timeout(self, io_loop):
         io_loop.remove_timeout(self._awaited_client_timeout)
         self._awaited_client_timeout = None
-    
+
 
 class SubscriptionItem(object):
     """A pair of dealer_name and model_key linked to a Subscription."""

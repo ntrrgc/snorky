@@ -23,10 +23,10 @@ class TestClient(Client):
 class PlayersWithColor(SimpleDealer):
     name = 'players_with_color'
     model_class_name = 'Player'
-    
+
     def get_key_for_model(self, model):
         return model['color']
-        
+
 
 class TestFacade(AsyncTestCase):
     def setUp(self):

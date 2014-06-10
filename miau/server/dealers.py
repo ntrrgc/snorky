@@ -28,25 +28,25 @@ class Dealer(object):
     def deliver_delta_item(self, delta_item):
         """Receives a delta_item, computes a set of destination subscriptions
         items and forwards the delta to them.
-        
+
         Please note that altough DeltaItemCreation and DeltaItemDeletion will
         always trigger deltas of the same time on the client, DeltaItemUpdate
         may not. To understand this fact, see the next example:
-        
+
         Suppose our model class composes a player name and a color, i.e.
         'id: 1, name: Alice, color: blue'.
-        
+
         We may also have a dealer named 'Players with color' that uses the
         `color` attribute to filter players.
-        
+
         A client maybe subscripted to players with color red, showing them in a
         list. Now, if Alice changes its color to red, this client will receive
         a creation delta instead of an update one because they had no previous
-        knowledge of Alice's model and will have to render it as a new row. 
-        
+        knowledge of Alice's model and will have to render it as a new row.
+
         If then Alice decides to change her player name, the client will
         receive a delta update because they already knew Alice's model.
-        
+
         And lastly, if Alice changes its color again to other than red the new
         model will no longer satisfy the filter and thus a deletion delta will
         be sent to the client.
@@ -156,7 +156,7 @@ class SimpleDealer(Dealer):
         return self.items_by_model_key.get(model_key, set())
 
 
-FilterAssociation = namedtuple('FilterAssociation', 
+FilterAssociation = namedtuple('FilterAssociation',
                                ('filter', 'subscription_item'))
 
 """
@@ -288,7 +288,7 @@ class FilterDealer(Dealer):
 
     def remove_subscription_item(self, item):
         self.filters.remove(item)
-    
+
     def get_subscription_items_for_model(self, model):
         for subs_item, filter in self.filters.items():
             if filter_matches(filter, model):

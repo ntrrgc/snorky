@@ -14,7 +14,7 @@ from tornado.testing import ExpectLog, AsyncTestCase
 class PlayersWithColor(SimpleDealer):
     name = 'players_with_color'
     model_class_name = 'Player'
-    
+
     def get_key_for_model(self, model):
         return model['color']
 
@@ -25,7 +25,7 @@ class TestableFrontendHandler(FrontendHandler):
 
         # Used for testing sent messages
         self._sent_message = None
-    
+
     def write_message(self, message):
         self._sent_message = message
 
@@ -97,7 +97,7 @@ class TestFrontend(AsyncTestCase):
     def test_close(self):
         # Acquire a subscription
         client_handler, token = self.test_acquire_subscription()
-        
+
         # The client disconnects
         client_handler.on_close()
 
@@ -113,7 +113,7 @@ class TestFrontend(AsyncTestCase):
         client_handler.open()
 
         # The client does not provide enough parameters
-        with ExpectLog('tornado.general', 
+        with ExpectLog('tornado.general',
                 'Frontend: 422 Unprocessable Entity'):
             client_handler.on_message(json.dumps({
                 "call_id": 1,
@@ -136,7 +136,7 @@ class TestFrontend(AsyncTestCase):
         client_handler.open()
 
         # The client does not provide a valid request
-        with ExpectLog('tornado.general', 
+        with ExpectLog('tornado.general',
                 'Frontend: 422 Unprocessable Entity'):
             client_handler.on_message(json.dumps({
                 "foo": "bar"
@@ -157,7 +157,7 @@ class TestFrontend(AsyncTestCase):
         client_handler.open()
 
         # The client does not even provide a valid JSON
-        with ExpectLog('tornado.general', 
+        with ExpectLog('tornado.general',
                 'Frontend: 400 Bad Request'):
             client_handler.on_message('{"foo":bar}')
 

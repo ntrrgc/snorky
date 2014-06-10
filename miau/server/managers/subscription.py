@@ -26,7 +26,7 @@ class SubscriptionManager(object):
             safe_random.choice("abcdefghijklmnopqrstuvwxyz1234567890")
             for i in range(32)
         ])
-        
+
     def register_subscription(self, subscription):
         """
         Registers a Subscription in the SubscriptionManager, assigning a secret
@@ -37,7 +37,7 @@ class SubscriptionManager(object):
 
         Returns the new token.
         """
-        
+
         if subscription.token:
             raise RuntimeError("This subscription already has a token.")
 
@@ -48,7 +48,7 @@ class SubscriptionManager(object):
             # but it's better to be safe than sorry.
             if not token in self.subscriptions_by_token:
                 break
-        
+
         subscription.token = token
         self.subscriptions_by_token[token] = subscription
 
@@ -57,7 +57,7 @@ class SubscriptionManager(object):
     def unregister_subscription(self, subscription):
         """
         Unregisters the Subscription object and removes its token.
-        
+
         Note: Calling this method does not dettach the subscription items from
         the dealer. To fully delete a subscription from the system see
         `miau.server.facade.Facade.cancel_subscription`.

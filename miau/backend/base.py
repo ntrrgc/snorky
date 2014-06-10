@@ -5,7 +5,7 @@ class MiauBackendConnector(object):
     def __init__(self, url_base, secret_key):
         self.url_base = url_base
         self.secret_key = secret_key
-    
+
         self.websession = requests.session()
 
     def talk_to_miau_server(self, url, data):

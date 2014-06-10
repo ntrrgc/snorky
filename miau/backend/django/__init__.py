@@ -25,7 +25,7 @@ def authorize_subscription(items):
     except:
         raise RuntimeError("Error from Miau server: %s" % response.content)
 
-def handle_post_save(sender, instance, created, raw, using, update_fields, 
+def handle_post_save(sender, instance, created, raw, using, update_fields,
         **kwargs):
     if created:
         item = {
