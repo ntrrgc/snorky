@@ -1,6 +1,7 @@
 import abc
 from collections import namedtuple
 from functools import wraps
+from miau.common.types import PY2, StringTypes, Number
 from miau.common.delta import Delta, DeltaItem, DeltaItemCreation, \
         DeltaItemUpdate, DeltaItemDeletion
 
@@ -204,25 +205,45 @@ def false_on_raise(function):
             return False
     return _false_on_raise
 
+def orderable_types(a, b):
+    return (isinstance(a, Number) and isinstance(b, Number)) or \
+            (isinstance(a, StringTypes) and isinstance(b, StringTypes))
+
 @false_on_raise
 def filter_eq(model, field, value):
     return get_field(model, field) == value
 
 @false_on_raise
 def filter_lt(model, field, value):
-    return get_field(model, field) < value
+    field_value = get_field(model, field)
+    # Python3 does not allow to compare strings with numbers, emulate that.
+    if PY2 and not orderable_types(field_value, value):
+        raise TypeError
+    return field_value < value
 
 @false_on_raise
 def filter_lte(model, field, value):
-    return get_field(model, field) <= value
+    field_value = get_field(model, field)
+    # Python3 does not allow to compare strings with numbers, emulate that.
+    if PY2 and not orderable_types(field_value, value):
+        raise TypeError
+    return field_value <= value
 
 @false_on_raise
 def filter_gt(model, field, value):
-    return get_field(model, field) > value
+    field_value = get_field(model, field)
+    # Python3 does not allow to compare strings with numbers, emulate that.
+    if PY2 and not orderable_types(field_value, value):
+        raise TypeError
+    return field_value > value
 
 @false_on_raise
 def filter_gte(model, field, value):
-    return get_field(model, field) >= value
+    field_value = get_field(model, field)
+    # Python3 does not allow to compare strings with numbers, emulate that.
+    if PY2 and not orderable_types(field_value, value):
+        raise TypeError
+    return field_value >= value
 
 @false_on_raise
 def filter_not(model, expr):
