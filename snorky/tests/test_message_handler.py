@@ -8,10 +8,7 @@ import unittest
 
 class EchoService(Service):
     def process_message_from(self, client, msg):
-        client.send({
-            "service": self.name,
-            "message": msg
-        })
+        self.send_message_to(client, msg)
 
 
 class MockClient(Client):
