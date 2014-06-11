@@ -1,4 +1,5 @@
 from tornado.log import gen_log
+import json
 
 
 class MessageHandler(object):
@@ -29,6 +30,16 @@ class MessageHandler(object):
             return
 
         service.process_message_from(client, content)
+
+    def process_message_raw(self, client, msg):
+        try:
+            decoded_msg = json.loads(msg)
+        except ValueError:
+            gen_log.warning('Invalid JSON from client %s: %s'
+                            % (client.remote_address, msg))
+            return
+
+        return self.process_message_from(client, decoded_msg)
 
     def client_connected(self, client):
         pass
