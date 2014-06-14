@@ -1,5 +1,5 @@
 from snorky.server.client import Client
-from snorky.server.services.base import RPCService, allowed_command, RPCMeta
+from snorky.server.services.base import RPCService, rpc_command, RPCMeta
 import unittest
 
 
@@ -12,13 +12,13 @@ class MockClient(Client):
 
 
 class CalculatorService(RPCService):
-    @allowed_command
+    @rpc_command
     def sum(self, req, a, b):
         return a + b
 
 
 class CalculatorExtendedService(CalculatorService):
-    @allowed_command
+    @rpc_command
     def difference(self, req, a, b):
         return a - b
 
@@ -30,9 +30,9 @@ class TestRPC(unittest.TestCase):
         self.calculator = CalculatorService("calc")
         self.calculator_ex = CalculatorExtendedService("calc_ex")
 
-    def test_allowed_commands(self):
-        self.assertEqual(self.calculator.allowed_commands, {"sum"})
-        self.assertEqual(self.calculator_ex.allowed_commands,
+    def test_rpc_commands(self):
+        self.assertEqual(self.calculator.rpc_commands, {"sum"})
+        self.assertEqual(self.calculator_ex.rpc_commands,
                          {"sum", "difference"})
 
     def test_base_existent(self):

@@ -13,7 +13,7 @@ class MockClient(Client):
 
 
 class CalculatorService(RPCService):
-    allowed_commands = {"sum", "difference", "buggy", "buggy_type_error"}
+    rpc_commands = {"sum", "difference", "buggy", "buggy_type_error"}
 
     def sum(self, req, a, b):
         return a + b

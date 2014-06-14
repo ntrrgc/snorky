@@ -69,8 +69,8 @@ class Request(object):
         self.resolved = True
 
 
-def allowed_command(method):
-    method.is_allowed_command = True
+def rpc_command(method):
+    method.is_rpc_command = True
     return method
 
 
@@ -79,21 +79,21 @@ class RPCMeta(type):
         new_class = super(RPCMeta, cls).__new__(cls, name, bases, attrs)
 
         # Create a new set based on the allowed commands of the superclass.
-        new_allowed_commands = set(new_class.allowed_commands)
+        new_rpc_commands = set(new_class.rpc_commands)
 
-        # Add each method decorated with @allowed_command
+        # Add each method decorated with @rpc_command
         for name, value in attrs.items():
-            if getattr(value, "is_allowed_command", False):
-                new_allowed_commands.add(name)
+            if getattr(value, "is_rpc_command", False):
+                new_rpc_commands.add(name)
 
         # Froze the set and put it in the new class
-        new_class.allowed_commands = frozenset(new_allowed_commands)
+        new_class.rpc_commands = frozenset(new_rpc_commands)
 
         return new_class
 
 
 class RPCService(with_metaclass(RPCMeta, Service)):
-    allowed_commands = frozenset()
+    rpc_commands = frozenset()
 
     def process_message_from(self, client, msg):
         try:
@@ -103,7 +103,7 @@ class RPCService(with_metaclass(RPCMeta, Service)):
                             % (self.name, msg))
             return
 
-        if request.command not in self.allowed_commands:
+        if request.command not in self.rpc_commands:
             request.error("Unknown command")
             return
 
