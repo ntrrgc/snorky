@@ -1,4 +1,4 @@
-from snorky.server.services.base import RPCService, RPCException, rpc_command
+from snorky.server.services.base import RPCService, RPCError, rpc_command
 
 
 class MessagingService(RPCService):
@@ -9,10 +9,10 @@ class MessagingService(RPCService):
     @rpc_command
     def register_participant(self, req, name):
         if name in self.participants:
-            raise RPCException("Name already registered")
+            raise RPCError("Name already registered")
 
         if not self.is_name_allowed(req.client, name):
-            raise RPCException("Name not allowed")
+            raise RPCError("Name not allowed")
 
         self.participants[name] = req.client
         return "OK"
@@ -23,7 +23,7 @@ class MessagingService(RPCService):
             del self.participants[name]
             return "OK"
         except KeyError:
-            raise RPCException("Unknown participant")
+            raise RPCError("Unknown participant")
 
     @rpc_command
     def list_participants(self, req):
@@ -35,15 +35,15 @@ class MessagingService(RPCService):
             if self.participants[sender] != req.client:
                 # The user tries to send a message impersonating other user,
                 # deny.
-                raise RPCException("Invalid sender")
+                raise RPCError("Invalid sender")
         except KeyError:
             # The sender name is not a know participant
-            raise RPCException("Invalid sender")
+            raise RPCError("Invalid sender")
 
         try:
             dest_client = self.participants[dest]
         except KeyError:
-            raise RPCException("Unknown destination")
+            raise RPCError("Unknown destination")
 
         self.send_message_to(dest_client, {
             "type": "message",

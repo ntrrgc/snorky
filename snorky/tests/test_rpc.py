@@ -1,5 +1,5 @@
 from snorky.server.client import Client
-from snorky.server.services.base import RPCService, RPCException
+from snorky.server.services.base import RPCService, RPCError
 from tornado.testing import ExpectLog
 import unittest
 

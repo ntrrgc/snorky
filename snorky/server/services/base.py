@@ -27,7 +27,7 @@ class InvalidMessage(Exception):
     pass
 
 
-class RPCException(Exception):
+class RPCError(Exception):
     pass
 
 
@@ -123,7 +123,7 @@ class RPCService(with_metaclass(RPCMeta, Service)):
             # If the method returns something, use that as a reply message
             if reply_data is not None:
                 request.reply(reply_data)
-        except RPCException as ex:
+        except RPCError as ex:
             error_name = ex.args[0] if len(ex.args) > 0 else "Exception"
             gen_log.info("%s in RPC service \"%s\""
                          % (error_name, self.name))
