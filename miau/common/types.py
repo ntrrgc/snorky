@@ -11,6 +11,8 @@ else:
     StringTypes = (str)
     ustr = str
 
+def is_string(thing):
+    return isinstance(thing, StringTypes)
 
 # flask implementation of with_metaclass
 # https://github.com/mitsuhiko/flask/blob/6ec83e18dca497a8fbfca6caca5999984bd32f2e/flask/_compat.py#L56-L73
