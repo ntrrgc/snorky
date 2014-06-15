@@ -125,8 +125,8 @@ class RPCService(with_metaclass(RPCMeta, Service)):
                 request.reply(reply_data)
         except RPCException as ex:
             error_name = ex.args[0] if len(ex.args) > 0 else "Exception"
-            gen_log.warning("%s in RPC service \"%s\""
-                           % (error_name, self.name))
+            gen_log.info("%s in RPC service \"%s\""
+                         % (error_name, self.name))
             request.error(error_name)
         except:
             gen_log.exception('Unhandled exception in RPC service "%s". '
