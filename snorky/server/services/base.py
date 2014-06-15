@@ -74,6 +74,11 @@ def rpc_command(method):
     return method
 
 
+def asynchronous(method):
+    method.is_asynchronous = True
+    return method
+
+
 class RPCMeta(type):
     def __new__(cls, name, bases, attrs):
         new_class = super(RPCMeta, cls).__new__(cls, name, bases, attrs)
@@ -123,6 +128,12 @@ class RPCService(with_metaclass(RPCMeta, Service)):
             # If the method returns something, use that as a reply message
             if reply_data is not None:
                 request.reply(reply_data)
+            elif not getattr(method, "is_asynchronous", False) and \
+                    not request.resolved:
+                # If the method is not marked as asynchronous, it returned
+                # None and the request is not marked as asynchronous, then
+                # reply with None.
+                request.reply(None)
         except RPCError as ex:
             error_name = ex.args[0] if len(ex.args) > 0 else "Exception"
             gen_log.info("%s in RPC service \"%s\""

@@ -15,13 +15,11 @@ class MessagingService(RPCService):
             raise RPCError("Name not allowed")
 
         self.participants[name] = req.client
-        return "OK"
 
     @rpc_command
     def unregister_participant(self, req, name):
         try:
             del self.participants[name]
-            return "OK"
         except KeyError:
             raise RPCError("Unknown participant")
 
@@ -50,7 +48,6 @@ class MessagingService(RPCService):
             "sender": sender,
             "body": body
         })
-        return "OK"
 
     def is_name_allowed(self, client, name):
         # Default policy: allow all names

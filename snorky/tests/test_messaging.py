@@ -40,7 +40,7 @@ class TestMessaging(unittest.TestCase):
             "message": {
                 "type": "response",
                 "call_id": 1,
-                "data": "OK"
+                "data": None
             }
         })
 
@@ -61,7 +61,7 @@ class TestMessaging(unittest.TestCase):
             "message": {
                 "type": "response",
                 "call_id": 1,
-                "data": "OK"
+                "data": None
             }
         })
 
@@ -122,7 +122,7 @@ class TestMessaging(unittest.TestCase):
             "message": {
                 "type": "response",
                 "call_id": 1,
-                "data": "OK"
+                "data": None
             }
         })
         self.assertEqual(self.msg_bob, {
@@ -151,7 +151,7 @@ class TestMessaging(unittest.TestCase):
             "message": {
                 "type": "response",
                 "call_id": 1,
-                "data": "OK"
+                "data": None
             }
         })
 
