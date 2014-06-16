@@ -1,7 +1,8 @@
+# -*- encoding: UTF-8 -*-
 from snorky.server.client import Client
-from snorky.server.services.base import RPCService, RPCError
+from snorky.server.services.base import RPCService, RPCError, format_call
 from tornado.testing import ExpectLog
-import unittest
+from unittest import TestCase
 
 
 class MockClient(Client):
@@ -28,7 +29,35 @@ class CalculatorService(RPCService):
         raise TypeError
 
 
-class TestRPC(unittest.TestCase):
+class TestFormatCall(TestCase):
+    def test_call(self):
+        self.assertEqual(format_call("sum", {"a": 1, "b": 2}),
+                         'sum({"a": 1, "b": 2})')
+
+    def test_strings(self):
+        self.assertEqual(format_call("length", {"string": "my cat"}),
+                         'length({"string": "my cat"})')
+
+    def test_unicode(self):
+        self.assertEqual(format_call("length", {"string": u"ñu"}),
+                         u'length({"string": "ñu"})')
+
+    def test_none(self):
+        self.assertEqual(format_call("length", {"string": None}),
+                         'length({"string": null})')
+
+    def test_multiline(self):
+        self.assertEqual(format_call("length", {"string": "a\nb"}),
+                         'length({"string": "a\\nb"})')
+
+    def test_ellipsis(self):
+        long_string = "a" * 200
+        formatted = format_call("length", {"string": long_string})
+        self.assertEqual(len(formatted), 100)
+        self.assertTrue(formatted.endswith("..."))
+
+
+class TestRPC(TestCase):
     def setUp(self):
         self.client = MockClient(self)
         self.calculator = CalculatorService("calc")
@@ -96,7 +125,8 @@ class TestRPC(unittest.TestCase):
 
     def test_invalid_params(self):
         with ExpectLog("tornado.general",
-                       'Invalid params in RPC service "calc". Message: .*'):
+                       'Invalid params in RPC service "calc": '
+                       'difference\(\{"a": 5\}\)'):
             self.calculator.process_message_from(self.client, {
                 "command": "difference",
                 "call_id": 1,

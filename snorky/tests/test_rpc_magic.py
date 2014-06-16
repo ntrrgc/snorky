@@ -1,7 +1,9 @@
 from snorky.server.client import Client
 from snorky.server.services.base import RPCService, rpc_command, RPCMeta, \
         asynchronous
-import unittest
+
+from unittest import TestCase
+from snorky.tests.utils.rpc import RPCTestMixin
 
 
 class MockClient(object):
@@ -36,7 +38,7 @@ class ProducerConsumerService(RPCService):
         self.consumer_req.reply(data)
 
 
-class TestRPC(unittest.TestCase):
+class TestRPC(RPCTestMixin, TestCase):
     def setUp(self):
         self.client = MockClient(self, "msg")
         self.msg = None
@@ -67,22 +69,9 @@ class TestRPC(unittest.TestCase):
         })
 
     def test_base_not_existent(self):
-        self.calculator.process_message_from(self.client, {
-            "command": "difference",
-            "call_id": 1,
-            "params": {
-                "a": 5,
-                "b": 12,
-            },
-        })
-        self.assertEqual(self.msg, {
-            "service": "calc",
-            "message": {
-                "type": "error",
-                "call_id": 1,
-                "message": "Unknown command",
-            },
-        })
+        msg = self.rpcExpectError(self.calculator, self.client,
+                                  "difference", a=5, b=12)
+        self.assertEqual(msg, "Unknown command")
 
     def test_extended_old_command(self):
         self.calculator_ex.process_message_from(self.client, {

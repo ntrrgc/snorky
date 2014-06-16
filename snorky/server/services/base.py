@@ -1,3 +1,4 @@
+import json
 try:
     from inspect import signature
 except ImportError:
@@ -30,6 +31,18 @@ class InvalidMessage(Exception):
 class RPCError(Exception):
     pass
 
+def ellipsis(string, max_length=100):
+    if len(string) <= max_length:
+        return string
+    else:
+        return string[:max_length - 3] + "..."
+
+def format_call(command, params):
+    return ellipsis("%s(%s)" % (
+        command,
+        json.dumps(params, sort_keys=True, ensure_ascii=False,
+                            separators=(', ', ': '))
+    ))
 
 class Request(object):
     __slots__ = ("service", "client", "command", "call_id", "params",
@@ -67,6 +80,9 @@ class Request(object):
             "message": msg
         })
         self.resolved = True
+
+    def format_call(self):
+        return format_call(self.command, self.params)
 
 
 def rpc_command(method):
@@ -106,8 +122,12 @@ class RPCService(with_metaclass(RPCMeta, Service)):
         except InvalidMessage:
             gen_log.warning('Invalid format in RPC service "%s". Message: %s'
                             % (self.name, msg))
+            # Discard silently
             return
 
+        return self.process_request(request)
+
+    def process_request(self, request):
         if request.command not in self.rpc_commands:
             request.error("Unknown command")
             return
@@ -117,8 +137,8 @@ class RPCService(with_metaclass(RPCMeta, Service)):
             # Check signature
             signature(method).bind(request, **request.params)
         except TypeError:
-            gen_log.warning('Invalid params in RPC service "%s". Message: %s'
-                            % (self.name, msg))
+            gen_log.warning('Invalid params in RPC service "%s": %s'
+                            % (self.name, request.format_call()))
             request.error("Invalid params")
             return
 
@@ -140,6 +160,6 @@ class RPCService(with_metaclass(RPCMeta, Service)):
                          % (error_name, self.name))
             request.error(error_name)
         except:
-            gen_log.exception('Unhandled exception in RPC service "%s". '
-                              'Message: %s' % (self.name, msg))
+            gen_log.exception('Unhandled exception in RPC service "%s": %s'
+                              % (self.name, request.format_call()))
             request.error("Internal error")
