@@ -129,5 +129,42 @@ class TestMessaging(RPCTestMixin, TestCase):
                             "list_participants")
         self.assertEqual(data, ["Alice", "Bob", "Carol"])
 
+    def test_unregister_participant(self):
+        self.test_register_twice()
+
+        # Bob unregisters
+        data = self.rpcCall(self.service, self.bob,
+                            "unregister_participant", name="Bob")
+        self.assertEqual(data, None)
+
+        msg = self.rpcExpectError(self.service, self.alice,
+                                  "send", sender="Alice", dest="Bob",
+                                  body="You should not receive this")
+        self.assertEqual(msg, "Unknown destination")
+
+        data = self.rpcCall(self.service, self.alice,
+                            "list_participants")
+        self.assertEqual(data, ["Alice"])
+
+    def test_unregister_unknown_participant(self):
+        self.test_register_twice()
+
+        # Bob tries to unregister Allice
+        msg = self.rpcExpectError(self.service, self.bob,
+                                  "unregister_participant", name="Charlie")
+        self.assertEqual(msg, "Unknown participant")
+
+    def test_unregister_other_participant(self):
+        self.test_register_twice()
+
+        # Bob tries to unregister Allice
+        msg = self.rpcExpectError(self.service, self.bob,
+                                  "unregister_participant", name="Alice")
+        self.assertEqual(msg, "Invalid participant")
+
+        data = self.rpcCall(self.service, self.alice,
+                            "list_participants")
+        self.assertEqual(data, ["Alice", "Bob"])
+
 if __name__ == "__main__":
     unittest.main()
