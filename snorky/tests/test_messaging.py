@@ -1,6 +1,7 @@
-import unittest
+from unittest import TestCase
 from miau.common.types import is_string
 from snorky.server.services.messaging import MessagingService
+from snorky.tests.utils.rpc import RPCTestMixin
 
 
 class MockClient(object):
@@ -17,7 +18,7 @@ class TestMessagingService(MessagingService):
         return is_string(name) and "duck" not in name.lower()
 
 
-class TestMessaging(unittest.TestCase):
+class TestMessaging(RPCTestMixin, TestCase):
     def setUp(self):
         self.service = TestMessagingService("messaging")
         self.msg_alice = None
@@ -28,103 +29,45 @@ class TestMessaging(unittest.TestCase):
         self.carol = MockClient(self, "msg_carol")
 
     def test_register(self):
-        self.service.process_message_from(self.alice, {
-            "command": "register_participant",
-            "call_id": 1,
-            "params": {
-                "name": "Alice"
-            }
-        })
-        self.assertEqual(self.msg_alice, {
-            "service": "messaging",
-            "message": {
-                "type": "response",
-                "call_id": 1,
-                "data": None
-            }
-        })
+        data = self.rpcCall(self.service, self.alice,
+                           "register_participant", name="Alice")
+        self.assertEqual(data, None)
 
     def test_register_twice(self):
         # Register Alice first
         self.test_register()
 
         # Now register Bob
-        self.service.process_message_from(self.bob, {
-            "command": "register_participant",
-            "call_id": 1,
-            "params": {
-                "name": "Bob"
-            }
-        })
-        self.assertEqual(self.msg_bob, {
-            "service": "messaging",
-            "message": {
-                "type": "response",
-                "call_id": 1,
-                "data": None
-            }
-        })
+        data = self.rpcCall(self.service, self.bob,
+                            "register_participant", name="Bob")
+        self.assertEqual(data, None)
 
     def test_register_same_name(self):
         # Register Alice first
         self.test_register()
 
         # Try to register Alice again
-        self.service.process_message_from(self.alice, {
-            "command": "register_participant",
-            "call_id": 2,
-            "params": {
-                "name": "Alice"
-            }
-        })
-        self.assertEqual(self.msg_alice, {
-            "service": "messaging",
-            "message": {
-                "type": "error",
-                "call_id": 2,
-                "message": "Name already registered"
-            }
-        })
+        msg = self.rpcExpectError(self.service, self.alice,
+                                  "register_participant", name="Alice")
+        self.assertEqual(msg, "Name already registered")
 
     def test_banned_name(self):
-        self.service.process_message_from(self.alice, {
-            "command": "register_participant",
-            "call_id": 1,
-            "params": {
-                "name": "DrDuck"
-            }
-        })
-        self.assertEqual(self.msg_alice, {
-            "service": "messaging",
-            "message": {
-                "type": "error",
-                "call_id": 1,
-                "message": "Name not allowed"
-            }
-        })
+        msg = self.rpcExpectError(self.service, self.alice,
+                                  "register_participant", name="DrDuck")
+        self.assertEqual(msg, "Name not allowed")
 
     def test_send(self):
         # Register both Alice and Bob
         self.test_register_twice()
 
         # Alice sends a message to Bob
-        self.service.process_message_from(self.alice, {
-            "command": "send",
-            "call_id": 1,
-            "params": {
-                "sender": "Alice",
-                "dest": "Bob",
-                "body": "Hi, Bob."
-            }
-        })
-        self.assertEqual(self.msg_alice, {
-            "service": "messaging",
-            "message": {
-                "type": "response",
-                "call_id": 1,
-                "data": None
-            }
-        })
+        data = self.rpcCall(self.service, self.alice,
+                            "send", sender="Alice", dest="Bob",
+                            body="Hi, Bob.")
+        # Alice gets send confirmation
+        self.assertEqual(data, None)
+
+        # Bob has received the message
         self.assertEqual(self.msg_bob, {
             "service": "messaging",
             "message": {
@@ -139,21 +82,9 @@ class TestMessaging(unittest.TestCase):
         self.test_register_twice()
 
         # Now register Carol
-        self.service.process_message_from(self.carol, {
-            "command": "register_participant",
-            "call_id": 1,
-            "params": {
-                "name": "Carol"
-            }
-        })
-        self.assertEqual(self.msg_carol, {
-            "service": "messaging",
-            "message": {
-                "type": "response",
-                "call_id": 1,
-                "data": None
-            }
-        })
+        data = self.rpcCall(self.service, self.carol,
+                            "register_participant", name="Carol")
+        self.assertEqual(data, None)
 
     def test_send_forgery(self):
         # Register Alice, Bob and Carol
@@ -161,23 +92,11 @@ class TestMessaging(unittest.TestCase):
 
         # Alice tries to send a message to Bob, pretending to be Carol
         self.msg_bob = None
-        self.service.process_message_from(self.alice, {
-            "command": "send",
-            "call_id": 1,
-            "params": {
-                "sender": "Carol",
-                "dest": "Bob",
-                "body": "Hi, Bob."
-            }
-        })
-        self.assertEqual(self.msg_alice, {
-            "service": "messaging",
-            "message": {
-                "type": "error",
-                "call_id": 1,
-                "message": "Invalid sender"
-            }
-        })
+        msg = self.rpcExpectError(self.service, self.alice,
+                                  "send", sender="Carol", dest="Bob",
+                                  body="Hi, Bob.")
+        self.assertEqual(msg, "Invalid sender")
+
         # Bob has not received anything
         self.assertIsNone(self.msg_bob)
 
@@ -187,63 +106,28 @@ class TestMessaging(unittest.TestCase):
 
         # Alice tries to send a message to Bob with invalid sender
         self.msg_bob = None
-        self.service.process_message_from(self.alice, {
-            "command": "send",
-            "call_id": 1,
-            "params": {
-                "sender": "Charlie",
-                "dest": "Bob",
-                "body": "Hi, Bob."
-            }
-        })
-        self.assertEqual(self.msg_alice, {
-            "service": "messaging",
-            "message": {
-                "type": "error",
-                "call_id": 1,
-                "message": "Invalid sender"
-            }
-        })
+        msg = self.rpcExpectError(self.service, self.alice,
+                                  "send", sender="Charlie", dest="Bob",
+                                  body="Hi, Bob")
+        self.assertEqual(msg, "Invalid sender")
+
         # Bob has not received anything
         self.assertIsNone(self.msg_bob)
 
     def test_send_non_existing_recipient(self):
         self.test_register_twice()
 
-        self.service.process_message_from(self.alice, {
-            "command": "send",
-            "call_id": 1,
-            "params": {
-                "sender": "Alice",
-                "dest": "Charlie",
-                "body": "Hi, Charlie."
-            }
-        })
-        self.assertEqual(self.msg_alice, {
-            "service": "messaging",
-            "message": {
-                "type": "error",
-                "call_id": 1,
-                "message": "Unknown destination"
-            }
-        })
+        msg = self.rpcExpectError(self.service, self.alice,
+                                  "send", sender="Alice", dest="Charlie",
+                                  body="Hi, Charlie")
+        self.assertEqual(msg, "Unknown destination")
 
     def test_list_participants(self):
         self.test_register_three()
 
-        self.service.process_message_from(self.alice, {
-            "command": "list_participants",
-            "call_id": 1,
-            "params": {}
-        })
-        self.assertEqual(self.msg_alice, {
-            "service": "messaging",
-            "message": {
-                "type": "response",
-                "call_id": 1,
-                "data": ["Alice", "Bob", "Carol"]
-            }
-        })
+        data = self.rpcCall(self.service, self.alice,
+                            "list_participants")
+        self.assertEqual(data, ["Alice", "Bob", "Carol"])
 
 if __name__ == "__main__":
     unittest.main()

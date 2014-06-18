@@ -51,22 +51,9 @@ class TestRPC(RPCTestMixin, TestCase):
                          {"sum", "difference"})
 
     def test_base_existent(self):
-        self.calculator.process_message_from(self.client, {
-            "command": "sum",
-            "call_id": 1,
-            "params": {
-                "a": 5,
-                "b": 12,
-            },
-        })
-        self.assertEqual(self.msg, {
-            "service": "calc",
-            "message": {
-                "type": "response",
-                "call_id": 1,
-                "data": 17,
-            },
-        })
+        data = self.rpcCall(self.calculator, self.client,
+                            "sum", a=5, b=12)
+        self.assertEqual(data, 17)
 
     def test_base_not_existent(self):
         msg = self.rpcExpectError(self.calculator, self.client,
@@ -74,40 +61,14 @@ class TestRPC(RPCTestMixin, TestCase):
         self.assertEqual(msg, "Unknown command")
 
     def test_extended_old_command(self):
-        self.calculator_ex.process_message_from(self.client, {
-            "command": "sum",
-            "call_id": 1,
-            "params": {
-                "a": 5,
-                "b": 12,
-            },
-        })
-        self.assertEqual(self.msg, {
-            "service": "calc_ex",
-            "message": {
-                "type": "response",
-                "call_id": 1,
-                "data": 17,
-            },
-        })
+        data = self.rpcCall(self.calculator_ex, self.client,
+                            "sum", a=5, b=12)
+        self.assertEqual(data, 17)
 
     def test_extended_new_command(self):
-        self.calculator_ex.process_message_from(self.client, {
-            "command": "difference",
-            "call_id": 1,
-            "params": {
-                "a": 5,
-                "b": 12,
-            },
-        })
-        self.assertEqual(self.msg, {
-            "service": "calc_ex",
-            "message": {
-                "type": "response",
-                "call_id": 1,
-                "data": -7,
-            },
-        })
+        data = self.rpcCall(self.calculator_ex, self.client,
+                            "difference", a=5, b=12)
+        self.assertEqual(data, -7)
 
     def test_asynchronous(self):
         client1 = MockClient(self, "client1_msg")
