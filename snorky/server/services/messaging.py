@@ -19,6 +19,10 @@ class MessagingService(RPCService):
     @rpc_command
     def unregister_participant(self, req, name):
         try:
+            if self.participants[name] != req.client:
+                # Don't let clients unregister other participants
+                raise RPCError("Invalid participant")
+
             del self.participants[name]
         except KeyError:
             raise RPCError("Unknown participant")
