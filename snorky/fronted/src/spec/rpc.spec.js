@@ -5,8 +5,8 @@ describe("A Snorky RPC service", function() {
     this.MockService = Snorky.Class(Snorky.RPCService, {
       constructor: function() {
         // Do not initialize snorky and name
-        // Mock send method with an spy
-        spyOn(this, "send");
+        // Mock sendMessage method with an spy
+        spyOn(this, "sendMessage");
         this.init();
       }
     });
@@ -22,8 +22,8 @@ describe("A Snorky RPC service", function() {
   it("can be requested commands", function(done) {
     var promise = this.mockService.sum({a: 1, b: 2});
 
-    expect(this.mockService.send).toHaveBeenCalled();
-    expect(this.mockService.send).toHaveBeenCalledWith(
+    expect(this.mockService.sendMessage).toHaveBeenCalled();
+    expect(this.mockService.sendMessage).toHaveBeenCalledWith(
       jasmine.objectContaining({
         "command": "sum",
         "params": {a: 1, b: 2}

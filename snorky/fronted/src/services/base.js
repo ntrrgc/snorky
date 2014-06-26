@@ -17,8 +17,8 @@
       // noop
     },
 
-    send: function(message) {
-      this.snorky.send(this.name, message);
+    sendMessage: function(message) {
+      this.snorky._sendServiceMessage(this.name, message);
     },
 
     onMessage: function(message) {
@@ -38,7 +38,7 @@
         var callId = self.nextCallId++;
         self.calls[callId] = { "resolve": resolve, "reject": reject };
 
-        self.send({
+        self.sendMessage({
           "command": command,
           "params": params,
           "callId": callId

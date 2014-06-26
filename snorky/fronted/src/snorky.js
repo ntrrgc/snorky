@@ -103,7 +103,7 @@ var Snorky = (function() {
       this.connecting = false;
     },
 
-    send: function(serviceName, message) {
+    _sendServiceMessage: function(serviceName, message) {
       var rawMessage = JSON.stringify({
         "service": serviceName,
         "message": message

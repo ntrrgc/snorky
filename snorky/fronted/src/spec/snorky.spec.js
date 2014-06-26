@@ -18,7 +18,7 @@ describe("Snorky connector", function() {
 
     this.MockService = Snorky.Class(Snorky.Service, {
       doSomething: function() {
-        this.send({"do": "something"});
+        this.sendMessage({"do": "something"});
       }
     });
   });
@@ -53,7 +53,7 @@ describe("Snorky connector", function() {
     expect(snorky.services.mockService).toEqual(jasmine.any(this.MockService));
 
     // Sanity checks
-    expect(snorky.send).not.toBe(undefined);
+    expect(snorky._sendServiceMessage).not.toBe(undefined);
     expect(snorky.services.mockService.snorky).toBe(snorky);
     expect(snorky._socket).toEqual(jasmine.any(this.MockSocket));
     expect(snorky._socket.send).not.toBe(undefined);
