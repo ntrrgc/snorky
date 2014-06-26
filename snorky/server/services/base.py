@@ -53,7 +53,7 @@ class Request(object):
         self.client = client
         self.resolved = False
         try:
-            self.call_id = msg["call_id"]
+            self.call_id = msg["callId"]
             self.command = msg["command"]
             self.params = msg["params"]
         except (KeyError, TypeError):
@@ -65,7 +65,7 @@ class Request(object):
 
         self.service.send_message_to(self.client, {
             "type": "response",
-            "call_id": self.call_id,
+            "callId": self.call_id,
             "data": data
         })
         self.resolved = True
@@ -76,7 +76,7 @@ class Request(object):
 
         self.service.send_message_to(self.client, {
             "type": "error",
-            "call_id": self.call_id,
+            "callId": self.call_id,
             "message": msg
         })
         self.resolved = True

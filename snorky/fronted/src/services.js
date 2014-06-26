@@ -41,7 +41,7 @@
         self.send({
           "command": command,
           "params": params,
-          "call_id": callId
+          "callId": callId
         });
       })
     },
@@ -54,19 +54,19 @@
       }
 
       if (message.type == "response" || message.type == "error") {
-        // Check for a known call_id
-        if (!message.call_id in this.calls) {
+        // Check for a known callId
+        if (!message.callId in this.calls) {
           console.error(
             'Response for unknown call with id "%s" from service "%s"',
-            message.call_id, this.name);
+            message.callId, this.name);
           return;
         }
       }
 
       if (message.type == "response") {
-        this.calls[message.call_id].resolve(message.data);
+        this.calls[message.callId].resolve(message.data);
       } else if (message.type == "error") {
-        this.calls[message.call_id].reject(Error(message.message));
+        this.calls[message.callId].reject(Error(message.message));
       } else {
         this.onNotification(message);
       }

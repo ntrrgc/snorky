@@ -33,7 +33,7 @@ describe("A Snorky RPC service", function() {
     this.mockService.onMessage({
       "type": "response",
       "data": 3,
-      "call_id": 0
+      "callId": 0
     });
 
     promise.then(function(value) {

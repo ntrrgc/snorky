@@ -67,7 +67,7 @@ class TestRPC(RPCTestMixin, TestCase):
     def test_process_message(self):
         self.calculator.process_message_from(self.client, {
             "command": "sum",
-            "call_id": 1,
+            "callId": 1,
             "params": {
                 "a": 5,
                 "b": 12,
@@ -77,7 +77,7 @@ class TestRPC(RPCTestMixin, TestCase):
             "service": "calc",
             "message": {
                 "type": "response",
-                "call_id": 1,
+                "callId": 1,
                 "data": 17,
             },
         })
@@ -119,14 +119,14 @@ class TestRPC(RPCTestMixin, TestCase):
                        'Unhandled exception in RPC service .*'):
             self.calculator.process_message_from(self.client, {
                 "command": "buggy",
-                "call_id": 3,
+                "callId": 3,
                 "params": {}
             })
             self.assertEqual(self.msg, {
                 "service": "calc",
                 "message": {
                     "type": "error",
-                    "call_id": 3,
+                    "callId": 3,
                     "message": "Internal error"
                 }
             })

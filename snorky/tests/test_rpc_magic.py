@@ -82,7 +82,7 @@ class TestRPC(RPCTestMixin, TestCase):
         # Client 1 calls consumer method
         service.process_message_from(client1, {
             "command": "consumer",
-            "call_id": 1,
+            "callId": 1,
             "params": {}
         })
         # No reply yet
@@ -91,7 +91,7 @@ class TestRPC(RPCTestMixin, TestCase):
         # Client 2 calls producer method
         service.process_message_from(client2, {
             "command": "producer",
-            "call_id": 2,
+            "callId": 2,
             "params": {
                 "data": "Hello"
             }
@@ -101,7 +101,7 @@ class TestRPC(RPCTestMixin, TestCase):
             "service": "prodcon",
             "message": {
                 "type": "response",
-                "call_id": 2,
+                "callId": 2,
                 "data": None,
             },
         })
@@ -110,7 +110,7 @@ class TestRPC(RPCTestMixin, TestCase):
             "service": "prodcon",
             "message": {
                 "type": "response",
-                "call_id": 1,
+                "callId": 1,
                 "data": "Hello"
             }
         })
