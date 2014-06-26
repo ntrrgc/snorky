@@ -10,7 +10,7 @@ module.exports = (grunt) ->
         "lib/my.class.js"
         "lib/promise.js"
         "src/snorky.js"
-        "src/services.js"
+        "src/services/base.js"
       ]
       options:
         specs: "src/spec/**.spec.js"
@@ -20,7 +20,7 @@ module.exports = (grunt) ->
           files: [
             "lib/*.js"
             "src/snorky.js"
-            "src/services.js"
+            "src/services/base.js"
             "src/spec/**.spec.js"
           ]
           browsers: [
