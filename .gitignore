@@ -5,3 +5,4 @@ __pycache__
 *.pyo
 .coverage
 miau/doc/build
+node_modules
