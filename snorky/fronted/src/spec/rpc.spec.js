@@ -19,9 +19,8 @@ describe("A Snorky RPC service", function() {
     expect(this.mockService.sum).toEqual(jasmine.any(Function));
   });
 
-  it("can be requested commands", function() {
+  it("can be requested commands", function(done) {
     var promise = this.mockService.sum({a: 1, b: 2});
-    expect(promise.then).not.toBe(undefined);
 
     expect(this.mockService.send).toHaveBeenCalled();
     expect(this.mockService.send).toHaveBeenCalledWith(
@@ -30,5 +29,16 @@ describe("A Snorky RPC service", function() {
         "params": {a: 1, b: 2}
       }));
 
+    // The server replies
+    this.mockService.onMessage({
+      "type": "response",
+      "data": 3,
+      "call_id": 0
+    });
+
+    promise.then(function(value) {
+      expect(value).toBe(3);
+      done();
+    })
   });
 });
