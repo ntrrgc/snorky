@@ -82,6 +82,12 @@
 
         var cls = this;
         _.each(methods, function(method) {
+          // Prevent the user from breaking internal existing methods
+          if (method in cls.prototype) {
+            throw Error('Method "' + method + '" already exists in the class. '
+                        + 'Refusing to overwrite it.');
+          }
+
           cls.prototype[method] = function(params) {
             return this.call(method, params);
           };

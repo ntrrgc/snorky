@@ -15,6 +15,27 @@ describe("A Snorky RPC service", function() {
     this.mockService = new this.MockService();
   });
 
+  it("can not overwrite methods with .addRPCMethods()", function() {
+    var self = this;
+
+    var overrideInClass = function() {
+      // already defined
+      self.MockService.addRPCMethods(["sum"]);
+    };
+    var errorMsg1 = 'Method "sum" already exists in the class. ' +
+      'Refusing to overwrite it.';
+
+    var overrideInParents = function() {
+      // defined in Service (super parent)
+      self.MockService.addRPCMethods(["sendMessage"]);
+    };
+    var errorMsg2 = 'Method "sendMessage" already exists in the class. ' +
+      'Refusing to overwrite it.';
+
+    expect(overrideInClass).toThrow(Error(errorMsg1));
+    expect(overrideInParents).toThrow(Error(errorMsg2));
+  });
+
   it("can call known methods by their name", function() {
     expect(this.mockService.sum).toEqual(jasmine.any(Function));
   });
