@@ -1,7 +1,5 @@
-"use strict";
-
-var Snorky = (function() {
-  var Class = my.Class;
+var Snorky = (function(Class) {
+  "use strict";
 
   // Minimal lodash-style implementation
   var _ = {
@@ -123,4 +121,4 @@ var Snorky = (function() {
 
   return Snorky;
 
-})();
+})(my.Class);

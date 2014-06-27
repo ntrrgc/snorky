@@ -1,6 +1,5 @@
-"use strict";
-
 (function() {
+  "use strict";
 
   Snorky.Service = Snorky.Class({
     constructor: function(name, snorky) {

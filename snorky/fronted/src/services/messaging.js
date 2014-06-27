@@ -1,6 +1,5 @@
-"use strict";
-
 (function() {
+  "use strict";
 
   Snorky.Messaging = Snorky.Class(Snorky.RPCService, {
     onNotification: function(message) {
