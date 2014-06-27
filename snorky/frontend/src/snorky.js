@@ -116,8 +116,9 @@ var Snorky = (function(Class) {
 
   });
 
-  // Export Class
+  // Export Class and _
   Snorky.Class = Class;
+  Snorky._ = _;
 
   return Snorky;
 

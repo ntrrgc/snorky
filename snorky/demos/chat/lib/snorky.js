@@ -116,8 +116,9 @@ var Snorky = (function(Class) {
 
   });
 
-  // Export Class
+  // Export Class and _
   Snorky.Class = Class;
+  Snorky._ = _;
 
   return Snorky;
 
@@ -126,7 +127,10 @@ var Snorky = (function(Class) {
 (function() {
   "use strict";
 
-  Snorky.Service = new Snorky.Class({
+  var Class = Snorky.Class;
+  var _ = Snorky._;
+
+  Snorky.Service = new Class({
     constructor: function(name, snorky) {
       if (!name instanceof String|| !snorky) {
         throw Error("Bad arguments for service constructor");
@@ -150,7 +154,7 @@ var Snorky = (function(Class) {
     }
   });
 
-  Snorky.RPCService = new Snorky.Class(Snorky.Service, {
+  Snorky.RPCService = new Class(Snorky.Service, {
     init: function() {
       this.nextCallId = 0;
       this.calls = {}; // callId -> Promise
@@ -225,7 +229,9 @@ var Snorky = (function(Class) {
 (function() {
   "use strict";
 
-  Snorky.Messaging = new Snorky.Class(Snorky.RPCService, {
+  var Class = Snorky.Class;
+
+  Snorky.Messaging = new Class(Snorky.RPCService, {
     onNotification: function(message) {
       if (message.type == "message") {
         this.onParticipantMessage(message.sender, message.dest, message.body);

@@ -1,7 +1,10 @@
 (function() {
   "use strict";
 
-  Snorky.Service = new Snorky.Class({
+  var Class = Snorky.Class;
+  var _ = Snorky._;
+
+  Snorky.Service = new Class({
     constructor: function(name, snorky) {
       if (!name instanceof String|| !snorky) {
         throw Error("Bad arguments for service constructor");
@@ -25,7 +28,7 @@
     }
   });
 
-  Snorky.RPCService = new Snorky.Class(Snorky.Service, {
+  Snorky.RPCService = new Class(Snorky.Service, {
     init: function() {
       this.nextCallId = 0;
       this.calls = {}; // callId -> Promise
