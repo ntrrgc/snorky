@@ -30,7 +30,14 @@ module.exports = (grunt) ->
       options:
         specs: specFiles
     karma:
-      unit:
+      server:
+        options:
+          files: concat(libFiles, srcFiles, specFiles)
+          frameworks: ["jasmine"]
+          reporters: ["progress"]
+          singleRun: false
+          autoWatch: true
+      auto:
         options:
           files: concat(libFiles, srcFiles, specFiles)
           browsers: [
@@ -40,7 +47,7 @@ module.exports = (grunt) ->
             "Firefox"
           ]
           frameworks: ["jasmine"]
-          reporters: ["progress", "growl"]
+          reporters: ["progress"]
           singleRun: false
           autoWatch: true
     jshint:
