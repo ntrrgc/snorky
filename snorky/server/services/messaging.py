@@ -50,6 +50,7 @@ class MessagingService(RPCService):
         self.send_message_to(dest_client, {
             "type": "message",
             "sender": sender,
+            "dest": dest,
             "body": body
         })
 

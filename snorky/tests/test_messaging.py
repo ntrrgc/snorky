@@ -73,6 +73,7 @@ class TestMessaging(RPCTestMixin, TestCase):
             "message": {
                 "type": "message",
                 "sender": "Alice",
+                "dest": "Bob",
                 "body": "Hi, Bob."
             }
         })
