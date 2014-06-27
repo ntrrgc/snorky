@@ -4,7 +4,8 @@ from snorky.server.services.base import RPCService, RPCError, rpc_command
 class MessagingService(RPCService):
     def __init__(self, name):
         super(MessagingService, self).__init__(name)
-        self.participants = {}
+        self.participants = {}        # participant name -> client
+        self.client_participants = {} # client -> set(participant names)
 
     @rpc_command
     def registerParticipant(self, req, name):
@@ -15,6 +16,7 @@ class MessagingService(RPCService):
             raise RPCError("Name not allowed")
 
         self.participants[name] = req.client
+        self.client_participants.setdefault(req.client, set()).add(name)
 
     @rpc_command
     def unregisterParticipant(self, req, name):
@@ -24,6 +26,9 @@ class MessagingService(RPCService):
                 raise RPCError("Invalid participant")
 
             del self.participants[name]
+            self.client_participants[req.client].remove(name)
+            if len(self.client_participants[req.client]) == 0:
+                del self.client_participants[req.client]
         except KeyError:
             raise RPCError("Unknown participant")
 
@@ -58,3 +63,8 @@ class MessagingService(RPCService):
         # Default policy: allow all names
         return True
 
+    def client_disconnected(self, client):
+        if client in self.client_participants:
+            for participant_name in self.client_participants[client]:
+                del self.participants[participant_name]
+            del self.client_participants[client]

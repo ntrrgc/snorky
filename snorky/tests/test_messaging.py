@@ -167,5 +167,26 @@ class TestMessaging(RPCTestMixin, TestCase):
                             "listParticipants")
         self.assertEqual(data, ["Alice", "Bob"])
 
+    def test_disconnect(self):
+        self.test_register()
+
+        self.assertIn("Alice", self.service.participants)
+        self.assertIn(self.alice, self.service.client_participants)
+
+        self.service.client_disconnected(self.alice)
+
+        self.assertNotIn("Alice", self.service.participants)
+        self.assertNotIn(self.alice, self.service.client_participants)
+
+    def test_disconnect_unknown(self):
+        # Alice is not registered
+
+        self.assertNotIn("Alice", self.service.participants)
+        self.assertNotIn(self.alice, self.service.client_participants)
+
+        self.service.client_disconnected(self.alice)
+        # No errors
+
+
 if __name__ == "__main__":
     unittest.main()
