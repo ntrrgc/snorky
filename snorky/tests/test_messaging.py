@@ -30,7 +30,7 @@ class TestMessaging(RPCTestMixin, TestCase):
 
     def test_register(self):
         data = self.rpcCall(self.service, self.alice,
-                           "register_participant", name="Alice")
+                           "registerParticipant", name="Alice")
         self.assertEqual(data, None)
 
     def test_register_twice(self):
@@ -39,7 +39,7 @@ class TestMessaging(RPCTestMixin, TestCase):
 
         # Now register Bob
         data = self.rpcCall(self.service, self.bob,
-                            "register_participant", name="Bob")
+                            "registerParticipant", name="Bob")
         self.assertEqual(data, None)
 
     def test_register_same_name(self):
@@ -48,12 +48,12 @@ class TestMessaging(RPCTestMixin, TestCase):
 
         # Try to register Alice again
         msg = self.rpcExpectError(self.service, self.alice,
-                                  "register_participant", name="Alice")
+                                  "registerParticipant", name="Alice")
         self.assertEqual(msg, "Name already registered")
 
     def test_banned_name(self):
         msg = self.rpcExpectError(self.service, self.alice,
-                                  "register_participant", name="DrDuck")
+                                  "registerParticipant", name="DrDuck")
         self.assertEqual(msg, "Name not allowed")
 
     def test_send(self):
@@ -83,7 +83,7 @@ class TestMessaging(RPCTestMixin, TestCase):
 
         # Now register Carol
         data = self.rpcCall(self.service, self.carol,
-                            "register_participant", name="Carol")
+                            "registerParticipant", name="Carol")
         self.assertEqual(data, None)
 
     def test_send_forgery(self):
@@ -126,7 +126,7 @@ class TestMessaging(RPCTestMixin, TestCase):
         self.test_register_three()
 
         data = self.rpcCall(self.service, self.alice,
-                            "list_participants")
+                            "listParticipants")
         self.assertEqual(data, ["Alice", "Bob", "Carol"])
 
     def test_unregister_participant(self):
@@ -134,7 +134,7 @@ class TestMessaging(RPCTestMixin, TestCase):
 
         # Bob unregisters
         data = self.rpcCall(self.service, self.bob,
-                            "unregister_participant", name="Bob")
+                            "unregisterParticipant", name="Bob")
         self.assertEqual(data, None)
 
         msg = self.rpcExpectError(self.service, self.alice,
@@ -143,7 +143,7 @@ class TestMessaging(RPCTestMixin, TestCase):
         self.assertEqual(msg, "Unknown destination")
 
         data = self.rpcCall(self.service, self.alice,
-                            "list_participants")
+                            "listParticipants")
         self.assertEqual(data, ["Alice"])
 
     def test_unregister_unknown_participant(self):
@@ -151,7 +151,7 @@ class TestMessaging(RPCTestMixin, TestCase):
 
         # Bob tries to unregister Allice
         msg = self.rpcExpectError(self.service, self.bob,
-                                  "unregister_participant", name="Charlie")
+                                  "unregisterParticipant", name="Charlie")
         self.assertEqual(msg, "Unknown participant")
 
     def test_unregister_other_participant(self):
@@ -159,11 +159,11 @@ class TestMessaging(RPCTestMixin, TestCase):
 
         # Bob tries to unregister Allice
         msg = self.rpcExpectError(self.service, self.bob,
-                                  "unregister_participant", name="Alice")
+                                  "unregisterParticipant", name="Alice")
         self.assertEqual(msg, "Invalid participant")
 
         data = self.rpcCall(self.service, self.alice,
-                            "list_participants")
+                            "listParticipants")
         self.assertEqual(data, ["Alice", "Bob"])
 
 if __name__ == "__main__":

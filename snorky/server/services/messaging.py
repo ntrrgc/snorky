@@ -7,7 +7,7 @@ class MessagingService(RPCService):
         self.participants = {}
 
     @rpc_command
-    def register_participant(self, req, name):
+    def registerParticipant(self, req, name):
         if name in self.participants:
             raise RPCError("Name already registered")
 
@@ -17,7 +17,7 @@ class MessagingService(RPCService):
         self.participants[name] = req.client
 
     @rpc_command
-    def unregister_participant(self, req, name):
+    def unregisterParticipant(self, req, name):
         try:
             if self.participants[name] != req.client:
                 # Don't let clients unregister other participants
@@ -28,7 +28,7 @@ class MessagingService(RPCService):
             raise RPCError("Unknown participant")
 
     @rpc_command
-    def list_participants(self, req):
+    def listParticipants(self, req):
         return sorted(self.participants.keys())
 
     @rpc_command
