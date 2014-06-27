@@ -1,9 +1,8 @@
 describe("Messaging service", function() {
   beforeEach(function() {
-    this.MockService = Snorky.Class(Snorky.RPCService, {
+    this.MockService = Snorky.Class(Snorky.Messaging, {
       constructor: function() {
         // Do not initialize snorky and name
-        // Mock sendMessage method with an spy
         this.init();
       }
     });

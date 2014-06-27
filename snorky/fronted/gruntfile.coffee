@@ -2,27 +2,22 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-jasmine"
   grunt.loadNpmTasks "grunt-karma"
 
+  srcFiles = [
+    "lib/*.js"
+    "src/snorky.js"
+    "src/services/base.js"
+    "src/services/messaging.js"
+  ]
+
   grunt.initConfig
     jasmine:
-      src: [
-        "lib/lodash.compat.js"
-        "lib/json3.lib.js"
-        "lib/my.class.js"
-        "lib/promise.js"
-        "src/snorky.js"
-        "src/services/base.js"
-      ]
+      src: srcFiles
       options:
         specs: "src/spec/**.spec.js"
     karma:
       unit:
         options:
-          files: [
-            "lib/*.js"
-            "src/snorky.js"
-            "src/services/base.js"
-            "src/spec/**.spec.js"
-          ]
+          files: srcFiles.concat(["src/spec/**.spec.js"])
           browsers: [
             "IE6 - WinXP"
             "IE8 - WinXP"
