@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="lib/jquery.js"></script>
+  <script src="lib/my.class.js"></script>
+  <script src="lib/json3.min.js"></script>
+  <script src="lib/lodash.compat.js"></script>
+  <script src="lib/snorky.js"></script>
+  <script src="demo.js"></script>
+  <title>Chat demo</title>
+</head>
+<body>
+  <h1>Chat demo</h1>
+
+  <form id="frmRegister">
+    <h2>Register</h2>
+    <label>
+      Name: <input type="text" id="txtParticipantName">
+    </label>
+    <input type="submit" id="btnRegister" value="Register">
+    <input type="button" id="btnUnregister" value="Unregister">
+    <div id="statusRegister"></div>
+  </form>
+
+  <form id="frmParticipants">
+    <h2>Participants</h2>
+    <input type="button" id="btnListParticipants" value="List participants">
+    <div id="statusParticipants"></div>
+    <ul id="ulParticipants">
+    </ul>
+  </form>
+
+  <form id="frmMessages">
+    <h2>Messages</h2>
+    Send from <input type="text" id="txtFrom">
+    to <input type="text" id="txtTo"><br/>
+    <input type="text" id="txtMessage" style="width: 400px">
+    <input type="submit" value="Submit">
+    <div id="statusMessages"></div>
+
+    <ul id="ulMessages">
+    </ul>
+  </form>
+
+</body>
+</html>
