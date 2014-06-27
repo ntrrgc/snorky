@@ -62,4 +62,14 @@ describe("A Snorky RPC service", function() {
       done();
     })
   });
+
+  it("allows requesting commands without parameters", function() {
+    this.mockService.sum();
+
+    expect(this.mockService.sendMessage).toHaveBeenCalledWith({
+      "command": "sum",
+      "callId": 0,
+      "params": {}
+    });
+  });
 });

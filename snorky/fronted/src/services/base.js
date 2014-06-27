@@ -88,7 +88,7 @@
           }
 
           cls.prototype[method] = function(params) {
-            return this.call(method, params);
+            return this.call(method, params || {});
           };
         });
       }
