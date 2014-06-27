@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html ng-app="Chat">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat demo</title>
+  <link rel="stylesheet" href="/lib/bootstrap.css">
+
+  <script src="/lib/promise.js"></script>
+  <script src="/lib/my.class.js"></script>
+  <script src="/lib/snorky.js"></script>
+  <script src="/lib/angular.js"></script>
+  <script src="/lib/lodash.compat.js"></script>
+  <script src="/lib/ui-bootstrap-tpls-0.11.0.js"></script>
+  <script src="lodash_utils.js"></script>
+  <script src="chat.js"></script>
+</head>
+<body ng-controller="ChatCtrl" class="container">
+  <h1>Chat demo</h1>
+
+  <div ng-show="chat.snorky.connecting">Connecting to Snorky...</div>
+
+  <div ng-show="chat.snorky.connected && !chat.registered">
+    <form ng-submit="registerName(myName)">
+      <alert type="danger" ng-if="registerError != ''">
+        {{ registerError }}
+      </alert>
+      <label>Choose a name:</label>
+      <input type="text" ng-model="myName">
+      <input type="submit" value="Register"
+             ng-disabled="myName.length == 0">
+    </form>
+  </div>
+
+  <div ng-show="chat.snorky.connected && chat.registered">
+    <form ng-submit="addBuddy(buddyName); buddyName = ''">
+      <label>Add a buddy:</label>
+      <input type="text" ng-model="buddyName">
+      <input type="submit" value="Add"
+             ng-disabled="buddyName.length == 0">
+    </form>
+
+    <tabset>
+      <tab heading="{{ conv.participantName }}" 
+           ng-repeat="conv in chat.conversations" 
+           active="conv.selected">
+        <ul ng-repeat="message in conv.messages">
+          <li>
+            <strong style="color: #7FAFE3">{{ message.sender }}</strong>:
+            {{ message.body }}
+          </li>
+        </ul>
+        <form ng-submit="sendMessage(conv); conv.writtenMessage = ''">
+          <input type="text" ng-model="conv.writtenMessage">
+          <input type="submit" value="Send">
+          <span style="color: #EB3D3D">{{ conv.sendError }}</span>
+        </form>
+      </tab>
+    </tabset>
+  </div>
+
+</body>
+</html>
