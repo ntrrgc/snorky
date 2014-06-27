@@ -32,5 +32,5 @@ class SnorkyWebSocketHandler(WebSocketHandler):
         self.message_handler.client_disconnected(self.client)
 
     @classmethod
-    def get_route(cls, message_handler):
-        return ("/", cls, {'message_handler': message_handler})
+    def get_route(cls, message_handler, path="/"):
+        return (path, cls, {'message_handler': message_handler})
