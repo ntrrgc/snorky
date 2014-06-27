@@ -36,7 +36,7 @@
 
     call: function(command, params) {
       var self = this;
-      return new Promise(function(resolve, reject) {
+      return new Snorky.Promise(function(resolve, reject) {
         var callId = self.nextCallId++;
         self.calls[callId] = { "resolve": resolve, "reject": reject };
 

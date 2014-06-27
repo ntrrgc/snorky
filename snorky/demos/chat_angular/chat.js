@@ -1,15 +1,12 @@
 "use strict";
 
-angular.module("Chat", ["ui.bootstrap"])
+angular.module("Chat", ["ui.bootstrap", "Snorky"])
   .service("SnorkyChat", function($rootScope) {
     var self = this;
 
     this.snorky = new Snorky(WebSocket, "ws://" + location.host + "/ws", {
       "messaging": Snorky.Messaging
     }, true);
-    this.snorky.onConnected = function() {
-      $rootScope.$digest();
-    };
     var messaging = this.snorky.services.messaging;
 
     this.myName = null;
@@ -20,10 +17,8 @@ angular.module("Chat", ["ui.bootstrap"])
       return messaging.registerParticipant({
         "name": name
       }).then(function() {
-        $rootScope.$apply(function() {
-          self.registered = true;
-          self.myName = name;
-        })
+        self.registered = true;
+        self.myName = name;
       });
     };
 
@@ -37,12 +32,10 @@ angular.module("Chat", ["ui.bootstrap"])
     };
 
     messaging.onParticipantMessage = function(sender, dest, body) {
-      $rootScope.$apply(function() {
-        var conversation = self.ensureConversation(sender);
-        conversation.messages.push({
-          "sender": sender,
-          "body": body
-        });
+      var conversation = self.ensureConversation(sender);
+      conversation.messages.push({
+        "sender": sender,
+        "body": body
       });
     };
 
@@ -52,11 +45,9 @@ angular.module("Chat", ["ui.bootstrap"])
         "dest": destName,
         "body": body
       }).then(function() {
-        $rootScope.$apply(function() {
-          conversation.messages.push({
-            "sender": self.myName,
-            "body": body
-          });
+        conversation.messages.push({
+          "sender": self.myName,
+          "body": body
         });
       });
     };
@@ -70,9 +61,7 @@ angular.module("Chat", ["ui.bootstrap"])
     $scope.registerName = function(name) {
       $scope.registerError = "";
       return $scope.chat.registerName(name).catch(function(err) {
-        $scope.$apply(function() {
-          $scope.registerError = err.message;
-        });
+        $scope.registerError = err.message;
       });
     };
 
@@ -87,9 +76,7 @@ angular.module("Chat", ["ui.bootstrap"])
       var body = conversation.writtenMessage;
       return $scope.chat.sendMessage(conversation, dest, body)
         .catch(function(err) {
-          $scope.$apply(function() {
-            conversation.sendError = err.message;
-          });
+          conversation.sendError = err.message;
         });
     };
   })

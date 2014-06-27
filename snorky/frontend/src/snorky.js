@@ -78,7 +78,7 @@ var Snorky = (function(Class) {
       this.connected = true;
       this.connecting = false;
 
-      this.onConnected();
+      Snorky.emitEvent(this.onConnected);
 
       _.each(this._queuedMessages, function(rawMessage) {
         this._socket.send(rawMessage);
@@ -102,7 +102,7 @@ var Snorky = (function(Class) {
       this.connected = false;
       this.connecting = false;
 
-      this.onDisconnected();
+      Snorky.emitEvent(this.onDisconnected);
     },
 
     _sendServiceMessage: function(serviceName, message) {
@@ -124,13 +124,27 @@ var Snorky = (function(Class) {
 
     onDisconnected: function() {
       // noop
-    }
+    },
 
   });
 
   // Export Class and _
   Snorky.Class = Class;
   Snorky._ = _;
+
+  // Snorky will use ES6 promises by default, but it allows switching
+  Snorky.Promise = Promise;
+
+  // Some MV* frameworks need to envelop event handlers or perform additional
+  // tasks in order to update the UI. By default we will just call the
+  // function normally, but allow changing this to extensions.
+  //
+  // We will use this adapter for all events intended to be defined outside of
+  // Snorky code.
+  Snorky.emitEvent = function(callback) {
+    var callbackArgs = Array.prototype.slice.call(arguments, 1);
+    callback.apply(undefined, callbackArgs);
+  };
 
   return Snorky;
 
