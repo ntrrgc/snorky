@@ -20,6 +20,9 @@ class Service(object):
             "message": msg,
         })
 
+    def client_connected(self, client):
+        pass
+
     def client_disconnected(self, client):
         pass
 

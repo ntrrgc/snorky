@@ -42,7 +42,9 @@ class MessageHandler(object):
         return self.process_message_from(client, decoded_msg)
 
     def client_connected(self, client):
-        pass
+        for service in self.registered_services.values():
+            service.client_connected(client)
 
     def client_disconnected(self, client):
-        pass
+        for service in self.registered_services.values():
+            service.client_disconnected(client)
