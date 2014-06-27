@@ -78,6 +78,8 @@ var Snorky = (function(Class) {
       this.connected = true;
       this.connecting = false;
 
+      this.onConnected();
+
       _.each(this._queuedMessages, function(rawMessage) {
         this._socket.send(rawMessage);
       });
@@ -99,6 +101,8 @@ var Snorky = (function(Class) {
 
       this.connected = false;
       this.connecting = false;
+
+      this.onDisconnected();
     },
 
     _sendServiceMessage: function(serviceName, message) {
@@ -112,6 +116,14 @@ var Snorky = (function(Class) {
       } else {
         this._queuedMessages.push(rawMessage);
       }
+    },
+
+    onConnected: function() {
+      // noop
+    },
+
+    onDisconnected: function() {
+      // noop
     }
 
   });

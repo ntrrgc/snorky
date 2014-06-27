@@ -28,6 +28,8 @@ describe("Snorky connector", function() {
     snorky = new Snorky(this.MockSocket, "ws://localhost/", {
       "mockService": this.MockService
     });
+    spyOn(snorky, "onConnected");
+    spyOn(snorky, "onDisconnected");
 
     expect(this.MockSocket).toHaveBeenCalledWith("ws://localhost/");
     expect(snorky.connected).toBe(false);
@@ -41,7 +43,9 @@ describe("Snorky connector", function() {
     it("acknowledges when the endpoint accepts the connection", function() {
     createsSocket.call(this);
 
+    expect(snorky.onConnected).not.toHaveBeenCalled();
     socket.onopen();
+    expect(snorky.onConnected).toHaveBeenCalled();
 
     expect(snorky.connected).toBe(true);
     expect(snorky.connecting).toBe(false);
@@ -87,7 +91,9 @@ describe("Snorky connector", function() {
   it("acknowledges when the endpoint closes the connection", function() {
     connectionEstablished.call(this);
 
+    expect(snorky.onDisconnected).not.toHaveBeenCalled();
     socket.onclose();
+    expect(snorky.onDisconnected).toHaveBeenCalled();
 
     expect(snorky.connected).toBe(false);
     expect(snorky.connecting).toBe(false);
