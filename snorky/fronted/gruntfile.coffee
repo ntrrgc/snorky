@@ -8,6 +8,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-concat"
   grunt.loadNpmTasks "grunt-contrib-jasmine"
   grunt.loadNpmTasks "grunt-karma"
+  grunt.loadNpmTasks "grunt-contrib-jshint"
 
   libFiles = [
     "lib/*.js"
@@ -42,12 +43,16 @@ module.exports = (grunt) ->
           reporters: ["progress", "growl"]
           singleRun: false
           autoWatch: true
+    jshint:
+      src: srcFiles
+      options:
+        force: true
     concat:
       src:
         src: srcFiles
         dest: "build/snorky.js"
 
-  grunt.registerTask "test", ["jasmine"]
+  grunt.registerTask "test", ["jshint", "jasmine"]
   grunt.registerTask "default", ["test"]
   grunt.registerTask "build", ["concat:src"]
   return

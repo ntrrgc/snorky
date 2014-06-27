@@ -16,7 +16,9 @@
     "karma-jasmine": "~0.2.2",
     "karma-firefox-launcher": "~0.1.3",
     "karma-growl-reporter": "~0.1.1",
-    "grunt-contrib-concat": "~0.4.0"
+    "grunt-contrib-concat": "~0.4.0",
+    "grunt-contrib-jshint": "~0.10.0",
+    "jshint": "~2.5.1"
   },
   "dependencies": {}
 }
