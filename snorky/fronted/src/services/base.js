@@ -1,7 +1,7 @@
 (function() {
   "use strict";
 
-  Snorky.Service = Snorky.Class({
+  Snorky.Service = new Snorky.Class({
     constructor: function(name, snorky) {
       if (!name instanceof String|| !snorky) {
         throw Error("Bad arguments for service constructor");
@@ -25,10 +25,10 @@
     }
   });
 
-  Snorky.RPCService = Snorky.Class(Snorky.Service, {
+  Snorky.RPCService = new Snorky.Class(Snorky.Service, {
     init: function() {
       this.nextCallId = 0;
-      this.calls = {} // callId -> Promise
+      this.calls = {}; // callId -> Promise
     },
 
     call: function(command, params) {
@@ -42,11 +42,11 @@
           "params": params,
           "callId": callId
         });
-      })
+      });
     },
 
     onMessage: function(message) {
-      if (!"type" in message) {
+      if (!("type" in message)) {
         console.error('Non-RPC message received from service "%s"',
                       this.name);
         return;
@@ -54,7 +54,7 @@
 
       if (message.type == "response" || message.type == "error") {
         // Check for a known callId
-        if (!message.callId in this.calls) {
+        if (!(message.callId in this.calls)) {
           console.error(
             'Response for unknown call with id "%s" from service "%s"',
             message.callId, this.name);
@@ -83,16 +83,16 @@
         _.each(methods, function(method) {
           // Prevent the user from breaking internal existing methods
           if (method in cls.prototype) {
-            throw Error('Method "' + method + '" already exists in the class. '
-                        + 'Refusing to overwrite it.');
+            throw Error('Method "' + method + '" already exists in the ' +
+                        'class. Refusing to overwrite it.');
           }
 
           cls.prototype[method] = function(params) {
             return this.call(method, params);
           };
-        })
+        });
       }
     }
-  })
+  });
 
 })();

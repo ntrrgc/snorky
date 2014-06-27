@@ -1,7 +1,7 @@
 (function() {
   "use strict";
 
-  Snorky.Messaging = Snorky.Class(Snorky.RPCService, {
+  Snorky.Messaging = new Snorky.Class(Snorky.RPCService, {
     onNotification: function(message) {
       if (message.type == "message") {
         this.onParticipantMessage(message.sender, message.dest, message.body);
@@ -20,6 +20,6 @@
     "unregisterParticipant",
     "listParticipants",
     "send"
-  ])
+  ]);
 
 })();

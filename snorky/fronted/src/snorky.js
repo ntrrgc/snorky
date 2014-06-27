@@ -5,7 +5,7 @@ var Snorky = (function(Class) {
   var _ = {
     each: function(collection, callback, thisArg) {
       for (var key in collection) {
-        if (callback.call(thisArg, collection[key], key, collection) == false) {
+        if (callback.call(thisArg, collection[key], key, collection) === false) {
           break;
         }
       }
@@ -18,7 +18,7 @@ var Snorky = (function(Class) {
     }
   };
 
-  var Snorky = Class({
+  var Snorky = new Class({
     STATIC: {
       Promise: Promise // use ES6 promises by default
     },
@@ -30,8 +30,8 @@ var Snorky = (function(Class) {
       this.services = {};
 
       for (var serviceName in services) {
-        var serviceClass = services[serviceName];
-        this.services[serviceName] = new serviceClass(serviceName, this);
+        var ServiceClass = services[serviceName];
+        this.services[serviceName] = new ServiceClass(serviceName, this);
       }
 
       this._socket = null;
