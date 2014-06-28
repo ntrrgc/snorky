@@ -19,10 +19,6 @@ var Snorky = (function(Class) {
   };
 
   var Snorky = new Class({
-    STATIC: {
-      Promise: Promise // use ES6 promises by default
-    },
-
     constructor: function(socketClass, address, services, debug) {
       this.address = address;
       this.socketClass = socketClass;
@@ -124,7 +120,7 @@ var Snorky = (function(Class) {
 
     onDisconnected: function() {
       // noop
-    },
+    }
 
   });
 
