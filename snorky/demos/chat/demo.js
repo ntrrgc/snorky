@@ -1,10 +1,12 @@
+var snorky, messaging;
+
 $(function() {
 
-  var snorky = new Snorky(SockJS, "/sockjs", {
+  snorky = new Snorky(SockJS, "/sockjs", {
     "messaging": Snorky.Messaging
   }, true);
 
-  var messaging = snorky.services.messaging;
+  messaging = snorky.services.messaging;
 
   $("#frmRegister").submit(function(ev) {
     ev.preventDefault();
