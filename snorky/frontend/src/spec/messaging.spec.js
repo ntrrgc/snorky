@@ -40,6 +40,10 @@ describe("Messaging service", function() {
     });
 
     expect(this.messagingService.onParticipantMessage).toHaveBeenCalledWith(
-      "Bob", "Alice", "Hi, Alice");
+      jasmine.objectContaining({
+        "sender": "Bob",
+        "dest": "Alice",
+        "body": "Hi, Alice"
+      }));
   });
 });

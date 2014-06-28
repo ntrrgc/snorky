@@ -57,9 +57,9 @@ $(function() {
     });
   });
 
-  messaging.onParticipantMessage = function(sender, dest, body) {
+  messaging.onParticipantMessage = function(msg) {
     $("#ulMessages").append($("<li/>", {
-      text: sender + " to " + dest + ": " + body
+      text: msg.sender + " to " + msg.dest + ": " + msg.body
     }));
   };
 

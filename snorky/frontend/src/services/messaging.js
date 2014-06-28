@@ -6,15 +6,14 @@
   Snorky.Messaging = new Class(Snorky.RPCService, {
     onNotification: function(message) {
       if (message.type == "message") {
-        Snorky.emitEvent(this.onParticipantMessage,
-                         message.sender, message.dest, message.body);
+        Snorky.emitEvent(this.onParticipantMessage, message);
       } else {
         console.error("Unknown message type in messaging service: " +
                       message.type);
       }
     },
 
-    onParticipantMessage: function(sender, body) {
+    onParticipantMessage: function(message) {
       // noop
     }
   });

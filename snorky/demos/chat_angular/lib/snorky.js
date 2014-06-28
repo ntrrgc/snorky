@@ -19,10 +19,6 @@ var Snorky = (function(Class) {
   };
 
   var Snorky = new Class({
-    STATIC: {
-      Promise: Promise // use ES6 promises by default
-    },
-
     constructor: function(socketClass, address, services, debug) {
       this.address = address;
       this.socketClass = socketClass;
@@ -45,12 +41,23 @@ var Snorky = (function(Class) {
     logDebug: function() {
       // Do not use console.log when console is undefined (e.g. Internet
       // Explorer)
-      if (this.debug && typeof console == "object") {
-        console.debug.apply(console, arguments);
+      if (this.debug && console && console.log)
+      {
+        // Use console.debug() falling back to console.log() if unavailable
+        var debug = console.debug || console.log;
+
+        if (debug.apply) {
+          debug.apply(console, arguments);
+        } else {
+          // Some versions of IE do not have apply
+          var a = arguments;
+          debug(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9],
+                a[10], a[11], a[12]);
+        }
       }
     },
 
-    connect: function(done) {
+    connect: function() {
       var self = this;
 
       this.connecting = true;
@@ -124,7 +131,7 @@ var Snorky = (function(Class) {
 
     onDisconnected: function() {
       // noop
-    },
+    }
 
   });
 
@@ -260,15 +267,14 @@ var Snorky = (function(Class) {
   Snorky.Messaging = new Class(Snorky.RPCService, {
     onNotification: function(message) {
       if (message.type == "message") {
-        Snorky.emitEvent(this.onParticipantMessage,
-                         message.sender, message.dest, message.body);
+        Snorky.emitEvent(this.onParticipantMessage, message);
       } else {
         console.error("Unknown message type in messaging service: " +
                       message.type);
       }
     },
 
-    onParticipantMessage: function(sender, body) {
+    onParticipantMessage: function(message) {
       // noop
     }
   });

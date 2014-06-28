@@ -31,12 +31,9 @@ angular.module("Chat", ["ui.bootstrap", "Snorky"])
       });
     };
 
-    messaging.onParticipantMessage = function(sender, dest, body) {
-      var conversation = self.ensureConversation(sender);
-      conversation.messages.push({
-        "sender": sender,
-        "body": body
-      });
+    messaging.onParticipantMessage = function(msg) {
+      var conversation = self.ensureConversation(msg.sender);
+      conversation.messages.push(msg);
     };
 
     this.sendMessage = function(conversation, destName, body) {
