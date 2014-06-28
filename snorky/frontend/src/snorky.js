@@ -57,7 +57,7 @@ var Snorky = (function(Class) {
       }
     },
 
-    connect: function(done) {
+    connect: function() {
       var self = this;
 
       this.connecting = true;
