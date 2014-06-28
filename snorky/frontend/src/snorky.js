@@ -41,8 +41,19 @@ var Snorky = (function(Class) {
     logDebug: function() {
       // Do not use console.log when console is undefined (e.g. Internet
       // Explorer)
-      if (this.debug && typeof console == "object") {
-        console.debug.apply(console, arguments);
+      if (this.debug && console && console.log)
+      {
+        // Use console.debug() falling back to console.log() if unavailable
+        var debug = console.debug || console.log;
+
+        if (debug.apply) {
+          debug.apply(console, arguments);
+        } else {
+          // Some versions of IE do not have apply
+          var a = arguments;
+          debug(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9],
+                a[10], a[11], a[12]);
+        }
       }
     },
 

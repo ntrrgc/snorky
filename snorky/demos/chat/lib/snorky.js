@@ -19,10 +19,6 @@ var Snorky = (function(Class) {
   };
 
   var Snorky = new Class({
-    STATIC: {
-      Promise: Promise // use ES6 promises by default
-    },
-
     constructor: function(socketClass, address, services, debug) {
       this.address = address;
       this.socketClass = socketClass;
@@ -45,8 +41,19 @@ var Snorky = (function(Class) {
     logDebug: function() {
       // Do not use console.log when console is undefined (e.g. Internet
       // Explorer)
-      if (this.debug && typeof console == "object") {
-        console.debug.apply(console, arguments);
+      if (this.debug && console && console.log)
+      {
+        // Use console.debug() falling back to console.log() if unavailable
+        var debug = console.debug || console.log;
+
+        if (debug.apply) {
+          debug.apply(console, arguments);
+        } else {
+          // Some versions of IE do not have apply
+          var a = arguments;
+          debug(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9],
+                a[10], a[11], a[12]);
+        }
       }
     },
 
@@ -78,6 +85,8 @@ var Snorky = (function(Class) {
       this.connected = true;
       this.connecting = false;
 
+      Snorky.emitEvent(this.onConnected);
+
       _.each(this._queuedMessages, function(rawMessage) {
         this._socket.send(rawMessage);
       });
@@ -99,6 +108,8 @@ var Snorky = (function(Class) {
 
       this.connected = false;
       this.connecting = false;
+
+      Snorky.emitEvent(this.onDisconnected);
     },
 
     _sendServiceMessage: function(serviceName, message) {
@@ -112,6 +123,14 @@ var Snorky = (function(Class) {
       } else {
         this._queuedMessages.push(rawMessage);
       }
+    },
+
+    onConnected: function() {
+      // noop
+    },
+
+    onDisconnected: function() {
+      // noop
     }
 
   });
@@ -119,6 +138,20 @@ var Snorky = (function(Class) {
   // Export Class and _
   Snorky.Class = Class;
   Snorky._ = _;
+
+  // Snorky will use ES6 promises by default, but it allows switching
+  Snorky.Promise = Promise;
+
+  // Some MV* frameworks need to envelop event handlers or perform additional
+  // tasks in order to update the UI. By default we will just call the
+  // function normally, but allow changing this to extensions.
+  //
+  // We will use this adapter for all events intended to be defined outside of
+  // Snorky code.
+  Snorky.emitEvent = function(callback) {
+    var callbackArgs = Array.prototype.slice.call(arguments, 1);
+    callback.apply(undefined, callbackArgs);
+  };
 
   return Snorky;
 
@@ -162,7 +195,7 @@ var Snorky = (function(Class) {
 
     call: function(command, params) {
       var self = this;
-      return new Promise(function(resolve, reject) {
+      return new Snorky.Promise(function(resolve, reject) {
         var callId = self.nextCallId++;
         self.calls[callId] = { "resolve": resolve, "reject": reject };
 
@@ -234,7 +267,8 @@ var Snorky = (function(Class) {
   Snorky.Messaging = new Class(Snorky.RPCService, {
     onNotification: function(message) {
       if (message.type == "message") {
-        this.onParticipantMessage(message.sender, message.dest, message.body);
+        Snorky.emitEvent(this.onParticipantMessage,
+                         message.sender, message.dest, message.body);
       } else {
         console.error("Unknown message type in messaging service: " +
                       message.type);
