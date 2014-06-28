@@ -1,6 +1,6 @@
 $(function() {
 
-  var snorky = new Snorky(WebSocket, "ws://localhost:5800/", {
+  var snorky = new Snorky(SockJS, "/sockjs", {
     "messaging": Snorky.Messaging
   }, true);
 
