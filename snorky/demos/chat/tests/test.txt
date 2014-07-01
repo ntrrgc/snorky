@@ -1,0 +1,65 @@
+*** Settings ***
+Library         Selenium2Library
+Suite Setup     Start clients
+Suite Teardown  Close All Browsers
+
+*** Variables ***
+${test_url}     http://localhost:5800/
+${browser}      chrome
+aaaaaa->bbbb
+
+
+*** Test cases ***
+
+Register participants
+    [Template]  Register participant
+    Alice
+    Bob
+
+List participants
+    Click Button        id=btnListParticipants
+    Wait Until Page Contains    Alice
+    Wait Until Page Contains    Bob
+
+Send messages
+    Send message and check   Alice   Bob     Hi, Bob.
+    Send message and check   Bob     Alice   Hi.
+    Send message and check   Alice   Bob     How's going?
+    Send message and check   Alice   Bob     Summer is very hot here
+    Send message and check   Bob     Alice   Fine.
+
+Send message to offline user raises error
+    Switch Browser      Bob
+    Close Browser
+
+    Send message        Alice   Bob     Are you still there?
+    Wait Until Page Contains    Unknown destination
+
+*** Keywords ***
+Start clients
+    Open Browser        ${test_url}     ${browser}  Alice
+    Open Browser        ${test_url}     ${browser}  Bob
+
+Register participant
+    [Arguments]         ${name}
+    Switch Browser      ${name}
+    Input Text          id=txtParticipantName   ${name}
+    Click Button        id=btnRegister
+    Wait Until Page Contains    Successfully registered
+
+
+Send message
+    [Arguments]         ${sender}  ${dest}  ${msg}
+
+    Switch Browser      ${sender}
+    Input Text          id=txtFrom      ${sender}
+    Input Text          id=txtTo        ${dest}
+    Input Text          id=txtMessage   ${msg}
+    Click Button        css=#frmMessages input[type=submit]
+
+Send message and check
+    [Arguments]         ${sender}  ${dest}  ${msg}
+    Send message        ${sender}  ${dest}  ${msg}
+
+    Switch Browser              ${dest}
+    Wait Until Page Contains    ${sender} to ${dest}: ${msg}
