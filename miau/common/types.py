@@ -34,3 +34,21 @@ def with_metaclass(meta, *bases):
                 return type.__new__(cls, name, (), d)
             return meta(name, bases, d)
     return metaclass('temporary_class', None, {})
+
+class MultiDict(dict):
+    def add(self, key, value):
+        values = self.setdefault(key, set())
+        values.add(value)
+
+    def remove(self, key, value):
+        values = self[key]
+        values.remove(value)
+        if len(values) == 0:
+            del self[key]
+
+    def get_set(self, key):
+        return self.get(key, set())
+
+    def in_set(self, key, value):
+        values = self.get(key)
+        return values is not None and value in values
