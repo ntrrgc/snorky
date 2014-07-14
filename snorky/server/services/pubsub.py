@@ -12,7 +12,7 @@ class PubSubService(RPCService):
             self.send_message_to(client, {
                 "type": "message",
                 "channel": channel,
-                "body": message
+                "message": message
             })
 
     @rpc_command
