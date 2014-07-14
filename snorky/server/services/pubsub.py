@@ -4,7 +4,7 @@ from miau.common.types import MultiDict
 
 class PubSubService(RPCService):
     def __init__(self, name):
-        self.name = name
+        super(PubSubService, self).__init__(name)
         self.subscriptions = MultiDict() # channel : str -> set<Client>
 
     def do_publish(self, channel, msg):
@@ -40,7 +40,8 @@ class PubSubService(RPCService):
 
 
 class PubSubBackend(RPCService):
-    def __init__(self, frontend):
+    def __init__(self, name, frontend):
+        super(PubSubBackend, self).__init__(name)
         self.frontend = frontend
 
     @rpc_command
