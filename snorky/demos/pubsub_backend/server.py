@@ -25,7 +25,7 @@ if __name__ == "__main__":
     io_loop = IOLoop.instance()
     message_handler = MessageHandler()
 
-    pubsub = PubSubService("pubsub")
+    pubsub = PrivatePubSub("pubsub")
     pubsub_backend = PubSubBackend("pubsub_backend", pubsub)
     message_handler.register_service(pubsub)
     message_handler.register_service(pubsub_backend)
