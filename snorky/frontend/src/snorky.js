@@ -89,7 +89,7 @@ var Snorky = (function(Class) {
 
       _.each(this._queuedMessages, function(rawMessage) {
         this._socket.send(rawMessage);
-      });
+      }, this);
       this._queuedMessages = [];
     },
 
