@@ -7,18 +7,18 @@ class PubSubService(RPCService):
         super(PubSubService, self).__init__(name)
         self.subscriptions = MultiDict() # channel : str -> set<Client>
 
-    def do_publish(self, channel, msg):
+    def do_publish(self, channel, message):
         for client in self.subscriptions.get_set(channel):
             self.send_message_to(client, {
                 "type": "message",
                 "channel": channel,
-                "body": msg
+                "body": message
             })
 
     @rpc_command
-    def publish(self, req, channel, msg):
+    def publish(self, req, channel, message):
         if self.can_publish(req.client, channel):
-            self.do_publish(channel, msg)
+            self.do_publish(channel, message)
         else:
             raise RPCError("Not authorized")
 
@@ -45,5 +45,5 @@ class PubSubBackend(RPCService):
         self.frontend = frontend
 
     @rpc_command
-    def publish(self, req, channel, msg):
-        self.frontend.do_publish(channel, msg)
+    def publish(self, req, channel, message):
+        self.frontend.do_publish(channel, message)
