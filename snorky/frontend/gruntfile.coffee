@@ -18,6 +18,7 @@ module.exports = (grunt) ->
     "src/snorky.js"
     "src/services/base.js"
     "src/services/messaging.js"
+    "src/services/pubsub.js"
   ]
 
   specFiles = [
