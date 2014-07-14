@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="Announcements">
+<head>
+  <meta charset="UTF-8">
+  <title>PubSub backend demo</title>
+  <link rel="stylesheet" href="/lib/bootstrap.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="/lib/promise.js"></script>
+  <script src="/lib/my.class.js"></script>
+  <script src="/lib/snorky.js"></script>
+  <script src="/lib/angular.js"></script>
+  <script src="/lib/angular-snorky.js"></script>
+  <script src="announcements.js"></script>
+</head>
+<body ng-controller="AnnouncementsCtrl" class="container">
+  <h1>Announcements</h1>
+
+  <div ng-show="snorky.connecting">Connecting to Snorky...</div>
+
+  <ul ng-repeat="announcement in announcements track by $index">
+    <li>{{ announcement }}</li>
+  </ul>
+
+</body>
+</html>
