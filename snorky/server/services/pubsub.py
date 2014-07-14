@@ -5,7 +5,11 @@ from miau.common.types import MultiDict
 class PubSubService(RPCService):
     def __init__(self, name):
         super(PubSubService, self).__init__(name)
-        self.subscriptions = MultiDict() # channel : str -> set<Client>
+
+        # channel : str -> set<Client>
+        self.subscriptions = MultiDict()
+        # Client -> set<channel : str>
+        self.subscriptions_by_client = MultiDict()
 
     def do_publish(self, channel, message):
         for client in self.subscriptions.get_set(channel):
@@ -27,16 +31,23 @@ class PubSubService(RPCService):
         if self.subscriptions.in_set(channel, req.client):
             raise RPCError("Already subscribed")
         self.subscriptions.add(channel, req.client)
+        self.subscriptions_by_client.add(req.client, channel)
 
     @rpc_command
     def unsubscribe(self, req, channel):
         try:
             self.subscriptions.remove(channel, req.client)
+            self.subscriptions_by_client.remove(req.client, channel)
         except KeyError:
             raise RPCError("Not subscribed")
 
     def can_publish(self, client, channel):
         return True
+
+    def client_disconnected(self, client):
+        for channel in self.subscriptions_by_client.get_set(client):
+            self.subscriptions.remove(channel, client)
+        self.subscriptions_by_client.clear_set(client)
 
 
 class PubSubBackend(RPCService):

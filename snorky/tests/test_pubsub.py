@@ -94,6 +94,23 @@ class TestPubSub(RPCTestMixin, TestCase):
             },
         })
 
+    def test_disconnected(self):
+        self.test_send()
+
+        self.service.client_disconnected(self.alice)
+        self.msg_alice = None
+
+        data = self.rpcCall(self.service, self.bob,
+                            "publish", channel="offtopic",
+                            message="Are you still there?")
+        self.assertEqual(data, None)
+
+        self.assertIsNone(self.msg_alice)
+
+    def test_disconnected_unused(self):
+        # Alice disconnects without using the service
+        self.service.client_disconnected(self.alice)
+
 
 if __name__ == "__main__":
     unittest.main()

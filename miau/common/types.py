@@ -52,3 +52,7 @@ class MultiDict(dict):
     def in_set(self, key, value):
         values = self.get(key)
         return values is not None and value in values
+
+    def clear_set(self, key):
+        if key in self:
+            del self[key]
