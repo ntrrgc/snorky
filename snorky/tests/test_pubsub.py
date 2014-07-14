@@ -33,7 +33,7 @@ class TestPubSub(RPCTestMixin, TestCase):
         self.assertEqual(data, None)
 
         data = self.rpcCall(self.service, self.bob,
-                            "publish", channel="offtopic", msg="Hello")
+                            "publish", channel="offtopic", message="Hello")
         self.assertEqual(data, None)
 
         self.assertEqual(self.msg_alice, {
@@ -41,7 +41,7 @@ class TestPubSub(RPCTestMixin, TestCase):
             "message": {
                 "type": "message",
                 "channel": "offtopic",
-                "body": "Hello"
+                "message": "Hello"
             },
         })
 
@@ -55,7 +55,7 @@ class TestPubSub(RPCTestMixin, TestCase):
 
         # Send a message to the unsubscripted channel
         data = self.rpcCall(self.service, self.bob,
-                            "publish", channel="offtopic", msg="Hello")
+                            "publish", channel="offtopic", message="Hello")
         self.assertEqual(data, None)
 
         # Alice has not received anything
@@ -63,14 +63,15 @@ class TestPubSub(RPCTestMixin, TestCase):
 
     def test_send_empty(self):
         data = self.rpcCall(self.service, self.alice,
-                            "publish", channel="offtopic", msg="Hello")
+                            "publish", channel="offtopic", message="Hello")
         self.assertEqual(data, None)
 
         # No errors, no exceptions
 
     def test_send_restricted(self):
         msg = self.rpcExpectError(self.service, self.alice,
-                                  "publish", channel="operators", msg="Hello")
+                                  "publish", channel="operators",
+                                  message="Hello")
         self.assertEqual(msg, "Not authorized")
 
     def test_backend(self):
@@ -78,10 +79,10 @@ class TestPubSub(RPCTestMixin, TestCase):
                             "subscribe", channel="operators")
         self.assertEqual(data, None)
 
-        backend = PubSubBackend(self.service)
+        backend = PubSubBackend("pubsub_backend", self.service)
         data = self.rpcCall(backend, None,
                             "publish", channel="operators",
-                            msg="Hi from operators")
+                            message="Hi from operators")
         self.assertEqual(data, None)
 
         self.assertEqual(self.msg_alice, {
@@ -89,7 +90,7 @@ class TestPubSub(RPCTestMixin, TestCase):
             "message": {
                 "type": "message",
                 "channel": "operators",
-                "body": "Hi from operators"
+                "message": "Hi from operators"
             },
         })
 
