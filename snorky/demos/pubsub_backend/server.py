@@ -23,18 +23,20 @@ class PrivatePubSub(PubSubService):
 
 if __name__ == "__main__":
     io_loop = IOLoop.instance()
-    message_handler = MessageHandler()
+    frontend_message_handler = MessageHandler()
+    backend_message_handler = MessageHandler()
 
     pubsub = PrivatePubSub("pubsub")
+    frontend_message_handler.register_service(pubsub)
+
     pubsub_backend = PubSubBackend("pubsub_backend", pubsub)
-    message_handler.register_service(pubsub)
-    message_handler.register_service(pubsub_backend)
+    backend_message_handler.register_service(pubsub_backend)
 
     dirname = os.path.dirname(__file__)
     application = Application([
-        SnorkyWebSocketHandler.get_route(message_handler, "/ws"),
+        SnorkyWebSocketHandler.get_route(frontend_message_handler, "/ws"),
         (r"/backend", BackendHTTPHandler, {
-            "message_handler": message_handler,
+            "message_handler": backend_message_handler,
             "api_key": "swordfish"
         }),
         (r"/(.*)", IndexAwareStaticFileHandler, {"path": dirname}),
