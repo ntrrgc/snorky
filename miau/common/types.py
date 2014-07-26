@@ -7,9 +7,22 @@ PY3 = not PY2
 if sys.version_info < (3, 0):
     StringTypes = (str, unicode)
     ustr = unicode
+
+    def items(dict):
+        return dict.iteritems()
+    def keys(dict):
+        return dict.iterkeys()
+    def values(dict):
+        return dict.itervalues()
 else:
     StringTypes = (str)
     ustr = str
+    def items(dict):
+        return dict.items()
+    def keys(dict):
+        return dict.keys()
+    def values(dict):
+        return dict.values()
 
 def is_string(thing):
     return isinstance(thing, StringTypes)
