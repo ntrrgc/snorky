@@ -86,6 +86,7 @@ class Subscription(object):
         # Clear buffer
         self._awaited_client_buffer[:] = []
 
-    def cancel_timeout(self, io_loop):
-        io_loop.remove_timeout(self._awaited_client_timeout)
-        self._awaited_client_timeout = None
+    def cancel_timeout(self):
+        if self._awaited_client_timeout:
+            self._awaited_client_timeout.cancel()
+            self._awaited_client_timeout = None
