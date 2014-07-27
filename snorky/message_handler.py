@@ -4,7 +4,10 @@ import json
 
 class MessageHandler(object):
     def __init__(self, services=None):
-        self.registered_services = services or {}
+        self.registered_services = {}
+        if services:
+            for service in services:
+                self.register_service(service)
 
     def register_service(self, service):
         self.registered_services[service.name] = service

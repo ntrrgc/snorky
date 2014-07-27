@@ -26,6 +26,11 @@ class TestMessageHandler(unittest.TestCase):
         self.mh.register_service(EchoService("echo"))
         self.msg = None
 
+    def test_initialize_with_services(self):
+        self.mh = MessageHandler([EchoService("echo")])
+
+        self.test_call()
+
     def test_call(self):
         self.mh.process_message_from(self.client, {
             "service": "echo",
