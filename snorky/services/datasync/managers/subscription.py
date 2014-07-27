@@ -54,7 +54,7 @@ class SubscriptionManager(object):
 
         Note: Calling this method does not dettach the subscription items from
         the dealer. To fully delete a subscription from the system see
-        `DataSyncService.cancel_subscription`.
+        `DataSyncService.do_cancel_subscription`.
         """
 
         token = subscription.token
