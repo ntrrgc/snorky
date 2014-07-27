@@ -56,6 +56,7 @@ class Subscription(object):
             raise RuntimeError("Subscription already linked to a Client")
 
         self.client = client
+        self.cancel_timeout()
         self.flush_awaited_client_buffer()
 
     def lost_client(self):
