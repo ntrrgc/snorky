@@ -1,8 +1,8 @@
 import unittest
 from mock import Mock
-from snorky.server.services.datasync.subscription import \
+from snorky.services.datasync.subscription import \
         Subscription, SubscriptionItem
-from snorky.server.services.datasync.managers.subscription import \
+from snorky.services.datasync.managers.subscription import \
         SubscriptionManager, UnknownSubscription
 
 

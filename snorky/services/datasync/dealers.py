@@ -2,7 +2,7 @@ import abc
 from collections import namedtuple
 from functools import wraps
 from miau.common.types import PY2, StringTypes, Number, MultiDict, items
-from snorky.server.services.datasync.delta import \
+from snorky.services.datasync.delta import \
         Delta, InsertionDelta, UpdateDelta, DeletionDelta
 
 

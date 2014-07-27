@@ -1,8 +1,8 @@
 import unittest
 from mock import Mock
-from snorky.server.services.datasync.managers.dealer import \
+from snorky.services.datasync.managers.dealer import \
         DealerManager, UnknownModelClass, UnknownDealer
-from snorky.server.services.datasync.delta import \
+from snorky.services.datasync.delta import \
         InsertionDelta, UpdateDelta, DeletionDelta
 
 

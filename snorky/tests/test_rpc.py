@@ -1,6 +1,6 @@
 # -*- encoding: UTF-8 -*-
-from snorky.server.client import Client
-from snorky.server.services.base import RPCService, RPCError, format_call
+from snorky.client import Client
+from snorky.services.base import RPCService, RPCError, format_call
 from snorky.tests.utils.rpc import RPCTestMixin
 from tornado.testing import ExpectLog
 from unittest import TestCase

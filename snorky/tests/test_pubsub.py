@@ -1,4 +1,4 @@
-from snorky.server.services.pubsub import PubSubService, PubSubBackend
+from snorky.services.pubsub import PubSubService, PubSubBackend
 
 from snorky.tests.utils.rpc import RPCTestMixin
 from unittest import TestCase

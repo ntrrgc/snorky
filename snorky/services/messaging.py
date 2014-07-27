@@ -1,4 +1,4 @@
-from snorky.server.services.base import RPCService, RPCError, rpc_command
+from snorky.services.base import RPCService, RPCError, rpc_command
 
 
 class MessagingService(RPCService):

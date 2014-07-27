@@ -1,4 +1,4 @@
-from snorky.server.services.base import format_call
+from snorky.services.base import format_call
 
 
 class TestRequest(object):

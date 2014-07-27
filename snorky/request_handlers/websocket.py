@@ -1,5 +1,5 @@
 from tornado.websocket import WebSocketHandler
-from snorky.server.client import Client
+from snorky.client import Client
 import json
 
 

@@ -1,12 +1,12 @@
 import os
 from tornado.ioloop import IOLoop
 from tornado.web import Application, StaticFileHandler
-from snorky.server.message_handler import MessageHandler
+from snorky.message_handler import MessageHandler
 
-from snorky.server.request_handlers.http import BackendHTTPHandler
-from snorky.server.request_handlers.websocket import SnorkyWebSocketHandler
+from snorky.request_handlers.http import BackendHTTPHandler
+from snorky.request_handlers.websocket import SnorkyWebSocketHandler
 
-from snorky.server.services.pubsub import PubSubService, PubSubBackend
+from snorky.services.pubsub import PubSubService, PubSubBackend
 
 # Adapted from http://stackoverflow.com/a/23818878/1777162
 class IndexAwareStaticFileHandler(StaticFileHandler):

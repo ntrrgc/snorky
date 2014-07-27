@@ -1,5 +1,5 @@
 from tornado.web import RequestHandler, HTTPError, asynchronous
-from snorky.server.client import Client
+from snorky.client import Client
 from hmac import compare_digest
 import json
 

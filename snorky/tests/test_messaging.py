@@ -1,6 +1,6 @@
 from unittest import TestCase
 from miau.common.types import is_string
-from snorky.server.services.messaging import MessagingService
+from snorky.services.messaging import MessagingService
 from snorky.tests.utils.rpc import RPCTestMixin
 
 

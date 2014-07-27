@@ -1,5 +1,5 @@
 from sockjs.tornado import SockJSRouter, SockJSConnection
-from snorky.server.client import Client
+from snorky.client import Client
 import json
 
 

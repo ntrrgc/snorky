@@ -1,5 +1,5 @@
 import unittest
-from snorky.server.services.datasync.dealers import BroadcastDealer
+from snorky.services.datasync.dealers import BroadcastDealer
 
 
 class TestBroadcastDealer(unittest.TestCase):

@@ -1,9 +1,9 @@
 from tornado.ioloop import IOLoop
 from tornado.web import Application
-from snorky.server.message_handler import MessageHandler
-from snorky.server.request_handlers.websocket import SnorkyWebSocketHandler
+from snorky.message_handler import MessageHandler
+from snorky.request_handlers.websocket import SnorkyWebSocketHandler
 
-from snorky.server.services.base import RPCService, allowed_command
+from snorky.services.base import RPCService, allowed_command
 
 
 class FooService(RPCService):

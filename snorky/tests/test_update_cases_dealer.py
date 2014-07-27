@@ -1,8 +1,8 @@
 import simplejson as json
 import unittest
 from mock import Mock
-from snorky.server.services.datasync.dealers import SimpleDealer
-from snorky.server.services.datasync.delta import \
+from snorky.services.datasync.dealers import SimpleDealer
+from snorky.services.datasync.delta import \
         Delta, InsertionDelta, UpdateDelta, DeletionDelta
 
 class FakeService(object):

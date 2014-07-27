@@ -1,6 +1,6 @@
-from snorky.server.message_handler import MessageHandler
-from snorky.server.services.base import Service
-from snorky.server.client import Client
+from snorky.message_handler import MessageHandler
+from snorky.services.base import Service
+from snorky.client import Client
 from tornado.testing import ExpectLog
 
 import unittest

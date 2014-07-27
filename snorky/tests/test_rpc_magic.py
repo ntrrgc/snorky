@@ -1,5 +1,5 @@
-from snorky.server.client import Client
-from snorky.server.services.base import RPCService, rpc_command, RPCMeta, \
+from snorky.client import Client
+from snorky.services.base import RPCService, rpc_command, RPCMeta, \
         asynchronous
 
 from unittest import TestCase

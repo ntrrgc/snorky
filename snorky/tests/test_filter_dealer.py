@@ -1,7 +1,7 @@
 import unittest
 from mock import Mock
-from snorky.server.services.datasync.dealers import FilterDealer, BadQuery
-from snorky.server.services.datasync.delta import \
+from snorky.services.datasync.dealers import FilterDealer, BadQuery
+from snorky.services.datasync.delta import \
         InsertionDelta, UpdateDelta, DeletionDelta
 
 

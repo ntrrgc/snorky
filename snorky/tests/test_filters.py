@@ -1,4 +1,4 @@
-from snorky.server.services.datasync.dealers import filter_matches
+from snorky.services.datasync.dealers import filter_matches
 import unittest
 
 
