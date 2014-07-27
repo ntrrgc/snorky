@@ -7,14 +7,6 @@ __all__ = ('UnknownSubscription', 'SubscriptionManager')
 safe_random = random.SystemRandom()
 
 
-class UnknownSubscription(Exception):
-    def __init__(self, token):
-        self.token = token
-
-    def __str__(self):
-        return "No subscription with token '%s'." % self.token
-
-
 class SubscriptionManager(object):
     """Tracks subscriptions"""
 
@@ -72,11 +64,7 @@ class SubscriptionManager(object):
 
     def get_subscription_with_token(self, token):
         """Returns a Subscription with the specified token."""
-
-        try:
-            return self.subscriptions_by_token[token]
-        except KeyError:
-            raise UnknownSubscription(token)
+        return self.subscriptions_by_token.get(token)
 
     def link_subscription_to_client(self, subscription, client):
         subscription.got_client(client)

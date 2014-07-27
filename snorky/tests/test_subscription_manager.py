@@ -3,7 +3,7 @@ from mock import Mock
 from snorky.services.datasync.subscription import \
         Subscription, SubscriptionItem
 from snorky.services.datasync.managers.subscription import \
-        SubscriptionManager, UnknownSubscription
+        SubscriptionManager
 
 
 class FakeSubscription(object):
@@ -50,8 +50,7 @@ class TestSubscriptionManager(unittest.TestCase):
         # Assert subscription has no token now
         self.assertIsNone(self.subscription.token)
         # Assert subscription can't be recovered now
-        with self.assertRaises(UnknownSubscription):
-            self.sm.get_subscription_with_token(token)
+        self.assertIsNone(self.sm.get_subscription_with_token(token))
 
     def test_link_to_client(self):
         token = self.test_authorize_subscription()
