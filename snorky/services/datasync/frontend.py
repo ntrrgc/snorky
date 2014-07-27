@@ -1,7 +1,7 @@
 from snorky.services.base import RPCService, RPCError, rpc_command
 from snorky.services.datasync.managers.dealer import DealerManager
 from snorky.services.datasync.managers.subscription import SubscriptionManager
-from miau.common.types import is_string
+from snorky.types import is_string
 
 
 class DataSyncService(RPCService):

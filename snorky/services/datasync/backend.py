@@ -6,7 +6,7 @@ from snorky.services.datasync.subscription import \
 from snorky.services.datasync.delta import \
         InsertionDelta, UpdateDelta, DeletionDelta
 from snorky.timeout import TornadoTimeoutFactory
-from miau.common.types import is_string
+from snorky.types import is_string
 import functools
 
 

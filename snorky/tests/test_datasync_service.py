@@ -7,7 +7,7 @@ import unittest
 from snorky.services.datasync.frontend import DataSyncService
 from snorky.services.datasync.backend import DataSyncBackend
 from snorky.services.datasync.dealers import SimpleDealer
-from miau.common.types import is_string
+from snorky.types import is_string
 
 
 class FakeClient(object):

@@ -1,6 +1,6 @@
 import random
 import functools
-from miau.common.types import MultiDict
+from snorky.types import MultiDict
 
 __all__ = ('UnknownSubscription', 'SubscriptionManager')
 

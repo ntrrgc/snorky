@@ -1,4 +1,4 @@
-from miau.common.types import MultiDict
+from snorky.types import MultiDict
 from unittest import TestCase
 import unittest
 

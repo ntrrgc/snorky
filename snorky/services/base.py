@@ -4,7 +4,7 @@ try:
 except ImportError:
     from funcsigs import signature
 from tornado.log import gen_log
-from miau.common.types import with_metaclass
+from snorky.types import with_metaclass
 
 
 class Service(object):

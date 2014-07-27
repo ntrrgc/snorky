@@ -1,5 +1,5 @@
 from snorky.services.base import RPCService, RPCError, rpc_command
-from miau.common.types import MultiDict
+from snorky.types import MultiDict
 
 
 class PubSubService(RPCService):
