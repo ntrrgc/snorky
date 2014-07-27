@@ -24,11 +24,11 @@ class UnknownModelClass(Exception):
 class DealerManager(object):
     """Tracks dealers registered in the system."""
 
-    __slots__ = ('dealers_by_name', 'dealers_by_model_class')
+    __slots__ = ('dealers_by_name', 'dealers_by_model')
 
     def __init__(self):
         self.dealers_by_name = {}
-        self.dealers_by_model_class = MultiDict()
+        self.dealers_by_model = MultiDict()
 
     def register_dealer(self, dealer):
         """Registers a new dealer."""
@@ -42,8 +42,8 @@ class DealerManager(object):
         # Add to dealers_by_name
         self.dealers_by_name[name] = dealer
 
-        # Add to dealers_by_model_class
-        self.dealers_by_model_class.add(model, dealer)
+        # Add to dealers_by_model
+        self.dealers_by_model.add(model, dealer)
 
     def get_dealer(self, name):
         """Returns a dealer with the specified name"""
@@ -56,7 +56,7 @@ class DealerManager(object):
         """Returns an iterable of dealers with the specified model
         """
         try:
-            return self.dealers_by_model_class[model]
+            return self.dealers_by_model[model]
         except KeyError:
             raise UnknownModelClass(model)
 
