@@ -27,7 +27,7 @@ class Dealer(object):
     @abc.abstractmethod
     def get_subscription_items_for_model(self, model): pass
 
-    def deliver_delta(self, delta, service):
+    def deliver_delta(self, delta):
         """Receives a delta, computes a set of destination subscriptions
         items and forwards the delta to them.
 
@@ -59,7 +59,7 @@ class Dealer(object):
             deliver_to = self.get_subscription_items_for_model(delta.data)
 
             for subscription_item in deliver_to:
-                subscription_item.subscription.deliver_delta(delta, service)
+                subscription_item.subscription.deliver_delta(delta)
 
         else:
             # If origin delta is an update
@@ -78,17 +78,17 @@ class Dealer(object):
             # For the subscription items that do not match the filter with the
             # old data but do with the new data, send a insertion delta.
             for item in set_new - set_old:
-                item.subscription.deliver_delta(insertion_delta, service)
+                item.subscription.deliver_delta(insertion_delta)
 
             # For the subscription items that match the filter with both the
             # new and old data, send an update delta.
             for item in set_old.intersection(set_new):
-                item.subscription.deliver_delta(update_delta, service)
+                item.subscription.deliver_delta(update_delta)
 
             # For the subscription items that match the filter with the old
             # data but do not match with the new data, send a deletion delta.
             for item in set_old - set_new:
-                item.subscription.deliver_delta(deletion_delta, service)
+                item.subscription.deliver_delta(deletion_delta)
 
 
 class BroadcastDealer(Dealer):

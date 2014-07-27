@@ -41,7 +41,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
         original_delta = InsertionDelta('player',
                 {'id': 1, 'name': 'Alice', 'color': 'blue'})
 
-        dealer.deliver_delta(original_delta, self.service)
+        dealer.deliver_delta(original_delta)
 
         # No delta is received
         self.assertFalse(self.deliver_delta.called)
@@ -55,7 +55,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
                 old_data={'id': 1, 'name': 'Alice', 'color': 'blue'},
                 new_data={'id': 1, 'name': 'Alice', 'color': 'red'})
 
-        dealer.deliver_delta(original_delta, self.service)
+        dealer.deliver_delta(original_delta)
 
         # Subscription item should receive a creation
         self.deliver_delta.assert_called_once_with(
@@ -63,7 +63,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
                 'id': 1,
                 'name': 'Alice',
                 'color': 'red'
-            }), self.service)
+            }))
 
     def test_update_update(self):
         dealer = PlayersWithColorDealer()
@@ -74,11 +74,10 @@ class TestUpdateCasesDealer(unittest.TestCase):
                 old_data={'id': 1, 'name': 'Alice', 'color': 'red'},
                 new_data={'id': 1, 'name': 'SuperAlice', 'color': 'red'})
 
-        dealer.deliver_delta(original_delta, self.service)
+        dealer.deliver_delta(original_delta)
 
         # Subscription item should receive an update
-        self.deliver_delta.assert_called_once_with(original_delta,
-                                                   self.service)
+        self.deliver_delta.assert_called_once_with(original_delta)
 
     def test_update_deletion(self):
         dealer = PlayersWithColorDealer()
@@ -89,7 +88,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
                 old_data={'id': 1, 'name': 'SuperAlice', 'color': 'red'},
                 new_data={'id': 1, 'name': 'SuperAlice', 'color': 'blue'})
 
-        dealer.deliver_delta(original_delta, self.service)
+        dealer.deliver_delta(original_delta)
 
         # Subscription item should receive a deletion
         self.deliver_delta.assert_called_once_with(
@@ -97,7 +96,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
                 'id': 1,
                 'name': 'SuperAlice',
                 'color': 'red'
-            }), self.service)
+            }))
 
     def test_unrelated_deletion(self):
         dealer = PlayersWithColorDealer()
@@ -107,7 +106,7 @@ class TestUpdateCasesDealer(unittest.TestCase):
         original_delta = DeletionDelta('player',
                 {'id': 1, 'name': 'SuperAlice', 'color': 'blue'})
 
-        dealer.deliver_delta(original_delta, self.service)
+        dealer.deliver_delta(original_delta)
 
         # Our subscription item has query = red, so no response should
         # arrive.

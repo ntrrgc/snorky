@@ -59,9 +59,9 @@ class TestDealerManager(unittest.TestCase):
 
         # Send a delta of the same model class of the registered dealer
         delta = InsertionDelta('test_model', {'id':1})
-        dm.deliver_delta(delta, self.service)
+        dm.deliver_delta(delta)
 
-        self.dealer1.deliver_delta.assert_called_once_with(delta, self.service)
+        self.dealer1.deliver_delta.assert_called_once_with(delta)
 
     def test_deliver_delta_without_dealer(self):
         dm = DealerManager()
@@ -70,7 +70,7 @@ class TestDealerManager(unittest.TestCase):
         delta = InsertionDelta('test_model', {'id':1})
 
         with self.assertRaises(UnknownModelClass):
-            dm.deliver_delta(delta, self.service)
+            dm.deliver_delta(delta)
 
     def test_deliver_delta_other_model_class(self):
         dm = DealerManager()
@@ -80,7 +80,7 @@ class TestDealerManager(unittest.TestCase):
         delta = InsertionDelta('unknown_model', {'id':1})
 
         with self.assertRaises(UnknownModelClass):
-            dm.deliver_delta(delta, self.service)
+            dm.deliver_delta(delta)
 
     def test_connect_subscription(self):
         dm = DealerManager()

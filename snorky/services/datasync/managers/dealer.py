@@ -60,10 +60,10 @@ class DealerManager(object):
         except KeyError:
             raise UnknownModelClass(model)
 
-    def deliver_delta(self, delta, service):
+    def deliver_delta(self, delta):
         # Deliver to associated dealers
         for dealer in self.get_dealers_for_model_class(delta.model):
-            dealer.deliver_delta(delta, service)
+            dealer.deliver_delta(delta)
 
     def connect_subscription(self, subscription):
         for item in subscription.items:

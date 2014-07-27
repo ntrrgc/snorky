@@ -50,23 +50,23 @@ class TestDealer(unittest.TestCase):
 
     def test_insertion(self):
         insertion = InsertionDelta('foo', {'id': 1, 'name': 'Alice'})
-        self.dealer.deliver_delta(insertion, self.service)
+        self.dealer.deliver_delta(insertion)
 
-        self.deliver_delta.assert_called_once_with(insertion, self.service)
+        self.deliver_delta.assert_called_once_with(insertion)
 
     def test_update(self):
         update = UpdateDelta('foo',
                 {'id': 1, 'name': 'Alice'},
                 {'id': 1, 'name': 'Bob'})
-        self.dealer.deliver_delta(update, self.service)
+        self.dealer.deliver_delta(update)
 
-        self.deliver_delta.assert_called_once_with(update, self.service)
+        self.deliver_delta.assert_called_once_with(update)
 
     def test_deletion(self):
         deletion = DeletionDelta('foo', {'id': 1, 'name': 'Alice'})
-        self.dealer.deliver_delta(deletion, self.service)
+        self.dealer.deliver_delta(deletion)
 
-        self.deliver_delta.assert_called_once_with(deletion, self.service)
+        self.deliver_delta.assert_called_once_with(deletion)
 
 
 if __name__ == "__main__":
