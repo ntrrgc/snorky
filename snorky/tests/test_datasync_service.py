@@ -60,7 +60,7 @@ class TestDataSync(RPCTestMixin, TestCase):
 
     def send_test_delta(self, color):
         response = self.rpcCall(self.backend, None,
-                        "publish_deltas", deltas=[{
+                        "publishDeltas", deltas=[{
                             "type": "insert",
                             "model": "Player",
                             "data": {
@@ -77,7 +77,7 @@ class TestDataSync(RPCTestMixin, TestCase):
 
     def test_authorize_subscription(self):
         self.token = self.rpcCall(self.backend, None,
-                "authorize_subscription", items=[{
+                "authorizeSubscription", items=[{
                     "dealer": "players_with_color",
                     "query": "red"
                 }])
@@ -96,7 +96,7 @@ class TestDataSync(RPCTestMixin, TestCase):
 
         # TODO Check if queued messages get delivered before or after this call
         response = self.rpcCall(self.frontend, self.client,
-                                "acquire_subscription", token=self.token)
+                                "acquireSubscription", token=self.token)
         self.assertEqual(response, None)
 
         # Subscription is linked now
@@ -108,12 +108,12 @@ class TestDataSync(RPCTestMixin, TestCase):
 
     def test_acquire_wrong_subscription(self):
         msg = self.rpcExpectError(self.frontend, self.client,
-                                  "acquire_subscription", token="foo")
+                                  "acquireSubscription", token="foo")
         self.assertEqual(msg, "No such subscription")
 
     def test_acquire_subscription_invalid_token(self):
         msg = self.rpcExpectError(self.frontend, self.client,
-                                  "acquire_subscription", token=1)
+                                  "acquireSubscription", token=1)
         self.assertEqual(msg, "token must be string")
 
     def test_delta(self):
@@ -153,7 +153,7 @@ class TestDataSync(RPCTestMixin, TestCase):
 
         # Client connects now
         response = self.rpcCall(self.frontend, self.client,
-                        "acquire_subscription", token=self.token)
+                        "acquireSubscription", token=self.token)
         self.assertEqual(response, None)
 
         self.assert_test_delta("red")
@@ -174,7 +174,7 @@ class TestDataSync(RPCTestMixin, TestCase):
         self.test_acquire_subscription()
 
         response = self.rpcCall(self.frontend, self.client,
-                                "cancel_subscription", token=self.token)
+                                "cancelSubscription", token=self.token)
         self.assertEqual(response, None)
 
         self.assertNotIn(self.token, self.frontend.sm.subscriptions_by_token)
@@ -186,12 +186,12 @@ class TestDataSync(RPCTestMixin, TestCase):
 
     def test_cancel_subscription_wrong_token(self):
         msg = self.rpcExpectError(self.frontend, self.client,
-                                  "cancel_subscription", token=5)
+                                  "cancelSubscription", token=5)
         self.assertEqual(msg, "token must be string")
 
     def test_cancel_subscription_invalid_token(self):
         msg = self.rpcExpectError(self.frontend, self.client,
-                                  "cancel_subscription", token="foo")
+                                  "cancelSubscription", token="foo")
         self.assertEqual(msg, "No such subscription")
 
     def test_cancel_subscription_other_client(self):
@@ -200,5 +200,5 @@ class TestDataSync(RPCTestMixin, TestCase):
         # Clients shall no cancel others' subscriptions
         another_client = FakeClient()
         msg = self.rpcExpectError(self.frontend, another_client,
-                                  "cancel_subscription", token=self.token)
+                                  "cancelSubscription", token=self.token)
         self.assertEqual(msg, "No such subscription")

@@ -12,7 +12,7 @@ class DataSyncService(RPCService):
         self.sm = SubscriptionManager()
 
     @rpc_command
-    def acquire_subscription(self, req, token):
+    def acquireSubscription(self, req, token):
         if not is_string(token):
             raise RPCError("token must be string")
 
@@ -23,7 +23,7 @@ class DataSyncService(RPCService):
         self.sm.link_subscription_to_client(subscription, req.client)
 
     @rpc_command
-    def cancel_subscription(self, req, token):
+    def cancelSubscription(self, req, token):
         if not is_string(token):
             raise RPCError("token must be string")
 

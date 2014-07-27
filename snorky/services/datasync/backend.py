@@ -20,7 +20,7 @@ class DataSyncBackend(RPCService):
         self.timeout_factory = timeout_factory or TornadoTimeoutFactory
 
     @rpc_command
-    def authorize_subscription(self, req, items):
+    def authorizeSubscription(self, req, items):
         obj_items = []
         try:
             for item in items:
@@ -43,7 +43,7 @@ class DataSyncBackend(RPCService):
         return token
 
     @rpc_command
-    def publish_deltas(self, req, deltas):
+    def publishDeltas(self, req, deltas):
         # deltas = [{
         #    "type": "insert",
         #    "model": "player",
