@@ -49,12 +49,13 @@ def format_call(command, params):
 
 class Request(object):
     __slots__ = ("service", "client", "command", "call_id", "params",
-                 "resolved")
+                 "resolved", "debug")
 
     def __init__(self, service, client, msg):
         self.service = service
         self.client = client
         self.resolved = False
+        self.debug = False
         try:
             self.call_id = msg["callId"]
             self.command = msg["command"]
@@ -163,6 +164,9 @@ class RPCService(with_metaclass(RPCMeta, Service)):
                          % (error_name, self.name))
             request.error(error_name)
         except:
+            if request.debug:
+                # In unit tests, let this exception propagate
+                raise
             gen_log.exception('Unhandled exception in RPC service "%s": %s'
                               % (self.name, request.format_call()))
             request.error("Internal error")

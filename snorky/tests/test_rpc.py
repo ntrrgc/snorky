@@ -135,7 +135,7 @@ class TestRPC(RPCTestMixin, TestCase):
         with ExpectLog("tornado.general",
                        'Unhandled exception in RPC service .*'):
             msg = self.rpcExpectError(self.calculator, self.client,
-                                      "buggy_type_error")
+                                      "buggy_type_error", request_debug=False)
             self.assertEqual(msg, "Internal error")
 
 

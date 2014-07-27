@@ -2,11 +2,14 @@ from snorky.services.base import format_call
 
 
 class TestRequest(object):
+    """Mocked Request class for use with RPC services"""
+
     def __init__(self, service, client, command, params):
         self.service = service
         self.client = client
         self.command = command
         self.params = params
+        self.debug = True # propagate internal errors
 
         self.call_id = None
         self.resolved = False
@@ -34,8 +37,14 @@ class TestRequest(object):
 
 
 class RPCTestMixin(object):
-    def _rpcCallNoAsserts(self, service, client, command, **params):
+    """Useful methods for testing RPC services"""
+
+    def _rpcCallNoAsserts(self, service, client, command, request_debug=True,
+                          **params):
+        # request_debug=True tells RPCService to propagate internal errors
+        # instead of replying with an RPC error.
         request = TestRequest(service, client, command, params)
+        request.debug = request_debug
         service.process_request(request)
         return request
 
@@ -54,5 +63,3 @@ class RPCTestMixin(object):
         self.assertTrue(request.resolved)
         self.assertEqual(request.response_type, "error")
         return request.response
-
-
