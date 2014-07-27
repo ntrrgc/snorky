@@ -64,3 +64,13 @@ class DealerManager(object):
         # Deliver to associated dealers
         for dealer in self.get_dealers_for_model_class(delta.model):
             dealer.deliver_delta(delta, service)
+
+    def connect_subscription(self, subscription):
+        for item in subscription.items:
+            dealer = self.get_dealer(item.dealer_name)
+            dealer.add_subscription_item(item)
+
+    def disconnect_subscription(self, subscription):
+        for item in subscription.items:
+            dealer = self.get_dealer(item.dealer_name)
+            dealer.remove_subscription_item(item)

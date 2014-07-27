@@ -2,6 +2,7 @@ import unittest
 from mock import Mock
 from snorky.services.datasync.managers.dealer import \
         DealerManager, UnknownModelClass, UnknownDealer
+from snorky.services.datasync.subscription import SubscriptionItem
 from snorky.services.datasync.delta import \
         InsertionDelta, UpdateDelta, DeletionDelta
 
@@ -10,12 +11,19 @@ class FakeService(object):
     pass
 
 
+class FakeSubscription(object):
+    def __init__(self, items):
+        self.items = items
+
+
 class FakeDealer(object):
     def __init__(self, name, model):
         self.name = name
         self.model = model
 
         self.deliver_delta = Mock()
+        self.add_subscription_item = Mock()
+        self.remove_subscription_item = Mock()
 
 class TestDealerManager(unittest.TestCase):
     def setUp(self):
@@ -73,3 +81,23 @@ class TestDealerManager(unittest.TestCase):
 
         with self.assertRaises(UnknownModelClass):
             dm.deliver_delta(delta, self.service)
+
+    def test_connect_subscription(self):
+        dm = DealerManager()
+        dm.register_dealer(self.dealer1)
+
+        item = SubscriptionItem("test_dealer1", 5)
+        subscription = FakeSubscription([item])
+
+        dm.connect_subscription(subscription)
+
+        self.dealer1.add_subscription_item.assert_called_once_with(item)
+
+        return dm, subscription, item
+
+    def test_disconnect_subscription(self):
+        dm, subscription, item = self.test_connect_subscription()
+
+        dm.disconnect_subscription(subscription)
+
+        self.dealer1.add_subscription_item.assert_called_once_with(item)
