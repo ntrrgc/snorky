@@ -43,6 +43,8 @@ class RPCTestMixin(object):
         request = self._rpcCallNoAsserts(service, client, command, **params)
 
         self.assertTrue(request.resolved)
+        if request.response_type == "error":
+            raise AssertionError("Error in RPC call: %s" % request.response)
         self.assertEqual(request.response_type, "response")
         return request.response
 
