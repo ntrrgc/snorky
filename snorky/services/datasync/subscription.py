@@ -36,14 +36,15 @@ class Subscription(object):
     """
 
     __slots__ = ('token', 'client', '_awaited_client_buffer',
-            '_awaited_client_timeout', 'items')
+            '_awaited_client_timeout', 'items', 'service')
 
-    def __init__(self, items):
+    def __init__(self, items, service):
         self.token = None
         self.client = None
         self._awaited_client_buffer = []
         self._awaited_client_timeout = None
 
+        self.service = service
         self.items = items
         for item in items:
             item.subscription = self
@@ -72,7 +73,7 @@ class Subscription(object):
         be sent when a client arrives."""
 
         if self.client is not None:
-            self.client.deliver_delta(delta)
+            self.service.deliver_delta(self.client, delta)
         else:
             self._awaited_client_buffer.append(delta)
 
