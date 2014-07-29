@@ -5,11 +5,34 @@ from snorky.types import is_string
 
 
 class DataSyncService(RPCService):
-    def __init__(self, name):
+    def __init__(self, name, dealers=[]):
         super(DataSyncService, self).__init__(name)
 
         self.dm = DealerManager()
         self.sm = SubscriptionManager()
+
+        for dealer in dealers:
+            self.register_dealer(dealer)
+
+    def register_dealer(self, dealer):
+        # Accept both a Dealer class or a Dealer instance.
+        # If it receives a class, instantiate it.
+        if isinstance(dealer, type):
+            instance = dealer()
+        else:
+            instance = dealer
+
+        self.dm.register_dealer(instance)
+        return instance
+
+    def unregister_dealer(self, dealer):
+        # Note unregister_dealer only accepts an instance, not a class.
+        # There could be several instances of the same Dealer class.
+
+        # Note also this method does not do any cleaning of subscriptions,
+        # therefore it should only be called before there are any clients
+        # connected.
+        self.dm.unregister_dealer(dealer)
 
     @rpc_command
     def acquireSubscription(self, req, token):

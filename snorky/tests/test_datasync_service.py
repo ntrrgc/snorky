@@ -34,7 +34,7 @@ class TestDataSync(RPCTestMixin, TestCase):
         self.sm = self.frontend.sm
 
         self.dealer = TestDealer()
-        self.dm.register_dealer(self.dealer)
+        self.frontend.register_dealer(self.dealer)
 
         self.client = FakeClient()
 
@@ -90,6 +90,30 @@ class TestDataSync(RPCTestMixin, TestCase):
         # The subscription has a timeout
         self.assertIsNotNone(self.subscription._awaited_client_timeout)
         self.assertEqual(self.time_man.timeouts_pending, 1)
+
+    def test_authorize_subscription_bad_dealer_format(self):
+        msg = self.rpcExpectError(self.backend, None,
+                                  "authorizeSubscription", items=[{
+                                      "dealer": {},
+                                      "query": "meow",
+                                  }])
+        self.assertEqual(msg, "dealer should be a dealer name")
+
+    def test_authorize_subscription_bad_format(self):
+        msg = self.rpcExpectError(self.backend, None,
+                                  "authorizeSubscription", items=[{
+                                      "foo": "bar",
+                                      "query": "meow",
+                                  }])
+        self.assertEqual(msg, "Missing field")
+
+    def test_authorize_subscription_unknown_dealer(self):
+        msg = self.rpcExpectError(self.backend, None,
+                                  "authorizeSubscription", items=[{
+                                      "dealer": "whatever",
+                                      "query": "",
+                                  }])
+        self.assertEqual(msg, "No such dealer")
 
     def test_acquire_subscription(self):
         self.test_authorize_subscription()
@@ -202,3 +226,40 @@ class TestDataSync(RPCTestMixin, TestCase):
         msg = self.rpcExpectError(self.frontend, another_client,
                                   "cancelSubscription", token=self.token)
         self.assertEqual(msg, "No such subscription")
+
+    def test_register_dealer_class(self):
+        self.frontend = DataSyncService("frontend")
+        self.frontend.register_dealer(TestDealer)
+
+        # Assign other variables to the new frontend
+        self.backend = DataSyncBackend("backend", self.frontend,
+                                       timeout_factory=self.time_man)
+
+        self.dm = self.frontend.dm
+        self.sm = self.frontend.sm
+
+        # Run the entire test with the new service instances
+        self.test_acquire_subscription()
+
+    def test_register_dealer_constructor(self):
+        self.frontend = DataSyncService("frontend", [TestDealer])
+
+        # Assign other variables to the new frontend
+        self.backend = DataSyncBackend("backend", self.frontend,
+                                       timeout_factory=self.time_man)
+
+        self.dm = self.frontend.dm
+        self.sm = self.frontend.sm
+
+        # Run the entire test with the new service instances
+        self.test_acquire_subscription()
+
+    def test_unregister_dealer(self):
+        self.frontend.unregister_dealer(self.dealer)
+
+        msg = self.rpcExpectError(self.backend, None,
+                                  "authorizeSubscription", items=[{
+                                      "dealer": "players_with_color",
+                                      "query": "red"
+                                  }])
+        self.assertEqual(msg, "No such dealer")

@@ -45,6 +45,10 @@ class DealerManager(object):
         # Add to dealers_by_model
         self.dealers_by_model.add(model, dealer)
 
+    def unregister_dealer(self, dealer):
+        del self.dealers_by_name[dealer.name]
+        self.dealers_by_model.remove(dealer.model, dealer)
+
     def get_dealer(self, name):
         """Returns a dealer with the specified name"""
         try:

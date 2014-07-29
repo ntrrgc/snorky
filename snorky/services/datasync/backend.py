@@ -24,10 +24,14 @@ class DataSyncBackend(RPCService):
         obj_items = []
         try:
             for item in items:
-                if not is_string(item["dealer"]):
-                    raise RPCError("dealer should be a dealer name")
+                dealer_name = item["dealer"]
 
-                obj_item = SubscriptionItem(item["dealer"], item["query"])
+                if not is_string(dealer_name):
+                    raise RPCError("dealer should be a dealer name")
+                elif dealer_name not in self.frontend.dm.dealers_by_name:
+                    raise RPCError("No such dealer")
+
+                obj_item = SubscriptionItem(dealer_name, item["query"])
                 obj_items.append(obj_item)
         except KeyError:
             raise RPCError("Missing field")
