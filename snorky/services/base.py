@@ -57,7 +57,7 @@ class Request(object):
         self.resolved = False
         self.debug = False
         try:
-            self.call_id = msg["callId"]
+            self.call_id = msg.get("callId", None)
             self.command = msg["command"]
             self.params = msg["params"]
         except (KeyError, TypeError):
@@ -67,11 +67,15 @@ class Request(object):
         if self.resolved:
             raise RuntimeError("This request has already been resolved")
 
-        self.service.send_message_to(self.client, {
+        data = {
             "type": "response",
             "callId": self.call_id,
             "data": data
-        })
+        }
+        if data["callId"] is None:
+            del data["callId"]
+        self.service.send_message_to(self.client, data)
+
         self.resolved = True
 
     def error(self, msg):

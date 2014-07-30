@@ -82,6 +82,22 @@ class TestRPC(RPCTestMixin, TestCase):
             },
         })
 
+    def test_message_without_call_id(self):
+        self.calculator.process_message_from(self.client, {
+            "command": "sum",
+            "params": {
+                "a": 5,
+                "b": 12,
+            },
+        })
+        self.assertEqual(self.msg, {
+            "service": "calc",
+            "message": {
+                "type": "response",
+                "data": 17,
+            },
+        })
+
     def test_call_return(self):
         data = self.rpcCall(self.calculator, self.client,
                             "sum", a=5, b=12)
