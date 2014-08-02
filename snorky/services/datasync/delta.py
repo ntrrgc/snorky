@@ -33,8 +33,8 @@ class UpdateDelta(Delta):
         return {
             "type": "update",
             "model": self.model,
-            "new_data": self.new_data,
-            "old_data": self.old_data,
+            "newData": self.new_data,
+            "oldData": self.old_data,
         }
 
 
