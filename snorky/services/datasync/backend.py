@@ -6,6 +6,7 @@ from snorky.services.datasync.subscription import \
 from snorky.services.datasync.delta import \
         InsertionDelta, UpdateDelta, DeletionDelta
 from snorky.timeout import TornadoTimeoutFactory
+from snorky.log import snorky_log
 from snorky.types import is_string
 import functools
 
@@ -56,6 +57,8 @@ class DataSyncBackend(RPCService):
         obj_deltas = []
         try:
             for delta in deltas:
+                snorky_log.info(delta)
+
                 delta_type = delta["type"]
                 model = delta["model"]
                 if not is_string(model):
