@@ -81,4 +81,33 @@ describe("Classy classes", function() {
     expect(b.foo).toEqual("bar")
     expect(b.getFoo()).toEqual("bar")
   });
+
+  it("works with instanceof", function() {
+    var A = Class({});
+
+    var a = new A();
+
+    expect(a instanceof A).toEqual(true);
+  });
+
+  it("works with instanceof and new", function() {
+    var A = new Class({});
+
+    var a = new A();
+
+    expect(a instanceof A).toEqual(true);
+  });
+
+  it("works with instanceof and constructors", function() {
+    var A = Class({
+      constructor: function() {
+        this.foo = "bar";
+      }
+    });
+
+    var a = new A();
+    expect(a.foo).toEqual("bar");
+
+    expect(a instanceof A).toEqual(true);
+  });
 });
