@@ -165,3 +165,43 @@ describe("SingleItemCollection", function() {
     });
   });
 });
+
+
+
+describe("ArrayCollection options", function() {
+  // A simple model class which can be used as item transformer
+  var Person = function(item) {
+    return {
+      "name": item.name,
+      "whoAmI": function() {
+        return "I am " + item.name;
+      }
+    };
+  };
+  var array, collection;
+
+  beforeEach(function() {
+    array = [Person({ name: "Alice" })];
+    collection = new DataSync.ArrayCollection(array, {
+      transformItem: Person
+    });
+  });
+
+  it("adds transformed items", function() {
+    collection.insert({ name: "Bob" })
+
+    expect(array.length).toEqual(2);
+    expect(array[1].name).toEqual("Bob");
+    expect(array[1].whoAmI()).toEqual("I am Bob");
+  });
+
+  it("applies transformation on updated items", function() {
+    var iter = collection.getIterator();
+    iter.next();
+    iter.update({ name: "Bob" });
+
+    expect(array.length).toEqual(1);
+    expect(array[0].name).toEqual("Bob");
+    expect(array[0].whoAmI()).toEqual("I am Bob");
+  });
+});

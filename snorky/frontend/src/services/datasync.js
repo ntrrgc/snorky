@@ -2,6 +2,7 @@
   "use strict";
 
   var Class = Snorky.Class;
+  var _ = Snorky._;
 
   Snorky.DataSync = new Class(Snorky.RPCService, {
     onNotification: function(message) {
@@ -106,13 +107,15 @@
 
   var ArrayIterator = Snorky.DataSync.ArrayIterator =
   new Class({
-    constructor: function(array) {
+    constructor: function(array, options) {
       this.array = array;
+      this.options = options;
     },
 
     array: null,
     index: -1,
     deleted: false,
+    options: {},
 
     hasNext: function() {
       var lastIndex = this.array.length - 1;
@@ -145,25 +148,32 @@
     update: function(newVal) {
       this.checkSafe();
 
-      this.array[this.index] = newVal;
+      this.array[this.index] = this.options.transformItem(newVal);
     }
   });
 
 
   var ArrayCollection = Snorky.DataSync.ArrayCollection =
   new Class(Collection, {
-    constructor: function(array) {
+    constructor: function(array, options) {
       this.array = array;
+      this.options = _.defaults(options, {
+        transformItem: function(item) {
+          return item;
+        }
+      });
     },
 
     array: null,
+    options: {},
 
     insert: function(val) {
-       this.array.push(val);
+      var transformed = this.options.transformItem(val);
+      this.array.push(transformed);
     },
 
     getIterator: function() {
-       return new ArrayIterator(this.array);
+      return new ArrayIterator(this.array, this.options);
     }
   });
 
