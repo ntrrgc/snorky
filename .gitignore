@@ -7,3 +7,4 @@ __pycache__
 miau/doc/build
 node_modules
 build
+db.sqlite3
