@@ -17,7 +17,7 @@
       // noop
     }
   });
-  Snorky.Messaging.addRPCMethods([
+  Snorky.DataSync.addRPCMethods([
     "acquireSubscription",
     "cancelSubscription"
   ]);
