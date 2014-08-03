@@ -22,6 +22,10 @@ class SnorkyWebSocketHandler(WebSocketHandler):
         self.client = WebSocketClient(req_handler=self)
         super(SnorkyWebSocketHandler, self).__init__(*args, **kwargs)
 
+    def check_origin(self, origin):
+        # TODO Allow to customize this
+        return True
+
     def open(self):
         self.message_handler.client_connected(self.client)
 
