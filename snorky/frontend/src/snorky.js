@@ -15,6 +15,15 @@ var Snorky = (function(Class) {
         object[key] = source[key];
       }
       return object;
+    },
+    defaults: function(object, source) {
+      object = object || {};
+      for (var key in source) {
+        if (!(key in object)) {
+          object[key] = source[key];
+        }
+      }
+      return object;
     }
   };
 
