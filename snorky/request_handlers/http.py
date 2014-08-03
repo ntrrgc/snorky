@@ -35,6 +35,7 @@ class BackendHTTPHandler(RequestHandler):
         except ValueError:
             raise HTTPError(400, "Invalid JSON")
 
+        # TODO Close request on error
         self.message_handler.process_message_from(self.client, msg)
 
     def check_api_key(self):
