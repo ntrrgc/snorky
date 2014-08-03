@@ -1,5 +1,17 @@
 "use strict";
 
+describe("DataSync service", function() {
+  it("has RPC methods", function() {
+    var proto = Snorky.DataSync.prototype;
+    expect(proto.acquireSubscription).not.toBe(undefined);
+    expect(proto.cancelSubscription).not.toBe(undefined);
+
+    var datasync = new Snorky.DataSync("datasync", {})
+    expect(datasync.acquireSubscription).not.toBe(undefined);
+    expect(datasync.cancelSubscription).not.toBe(undefined);
+  });
+});
+
 describe("CollectionDeltaProcessor", function() {
   var proc;
   var players;
