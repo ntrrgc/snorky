@@ -1,60 +1,25 @@
 from __future__ import absolute_import
-import requests
-import json
+from snorky.backend import SnorkyHTTPTransport, SnorkyBackend, SnorkyError
 from django.conf import settings
 from django.utils.module_loading import import_by_path
 from django.db.models.signals import pre_save, post_save, pre_delete, \
         post_delete
 
-SNORKY_JSON_ENCODER = getattr(settings, "SNORKY_JSON_ENCODER",
-                              json.JSONEncoder)
-SNORKY_JSON_ENCODER = import_by_path(SNORKY_JSON_ENCODER)
-
 SNORKY_DATASYNC_SERVICE = getattr(settings, "SNORKY_DATASYNC_SERVICE",
                                   "datasync_backend")
 
-websession = requests.session()
-
-class SnorkyError(Exception):
-    pass
-
-def snorky_send(command, **params):
-    response = websession.post(settings.SNORKY_BACKEND_URL, headers={
-        "X-Backend-Key": settings.SNORKY_API_KEY
-    }, data=json.dumps({
-        "service": SNORKY_DATASYNC_SERVICE,
-        "message": { # TODO Not very intuitive. Change to data? payload?
-            "command": command,
-            "params": params
-        }
-    }))
-
-    if not response.ok:
-        raise RuntimeError("Error from Snorky server: %d %s" %
-                           (response.status_code, response.reason))
-
-    try:
-        response = json.loads(response.content)
-    except ValueError:
-        raise RuntimeError("Non-JSON response from Snorky: %s" %
-                           response.content)
-
-    # We"re only interested in the response from the service
-    response = response["message"]
-
-    if response["type"] == "response":
-        return response["data"]
-    elif response["type"] == "error":
-        raise SnorkyError(response["message"])
-    else:
-        raise RuntimeError
+http_transport = SnorkyHTTPTransport(url=settings.SNORKY_BACKEND_URL,
+                                     key=settings.SNORKY_API_KEY)
+snorky_backend = SnorkyBackend(http_transport)
 
 def publish_deltas(deltas):
-    snorky_send("publishDeltas", deltas=deltas)
+    snorky_backend.call(SNORKY_DATASYNC_SERVICE,
+                        "publishDeltas", deltas=deltas)
 
 def authorize_subscription(items):
     try:
-        response = snorky_send("authorizeSubscription", items=items)
+        response = snorky_backend.call(SNORKY_DATASYNC_SERVICE,
+                                       "authorizeSubscription", items=items)
         return response
     except SnorkyError as err:
         raise RuntimeError("Error from Snorky server: %s" % err.args[0])
