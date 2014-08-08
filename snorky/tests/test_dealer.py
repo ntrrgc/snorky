@@ -69,5 +69,13 @@ class TestDealer(unittest.TestCase):
         self.deliver_delta.assert_called_once_with(deletion)
 
 
+class AutomaticNameDealer(Dealer):
+    pass
+
+class TestAutomaticNameDealer(unittest.TestCase):
+    def test_name(self):
+        self.assertEqual(AutomaticNameDealer().name, "AutomaticNameDealer")
+
+
 if __name__ == "__main__":
     unittest.main()
