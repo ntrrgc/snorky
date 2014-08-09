@@ -1,6 +1,6 @@
 from snorky.client import Client
 from snorky.services.base import RPCService, rpc_command, RPCMeta, \
-        asynchronous
+        rpc_asynchronous
 
 from unittest import TestCase
 from snorky.tests.utils.rpc import RPCTestMixin
@@ -28,7 +28,7 @@ class CalculatorExtendedService(CalculatorService):
 
 
 class ProducerConsumerService(RPCService):
-    @asynchronous
+    @rpc_asynchronous
     @rpc_command
     def consumer(self, req):
         self.consumer_req = req
