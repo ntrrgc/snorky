@@ -20,6 +20,7 @@ module.exports = (grunt) ->
     "src/services/messaging.js"
     "src/services/pubsub.js"
     "src/services/datasync.js"
+    "src/services/chat.js"
   ]
 
   specFiles = [
