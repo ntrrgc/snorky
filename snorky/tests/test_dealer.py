@@ -70,7 +70,15 @@ class TestDealer(unittest.TestCase):
 
 
 class AutomaticNameDealer(Dealer):
-    pass
+    def add_subscription_item(self, item):
+        raise NotImplementedError
+
+    def remove_subscription_item(self, item):
+        raise NotImplementedError
+
+    def get_subscription_items_for_model(self, model):
+        raise NotImplementedError
+
 
 class TestAutomaticNameDealer(unittest.TestCase):
     def test_name(self):
