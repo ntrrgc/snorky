@@ -71,6 +71,7 @@ class DataSyncService(RPCService):
         })
 
     def client_disconnected(self, client):
-        for subscription in list(self.sm.subscriptions_by_client[client]):
+        subscriptions = list(self.sm.subscriptions_by_client.get_set(client))
+        for subscription in subscriptions:
             self.do_cancel_subscription(subscription)
 

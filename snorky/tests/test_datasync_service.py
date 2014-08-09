@@ -38,6 +38,10 @@ class TestDataSync(RPCTestMixin, TestCase):
 
         self.client = FakeClient()
 
+    def test_client_disconnected_without_using_the_service(self):
+        self.frontend.client_disconnected(self.client)
+        # No crash
+
     def assert_test_delta(self, color):
         self.client.send.assert_called_once_with({
             "service": "frontend",
