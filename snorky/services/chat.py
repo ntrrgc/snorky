@@ -7,10 +7,14 @@ class ChatService(RPCService):
     def __init__(self, name):
         super(ChatService, self).__init__(name)
 
-        # channel : str -> set<Client>
-        self.subscriptions = MultiDict()
-        # Client -> set<channel : str>
-        self.subscriptions_by_client = MultiDict()
+        # (channel) : obj -> set<Client>
+        self.clients_by_channel = MultiDict()
+        # (Client) -> set<channel : obj>
+        self.channels_by_client = MultiDict()
+        # (identity : obj, channel : obj) -> set<Client>
+        self.clients_by_identity_and_channel = MultiDict()
+        # (channel : obj) -> set<Identity>
+        self.identities_by_channel = MultiDict()
 
     def get_time(self):
         from dateutil.tz import tzlocal
@@ -18,34 +22,53 @@ class ChatService(RPCService):
 
     @rpc_command
     def join(self, req, channel):
-        if self.subscriptions.in_set(channel, req.client):
+        client = req.client
+        identity = client.identity
+
+        if self.clients_by_channel.in_set(channel, client):
             raise RPCError("Already joined")
 
-        # Send presence to other members
-        self.send_presence(channel, req.client, "joined")
+        if identity not in self.identities_by_channel.get_set(channel):
+            # Send presence to other members
+            self.send_presence(channel, client, "joined")
+            self.identities_by_channel.add(channel, identity)
 
-        self.subscriptions.add(channel, req.client)
-        self.subscriptions_by_client.add(req.client, channel)
+        self.clients_by_channel.add(channel, client)
+        self.channels_by_client.add(client, channel)
+        self.clients_by_identity_and_channel.add(
+            (identity, channel), req.client)
 
         return {
-            "members": [client.identity for client
-                        in self.subscriptions.get_set(channel)]
+            "members": list(self.identities_by_channel.get_set(channel))
         }
 
     @rpc_command
     def leave(self, req, channel):
-        try:
-            self.subscriptions.remove(channel, req.client)
-            self.subscriptions_by_client.remove(req.client, channel)
+        client = req.client
 
-            # Send presence to remaining users
-            self.send_presence(channel, req.client, "left")
-        except KeyError:
+        if not self.clients_by_channel.in_set(channel, client):
             raise RPCError("Not joined")
+
+        self.do_leave(client, channel)
+
+    def do_leave(self, client, channel):
+        identity = client.identity
+
+        self.clients_by_channel.remove(channel, client)
+        self.channels_by_client.remove(client, channel)
+        self.clients_by_identity_and_channel.remove(
+            (identity, channel), client)
+
+        if len(self.clients_by_identity_and_channel.get_set(
+            (identity, channel))) == 0:
+            # User is not connected from elsewhere
+            self.identities_by_channel.remove(channel, identity)
+            # Send presence to remaining users
+            self.send_presence(channel, client, "left")
 
     @rpc_command
     def send(self, req, channel, body):
-        if not self.subscriptions.in_set(channel, req.client):
+        if not self.clients_by_channel.in_set(channel, req.client):
             raise RPCError("Not joined")
 
         message = {
@@ -56,7 +79,7 @@ class ChatService(RPCService):
             "timestamp": self.get_time(),
         }
 
-        for client in self.subscriptions.get_set(channel):
+        for client in self.clients_by_channel.get_set(channel):
             self.send_message_to(client, message)
 
     def send_presence(self, channel, client, status):
@@ -67,13 +90,10 @@ class ChatService(RPCService):
             "status": status,
             "timestamp": self.get_time(),
         }
-        for client in self.subscriptions.get_set(channel):
+        for client in self.clients_by_channel.get_set(channel):
             self.send_message_to(client, presence)
 
     def client_disconnected(self, client):
-        for channel in self.subscriptions_by_client.get_set(client):
-            self.subscriptions.remove(channel, client)
-            # Send presence to remaining users
-            self.send_presence(channel, client, "left")
-
-        self.subscriptions_by_client.clear_set(client)
+        channels = list(self.channels_by_client.get_set(client))
+        for channel in channels:
+            self.do_leave(client, channel)
