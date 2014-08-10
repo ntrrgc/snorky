@@ -22,6 +22,7 @@ class TestChat(RPCTestMixin, unittest.TestCase):
         self.alice = MockClient("Alice")
         self.alice_laptop = MockClient("Alice")
         self.bob = MockClient("Bob")
+        self.anonymous = MockClient(None)
 
         self.service = TestChatService("chat")
 
@@ -272,6 +273,11 @@ class TestChat(RPCTestMixin, unittest.TestCase):
         self.assertPresences(self.bob, [
             ("Alice", "left", "#cats")
         ])
+
+    def test_join_anonymous(self):
+        msg = self.rpcExpectError(self.service, self.anonymous,
+                                  "join", channel="#cats")
+        self.assertEqual(msg, "Not authenticated")
 
 
 if __name__ == "__main__":

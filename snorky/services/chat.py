@@ -25,6 +25,9 @@ class ChatService(RPCService):
         client = req.client
         identity = client.identity
 
+        if identity is None:
+            raise RPCError("Not authenticated")
+
         if self.clients_by_channel.in_set(channel, client):
             raise RPCError("Already joined")
 
