@@ -1,4 +1,5 @@
 from snorky.services.base import format_call
+from snorky.hashable import make_hashable
 
 
 class TestRequest(object):
@@ -8,7 +9,7 @@ class TestRequest(object):
         self.service = service
         self.client = client
         self.command = command
-        self.params = params
+        self.params = make_hashable(params)
         self.debug = True # propagate internal errors
 
         self.call_id = None

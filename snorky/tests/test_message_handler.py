@@ -8,6 +8,9 @@ import unittest
 
 class EchoService(Service):
     def process_message_from(self, client, msg):
+        # Messages received should be hashable
+        hash(msg)
+
         self.send_message_to(client, msg)
 
 
@@ -39,6 +42,16 @@ class TestMessageHandler(unittest.TestCase):
         self.assertEqual(self.msg, {
             "service": "echo",
             "message": "foo"
+        })
+
+    def test_process_message_raw_complex(self):
+        self.mh.process_message_raw(self.client, '''{
+            "service": "echo",
+            "message": { "favoriteNumbers": [3, 5, 0] }
+        }''')
+        self.assertEqual(self.msg, {
+            "service": "echo",
+            "message": { "favoriteNumbers": [3, 5, 0] }
         })
 
     def test_process_message_raw(self):

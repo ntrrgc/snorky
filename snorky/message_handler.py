@@ -1,4 +1,5 @@
 from tornado.log import gen_log
+from snorky.hashable import make_hashable
 import json
 
 
@@ -36,7 +37,7 @@ class MessageHandler(object):
 
     def process_message_raw(self, client, msg):
         try:
-            decoded_msg = json.loads(msg)
+            decoded_msg = make_hashable(json.loads(msg))
         except ValueError:
             gen_log.warning('Invalid JSON from client %s: %s'
                             % (client.remote_address, msg))
