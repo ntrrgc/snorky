@@ -279,6 +279,45 @@ class TestChat(RPCTestMixin, unittest.TestCase):
                                   "join", channel="#cats")
         self.assertEqual(msg, "Not authenticated")
 
+    def assertReadNotification(self, client, channel="#cats"):
+        client.send.assert_called_once_with({
+            "service": "chat",
+            "message": {
+                "type": "read",
+                "channel": channel,
+                "timestamp": "fake",
+            }
+        })
+        client.send.reset_mock()
+
+    def assertNoReadNotification(self, client):
+        self.assertFalse(client.send.called)
+
+    def test_read(self):
+        self.join(self.alice, "#cats", ["Alice"])
+        self.join(self.alice_laptop, "#cats", ["Alice"])
+        self.join(self.bob, "#cats", ["Alice", "Bob"])
+
+        self.assertPresence(self.alice, "Bob", "joined")
+        self.assertPresence(self.alice_laptop, "Bob", "joined")
+
+        response = self.rpcCall(self.service, self.bob,
+                                "send", channel="#cats", body="Hi")
+        self.assertEqual(response, None)
+
+        self.assertMessage(self.bob, "Bob", "Hi")
+        self.assertMessage(self.alice, "Bob", "Hi")
+        self.assertMessage(self.alice_laptop, "Bob", "Hi")
+
+        # Alice reads the message in her desktop
+        response = self.rpcCall(self.service, self.alice,
+                                "read", channel="#cats")
+        self.assertEqual(response, None)
+
+        # Her laptop should have received a read notification
+        self.assertReadNotification(self.alice_laptop)
+        self.assertNoReadNotification(self.alice)
+        self.assertNoReadNotification(self.bob)
 
 if __name__ == "__main__":
     unittest.main()

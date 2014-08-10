@@ -96,6 +96,20 @@ class ChatService(RPCService):
         for client in self.clients_by_channel.get_set(channel):
             self.send_message_to(client, presence)
 
+    @rpc_command
+    def read(self, req, channel):
+        notification = {
+            "type": "read",
+            "channel": channel,
+            "timestamp": self.get_time(),
+        }
+
+        for client in self.clients_by_identity_and_channel.get_set(
+                            (req.client.identity, channel)):
+            if client is not req.client:
+                self.send_message_to(client, notification)
+
+
     def client_disconnected(self, client):
         channels = list(self.channels_by_client.get_set(client))
         for channel in channels:

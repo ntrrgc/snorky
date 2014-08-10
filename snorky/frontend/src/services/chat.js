@@ -27,6 +27,7 @@
     "join",
     "leave",
     "send",
+    "read"
   ]);
 
 })();
