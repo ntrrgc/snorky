@@ -69,8 +69,8 @@ class DataSyncBackend(RPCService):
                 elif delta_type == "delete":
                     obj_delta = DeletionDelta(model, delta["data"])
                 elif delta_type == "update":
-                    obj_delta = UpdateDelta(model, delta["new_data"],
-                                            delta["old_data"])
+                    obj_delta = UpdateDelta(model, delta["newData"],
+                                            delta["oldData"])
                 else:
                     raise RPCError("Invalid delta type")
 

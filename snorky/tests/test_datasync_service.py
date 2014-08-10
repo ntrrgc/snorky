@@ -267,3 +267,73 @@ class TestDataSync(RPCTestMixin, TestCase):
                                       "query": "red"
                                   }])
         self.assertEqual(msg, "No such dealer")
+
+    def test_deletion_delta(self):
+        self.test_acquire_subscription()
+
+        response = self.rpcCall(self.backend, None,
+                        "publishDeltas", deltas=[{
+                            "type": "delete",
+                            "model": "Player",
+                            "data": {
+                                "name": "Alice",
+                                "color": "red"
+                            },
+                        }])
+        self.assertEqual(response, None)
+
+        self.client.send.assert_called_once_with({
+            "service": "frontend",
+            "message": {
+                "type": "delta",
+                "delta": {
+                    "type": "delete",
+                    "model": "Player",
+                    "data": {
+                        "name": "Alice",
+                        "color": "red"
+                    }
+                }
+            }
+        })
+
+    def test_update_delta(self):
+        self.test_acquire_subscription()
+
+        response = self.rpcCall(self.backend, None,
+                        "publishDeltas", deltas=[{
+                            "type": "update",
+                            "model": "Player",
+                            "oldData": {
+                                "name": "Alice",
+                                "color": "red",
+                                "points": 0,
+                            },
+                            "newData": {
+                                "name": "Alice",
+                                "color": "red",
+                                "points": 1,
+                            },
+                        }])
+        self.assertEqual(response, None)
+
+        self.client.send.assert_called_once_with({
+            "service": "frontend",
+            "message": {
+                "type": "delta",
+                "delta": {
+                    "type": "update",
+                    "model": "Player",
+                    "oldData": {
+                        "name": "Alice",
+                        "color": "red",
+                        "points": 0,
+                    },
+                    "newData": {
+                        "name": "Alice",
+                        "color": "red",
+                        "points": 1,
+                    },
+                }
+            }
+        })
