@@ -85,7 +85,9 @@ var Snorky = (function(Class) {
 
     disconnect: function() {
       this._socket.close();
-      this._socket = null;
+
+      // Set as disconnected immediately
+      this.connected = false;
     },
 
     _onSocketOpen: function() {
@@ -119,6 +121,7 @@ var Snorky = (function(Class) {
       this.connecting = false;
 
       Snorky.emitEvent(this.onDisconnected);
+      this._socket = null;
     },
 
     _sendServiceMessage: function(serviceName, message) {

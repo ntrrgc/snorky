@@ -14,6 +14,7 @@ describe("Snorky connector", function() {
       this.onopen = function() { };
       this.onmessage = function() { };
       this.onclose = function() { };
+      this.close = jasmine.createSpy();
     };
 
     this.MockService = Snorky.Class(Snorky.Service, {
@@ -94,6 +95,15 @@ describe("Snorky connector", function() {
     expect(snorky.onDisconnected).not.toHaveBeenCalled();
     socket.onclose();
     expect(snorky.onDisconnected).toHaveBeenCalled();
+
+    expect(snorky.connected).toBe(false);
+    expect(snorky.connecting).toBe(false);
+  });
+
+  it("is set to disconnected when closed in the client side", function() {
+    connectionEstablished.call(this);
+
+    snorky.disconnect();
 
     expect(snorky.connected).toBe(false);
     expect(snorky.connecting).toBe(false);
