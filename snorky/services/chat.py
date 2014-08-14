@@ -20,13 +20,16 @@ class ChatService(RPCService):
         from dateutil.tz import tzlocal
         return datetime.now(tz=tzlocal()).isoformat()
 
+    def check_identity(self, client):
+        if client.identity is None:
+            raise RPCError("Not authenticated")
+
     @rpc_command
     def join(self, req, channel):
         client = req.client
         identity = client.identity
 
-        if identity is None:
-            raise RPCError("Not authenticated")
+        self.check_identity(client)
 
         if self.clients_by_channel.in_set(channel, client):
             raise RPCError("Already joined")
