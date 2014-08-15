@@ -18,7 +18,7 @@ describe("CollectionDeltaProcessor", function() {
 
   beforeEach(function() {
     players = [
-      { id: 1, name: "Alice", color: "red" },
+      { id: 1, name: "Alice", color: "red" }
     ];
     proc = new Snorky.DataSync.CollectionDeltaProcessor({
       "Player": new Snorky.DataSync.ArrayCollection(players)
@@ -66,7 +66,7 @@ describe("CollectionDeltaProcessor", function() {
     });
 
     expect(players).toEqual([
-      { id: 1, name: "Alice", color: "blue" },
+      { id: 1, name: "Alice", color: "blue" }
     ]);
   });
 

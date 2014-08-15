@@ -216,7 +216,7 @@
         throw new Error("Iterator not pointing to an item! (call next())");
       }
       this.collection.updateHandler(newVal);
-    },
+    }
   });
 
   var SingleItemCollection = Snorky.DataSync.SingleItemCollection =
