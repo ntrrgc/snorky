@@ -8,6 +8,7 @@
     init: function() {
       Snorky.RPCService.prototype.init.call(this);
       this.notificationReceived.add(this.onNotification, this);
+      this.deltaReceived = new Snorky.Signal();
     },
 
     onNotification: function(message) {
