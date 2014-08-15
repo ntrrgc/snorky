@@ -12,7 +12,7 @@
       this.name = name;
       this.snorky = snorky;
 
-      this.messageReceived = new Snorky.Signal();
+      this.packetReceived = new Snorky.Signal();
 
       this.init();
     },
@@ -31,7 +31,7 @@
       this.nextCallId = 0;
       this.calls = {}; // callId -> Promise
 
-      this.messageReceived.add(this.onMessage, this);
+      this.packetReceived.add(this.onPacket, this);
       this.notificationReceived = new Snorky.Signal();
     },
 
@@ -49,7 +49,7 @@
       });
     },
 
-    onMessage: function(message) {
+    onPacket: function(message) {
       if (!("type" in message)) {
         console.error('Non-RPC message received from service "%s"',
                       this.name);

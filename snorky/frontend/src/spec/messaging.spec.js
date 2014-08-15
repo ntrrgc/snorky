@@ -9,7 +9,7 @@ describe("Messaging service", function() {
     this.messagingService = new this.MockService();
 
     spyOn(this.messagingService, "sendMessage");
-    participantMessageReceived = spySignal(this.messagingService.participantMessageReceived);
+    messageReceived = spySignal(this.messagingService.messageReceived);
   });
 
   it("sends messages", function() {
@@ -32,14 +32,14 @@ describe("Messaging service", function() {
   });
 
   it("receives messages", function() {
-    this.messagingService.messageReceived.dispatch({
+    this.messagingService.packetReceived.dispatch({
       "type": "message",
       "sender": "Bob",
       "dest": "Alice",
       "body": "Hi, Alice"
     });
 
-    expect(participantMessageReceived).toHaveBeenCalledWith(
+    expect(messageReceived).toHaveBeenCalledWith(
       jasmine.objectContaining({
         "sender": "Bob",
         "dest": "Alice",

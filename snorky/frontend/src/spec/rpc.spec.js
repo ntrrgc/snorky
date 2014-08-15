@@ -51,7 +51,7 @@ describe("A Snorky RPC service", function() {
       }));
 
     // The server replies
-    this.mockService.onMessage({
+    this.mockService.onPacket({
       "type": "response",
       "data": 3,
       "callId": 0

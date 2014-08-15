@@ -113,7 +113,7 @@ var Snorky = (function(Class) {
       var service = packet.service;
       if (service in this.services) {
         // TODO Refactor message to content?
-        this.services[service].messageReceived.dispatch(packet.message);
+        this.services[service].packetReceived.dispatch(packet.message);
       }
     },
 

@@ -78,7 +78,7 @@ describe("Snorky connector", function() {
   it("receives messages from services", function() {
     connectionEstablished.call(this);
 
-    var messageReceived = spySignal(snorky.services.mockService.messageReceived);
+    var packetReceived = spySignal(snorky.services.mockService.packetReceived);
 
     var packet = {
       "service": "mockService",
@@ -86,7 +86,7 @@ describe("Snorky connector", function() {
     };
     socket.onmessage({ data: JSON.stringify(packet) });
 
-    expect(messageReceived)
+    expect(packetReceived)
       .toHaveBeenCalledWith("Hello World")
   });
 
