@@ -6,8 +6,8 @@ describe("A Snorky RPC service", function() {
       constructor: function() {
         // Do not initialize snorky and name
         // Mock sendMessage method with an spy
+        Snorky.RPCService.call(this, "mock", {});
         spyOn(this, "sendMessage");
-        this.init();
       }
     });
     this.MockService.addRPCMethods(["sum"]);

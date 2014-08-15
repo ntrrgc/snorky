@@ -4,29 +4,27 @@
   var Class = Snorky.Class;
 
   Snorky.Chat = new Class(Snorky.RPCService, {
+    init: function() {
+      Snorky.RPCService.prototype.init.call(this);
+
+      this.notificationReceived.add(this.onNotification, this);
+
+      this.participantMessageReceived = new Snorky.Signal();
+      this.presenceReceived = new Snorky.Signal();
+      this.readReceived = new Snorky.Signal();
+    },
+
     onNotification: function(message) {
       if (message.type == "message") {
-        Snorky.emitEvent(this.onParticipantMessage, message);
+        this.participantMessageReceived.dispatch(message);
       } else if (message.type == "presence") {
-        Snorky.emitEvent(this.onPresence, message);
+        this.presenceReceived.dispatch(message);
       } else if (message.type == "read") {
-        Snorky.emitEvent(this.onRead, message);
+        this.readReceived.dispatch(message);
       } else {
         console.error("Unknown message type in messaging service: " +
                       message.type);
       }
-    },
-
-    onParticipantMessage: function(message) {
-      // noop
-    },
-
-    onPresence: function(presence) {
-      // noop
-    },
-
-    onRead: function(event) {
-      // noop
     }
   });
   Snorky.Chat.addRPCMethods([

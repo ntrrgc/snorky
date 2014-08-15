@@ -3,13 +3,13 @@ describe("Messaging service", function() {
     this.MockService = Snorky.Class(Snorky.Messaging, {
       constructor: function() {
         // Do not initialize snorky and name
-        this.init();
+        Snorky.Messaging.call(this, "mock", {});
       }
     });
     this.messagingService = new this.MockService();
 
     spyOn(this.messagingService, "sendMessage");
-    spyOn(this.messagingService, "onParticipantMessage");
+    participantMessageReceived = spySignal(this.messagingService.participantMessageReceived);
   });
 
   it("sends messages", function() {
@@ -32,14 +32,14 @@ describe("Messaging service", function() {
   });
 
   it("receives messages", function() {
-    this.messagingService.onMessage({
+    this.messagingService.messageReceived.dispatch({
       "type": "message",
       "sender": "Bob",
       "dest": "Alice",
       "body": "Hi, Alice"
     });
 
-    expect(this.messagingService.onParticipantMessage).toHaveBeenCalledWith(
+    expect(participantMessageReceived).toHaveBeenCalledWith(
       jasmine.objectContaining({
         "sender": "Bob",
         "dest": "Alice",

@@ -41,8 +41,11 @@ var Snorky = (function(Class) {
 
       this._socket = null;
       this._queuedMessages = [];
-      this.connected = false;
-      this.connecting = false;
+      this.isConnected = false;
+      this.isConnecting = false;
+
+      this.connected = new Snorky.Signal();
+      this.disconnected = new Snorky.Signal();
 
       this.connect();
     },
@@ -69,7 +72,7 @@ var Snorky = (function(Class) {
     connect: function() {
       var self = this;
 
-      this.connecting = true;
+      this.isConnecting = true;
 
       this._socket = new this.socketClass(this.address);
       this._socket.onopen = function() {
@@ -87,16 +90,16 @@ var Snorky = (function(Class) {
       this._socket.close();
 
       // Set as disconnected immediately
-      this.connected = false;
+      this.isConnected = false;
     },
 
     _onSocketOpen: function() {
       this.logDebug("Connected to Snorky server.");
 
-      this.connected = true;
-      this.connecting = false;
+      this.isConnected = true;
+      this.isConnecting = false;
 
-      Snorky.emitEvent(this.onConnected);
+      this.connected.dispatch();
 
       _.each(this._queuedMessages, function(rawMessage) {
         this._socket.send(rawMessage);
@@ -110,17 +113,17 @@ var Snorky = (function(Class) {
       var service = packet.service;
       if (service in this.services) {
         // TODO Refactor message to content?
-        this.services[service].onMessage(packet.message);
+        this.services[service].messageReceived.dispatch(packet.message);
       }
     },
 
     _onSocketClose: function() {
       this.logDebug("Snorky disconnected");
 
-      this.connected = false;
-      this.connecting = false;
+      this.isConnected = false;
+      this.isConnecting = false;
 
-      Snorky.emitEvent(this.onDisconnected);
+      this.disconnected.dispatch();
       this._socket = null;
     },
 
@@ -130,19 +133,11 @@ var Snorky = (function(Class) {
         "message": message
       });
 
-      if (this.connected) {
+      if (this.isConnected) {
         this._socket.send(rawMessage);
       } else {
         this._queuedMessages.push(rawMessage);
       }
-    },
-
-    onConnected: function() {
-      // noop
-    },
-
-    onDisconnected: function() {
-      // noop
     }
 
   });
@@ -151,19 +146,13 @@ var Snorky = (function(Class) {
   Snorky.Class = Class;
   Snorky._ = _;
 
+  // Export Signal class and allow replacing it
+  if (typeof signals !== "undefined") {
+    Snorky.Signal = signals.Signal;
+  }
+
   // Snorky will use ES6 promises by default, but it allows switching
   Snorky.Promise = Promise;
-
-  // Some MV* frameworks need to envelop event handlers or perform additional
-  // tasks in order to update the UI. By default we will just call the
-  // function normally, but allow changing this to extensions.
-  //
-  // We will use this adapter for all events intended to be defined outside of
-  // Snorky code.
-  Snorky.emitEvent = function(callback) {
-    var callbackArgs = Array.prototype.slice.call(arguments, 1);
-    callback.apply(undefined, callbackArgs);
-  };
 
   return Snorky;
 

@@ -1,7 +1,7 @@
 "use strict";
 
 describe("Snorky connector", function() {
-  var snorky, socket;
+  var snorky, socket, connected, disconnected;
 
   beforeEach(function() {
     var that = this;
@@ -29,12 +29,13 @@ describe("Snorky connector", function() {
     snorky = new Snorky(this.MockSocket, "ws://localhost/", {
       "mockService": this.MockService
     });
-    spyOn(snorky, "onConnected");
-    spyOn(snorky, "onDisconnected");
+
+    connected = spySignal(snorky.connected);
+    disconnected = spySignal(snorky.disconnected);
 
     expect(this.MockSocket).toHaveBeenCalledWith("ws://localhost/");
-    expect(snorky.connected).toBe(false);
-    expect(snorky.connecting).toBe(true);
+    expect(snorky.isConnected).toBe(false);
+    expect(snorky.isConnecting).toBe(true);
 
     socket = snorky._socket;
     expect(socket).toEqual(jasmine.any(this.MockSocket));
@@ -44,12 +45,12 @@ describe("Snorky connector", function() {
     it("acknowledges when the endpoint accepts the connection", function() {
     createsSocket.call(this);
 
-    expect(snorky.onConnected).not.toHaveBeenCalled();
+    expect(connected).not.toHaveBeenCalled();
     socket.onopen();
-    expect(snorky.onConnected).toHaveBeenCalled();
+    expect(connected).toHaveBeenCalled();
 
-    expect(snorky.connected).toBe(true);
-    expect(snorky.connecting).toBe(false);
+    expect(snorky.isConnected).toBe(true);
+    expect(snorky.isConnecting).toBe(false);
   }).fn;
 
   it("sends messages to services", function() {
@@ -77,7 +78,7 @@ describe("Snorky connector", function() {
   it("receives messages from services", function() {
     connectionEstablished.call(this);
 
-    spyOn(snorky.services.mockService, "onMessage");
+    var messageReceived = spySignal(snorky.services.mockService.messageReceived);
 
     var packet = {
       "service": "mockService",
@@ -85,19 +86,19 @@ describe("Snorky connector", function() {
     };
     socket.onmessage({ data: JSON.stringify(packet) });
 
-    expect(snorky.services.mockService.onMessage)
+    expect(messageReceived)
       .toHaveBeenCalledWith("Hello World")
   });
 
   it("acknowledges when the endpoint closes the connection", function() {
     connectionEstablished.call(this);
 
-    expect(snorky.onDisconnected).not.toHaveBeenCalled();
+    expect(disconnected).not.toHaveBeenCalled();
     socket.onclose();
-    expect(snorky.onDisconnected).toHaveBeenCalled();
+    expect(disconnected).toHaveBeenCalled();
 
-    expect(snorky.connected).toBe(false);
-    expect(snorky.connecting).toBe(false);
+    expect(snorky.isConnected).toBe(false);
+    expect(snorky.isConnecting).toBe(false);
   });
 
   it("is set to disconnected when closed in the client side", function() {
@@ -105,7 +106,7 @@ describe("Snorky connector", function() {
 
     snorky.disconnect();
 
-    expect(snorky.connected).toBe(false);
-    expect(snorky.connecting).toBe(false);
+    expect(snorky.isConnected).toBe(false);
+    expect(snorky.isConnecting).toBe(false);
   });
 });

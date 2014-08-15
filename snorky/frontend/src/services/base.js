@@ -12,6 +12,8 @@
       this.name = name;
       this.snorky = snorky;
 
+      this.messageReceived = new Snorky.Signal();
+
       this.init();
     },
 
@@ -21,10 +23,6 @@
 
     sendMessage: function(message) {
       this.snorky._sendServiceMessage(this.name, message);
-    },
-
-    onMessage: function(message) {
-      // noop
     }
   });
 
@@ -32,6 +30,9 @@
     init: function() {
       this.nextCallId = 0;
       this.calls = {}; // callId -> Promise
+
+      this.messageReceived.add(this.onMessage, this);
+      this.notificationReceived = new Snorky.Signal();
     },
 
     call: function(command, params) {
@@ -70,12 +71,8 @@
       } else if (message.type == "error") {
         this.calls[message.callId].reject(Error(message.message));
       } else {
-        this.onNotification(message);
+        this.notificationReceived.dispatch(message);
       }
-    },
-
-    onNotification: function(message) {
-      // noop
     },
 
     STATIC: {

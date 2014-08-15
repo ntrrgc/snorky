@@ -23,19 +23,23 @@ module.exports = (grunt) ->
     "src/services/chat.js"
   ]
 
+  specUtils = [
+    "src/spec/utils/**.js"
+  ]
+
   specFiles = [
     "src/spec/**.spec.js"
   ]
 
   grunt.initConfig
     jasmine:
-      src: concat(libFiles, srcFiles)
+      src: concat(libFiles, srcFiles, specUtils)
       options:
         specs: specFiles
     karma:
       server:
         options:
-          files: concat(libFiles, srcFiles, specFiles)
+          files: concat(libFiles, srcFiles, specUtils, specFiles)
           frameworks: ["jasmine"]
           reporters: ["progress"]
           singleRun: false

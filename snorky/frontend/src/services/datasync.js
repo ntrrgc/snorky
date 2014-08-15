@@ -5,17 +5,18 @@
   var _ = Snorky._;
 
   Snorky.DataSync = new Class(Snorky.RPCService, {
+    init: function() {
+      Snorky.RPCService.prototype.init.call(this);
+      this.notificationReceived.add(this.onNotification, this);
+    },
+
     onNotification: function(message) {
       if (message.type == "delta") {
-        Snorky.emitEvent(this.onDelta, message.delta);
+        this.deltaReceived.dispatch(message.delta);
       } else {
         console.error("Unknown message type in DataSync service: " +
                       message.type);
       }
-    },
-
-    onDelta: function(delta) {
-      // noop
     }
   });
   Snorky.DataSync.addRPCMethods([
