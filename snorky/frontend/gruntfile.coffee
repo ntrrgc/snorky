@@ -15,6 +15,7 @@ module.exports = (grunt) ->
   ]
 
   srcFiles = [
+    "src/stable-stringify.js"
     "src/snorky.js"
     "src/services/base.js"
     "src/services/messaging.js"
