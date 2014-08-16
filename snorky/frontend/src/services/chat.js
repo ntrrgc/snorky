@@ -9,14 +9,14 @@
 
       this.notificationReceived.add(this.onNotification, this);
 
-      this.participantMessageReceived = new Snorky.Signal();
+      this.messageReceived = new Snorky.Signal();
       this.presenceReceived = new Snorky.Signal();
       this.readReceived = new Snorky.Signal();
     },
 
     onNotification: function(message) {
       if (message.type == "message") {
-        this.participantMessageReceived.dispatch(message);
+        this.messageReceived.dispatch(message);
       } else if (message.type == "presence") {
         this.presenceReceived.dispatch(message);
       } else if (message.type == "read") {
