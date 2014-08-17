@@ -16,14 +16,14 @@ class SnorkyHTTPTransport(object):
             "X-Backend-Key": self.key,
             "Content-Type": "application/json",
             "Accept": "application/json"
-        }, data=json.dumps(message))
+        }, data=json.dumps(message).encode("UTF-8"))
 
         if not response.ok:
             raise RuntimeError("Error from Snorky server: %d %s" %
                                (response.status_code, response.reason))
 
         try:
-            response = json.loads(response.content)
+            response = json.loads(response.content.decode("UTF-8"))
         except ValueError:
             raise RuntimeError("Non-JSON response from Snorky: %s" %
                                response.content)
@@ -38,7 +38,6 @@ class SnorkyBackend(object):
 
     def send(self, message):
         return self.transport.send(message, json=self.json)
-
 
     def call(self, service, command, **params):
         response = self.send({
