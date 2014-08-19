@@ -65,12 +65,12 @@ class TestMessageHandler(unittest.TestCase):
         })
 
     def test_invalid_json(self):
-        with ExpectLog("tornado.general", 'Invalid JSON.*'):
+        with ExpectLog("snorky", 'Invalid JSON.*'):
             self.mh.process_message_raw(self.client, '''{
                 "service": "echo''')
 
     def test_bad_service(self):
-        with ExpectLog("tornado.general",
+        with ExpectLog("snorky",
                        'Message for non existing service "bar" from client'):
             self.mh.process_message_from(self.client, {
                 "service": "bar",
@@ -78,7 +78,7 @@ class TestMessageHandler(unittest.TestCase):
             })
 
     def test_bad_package(self):
-        with ExpectLog("tornado.general",
+        with ExpectLog("snorky",
                        'Malformed message from client'):
             self.mh.process_message_from(self.client, {"cat": 42})
 

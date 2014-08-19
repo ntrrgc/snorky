@@ -114,7 +114,7 @@ class TestRPC(RPCTestMixin, TestCase):
         self.assertEqual(msg, "Unknown command")
 
     def test_bad_message(self):
-        with ExpectLog("tornado.general",
+        with ExpectLog("snorky",
                        'Invalid format in RPC service "calc". Message: .*'):
             self.calculator.process_message_from(self.client, {
                 "command": "",
@@ -123,7 +123,7 @@ class TestRPC(RPCTestMixin, TestCase):
         self.assertIsNone(self.msg)
 
     def test_invalid_params(self):
-        with ExpectLog("tornado.general",
+        with ExpectLog("snorky",
                        'Invalid params in RPC service "calc": '
                        'difference\(\{"a": 5\}\)'):
             msg = self.rpcExpectError(self.calculator, self.client,
@@ -131,7 +131,7 @@ class TestRPC(RPCTestMixin, TestCase):
             self.assertEqual(msg, "Invalid params")
 
     def test_internal_error(self):
-        with ExpectLog("tornado.general",
+        with ExpectLog("snorky",
                        'Unhandled exception in RPC service .*'):
             self.calculator.process_message_from(self.client, {
                 "command": "buggy",
@@ -148,7 +148,7 @@ class TestRPC(RPCTestMixin, TestCase):
             })
 
     def test_internal_type_error(self):
-        with ExpectLog("tornado.general",
+        with ExpectLog("snorky",
                        'Unhandled exception in RPC service .*'):
             msg = self.rpcExpectError(self.calculator, self.client,
                                       "buggy_type_error", request_debug=False)

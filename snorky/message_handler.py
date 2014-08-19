@@ -1,4 +1,4 @@
-from tornado.log import gen_log
+from snorky.log import snorky_log
 from snorky.hashable import make_hashable
 import json
 
@@ -21,14 +21,14 @@ class MessageHandler(object):
             service_name = msg["service"]
             content = msg["message"]
         except KeyError:
-            gen_log.warning("Malformed message from client %s: %s"
+            snorky_log.warning("Malformed message from client %s: %s"
                            % (client.remote_address, msg))
             return
 
         try:
             service = self.registered_services[service_name]
         except KeyError:
-            gen_log.warning(
+            snorky_log.warning(
                 'Message for non existing service "%s" from client %s'
                 % (service_name, client.remote_address))
             return
@@ -39,7 +39,7 @@ class MessageHandler(object):
         try:
             decoded_msg = make_hashable(json.loads(msg))
         except ValueError:
-            gen_log.warning('Invalid JSON from client %s: %s'
+            snorky_log.warning('Invalid JSON from client %s: %s'
                             % (client.remote_address, msg))
             return
 

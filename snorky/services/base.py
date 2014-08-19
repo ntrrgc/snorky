@@ -3,7 +3,7 @@ try:
     from inspect import signature
 except ImportError:
     from funcsigs import signature
-from tornado.log import gen_log
+from snorky.log import snorky_log
 from snorky.types import with_metaclass
 
 
@@ -128,7 +128,7 @@ class RPCService(with_metaclass(RPCMeta, Service)):
         try:
             request = Request(self, client, msg)
         except InvalidMessage:
-            gen_log.warning('Invalid format in RPC service "%s". Message: %s'
+            snorky_log.warning('Invalid format in RPC service "%s". Message: %s'
                             % (self.name, msg))
             # Discard silently
             return
@@ -145,7 +145,7 @@ class RPCService(with_metaclass(RPCMeta, Service)):
             # Check signature
             signature(method).bind(request, **request.params)
         except TypeError:
-            gen_log.warning('Invalid params in RPC service "%s": %s'
+            snorky_log.warning('Invalid params in RPC service "%s": %s'
                             % (self.name, request.format_call()))
             request.error("Invalid params")
             return
@@ -163,13 +163,13 @@ class RPCService(with_metaclass(RPCMeta, Service)):
                 request.reply(None)
         except RPCError as ex:
             error_name = ex.args[0] if len(ex.args) > 0 else "Exception"
-            gen_log.info("%s in RPC service \"%s\""
+            snorky_log.info("%s in RPC service \"%s\""
                          % (error_name, self.name))
             request.error(error_name)
         except:
             if request.debug:
                 # In unit tests, let this exception propagate
                 raise
-            gen_log.exception('Unhandled exception in RPC service "%s": %s'
+            snorky_log.exception('Unhandled exception in RPC service "%s": %s'
                               % (self.name, request.format_call()))
             request.error("Internal error")
