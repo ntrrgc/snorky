@@ -1,7 +1,7 @@
 import os
 from tornado.ioloop import IOLoop
 from tornado.web import Application, StaticFileHandler
-from snorky.message_handler import MessageHandler
+from snorky import ServiceRegistry
 
 from snorky.request_handlers.http import BackendHTTPHandler
 from snorky.request_handlers.websocket import SnorkyWebSocketHandler
@@ -23,20 +23,20 @@ class PrivatePubSub(PubSubService):
 
 if __name__ == "__main__":
     io_loop = IOLoop.instance()
-    frontend_message_handler = MessageHandler()
-    backend_message_handler = MessageHandler()
+    frontend_registry = ServiceRegistry()
+    backend_registry = ServiceRegistry()
 
     pubsub = PrivatePubSub("pubsub")
-    frontend_message_handler.register_service(pubsub)
+    frontend_registry.register_service(pubsub)
 
     pubsub_backend = PubSubBackend("pubsub_backend", pubsub)
-    backend_message_handler.register_service(pubsub_backend)
+    backend_registry.register_service(pubsub_backend)
 
     dirname = os.path.dirname(__file__)
     application = Application([
-        SnorkyWebSocketHandler.get_route(frontend_message_handler, "/ws"),
+        SnorkyWebSocketHandler.get_route(frontend_registry, "/ws"),
         (r"/backend", BackendHTTPHandler, {
-            "message_handler": backend_message_handler,
+            "service_registry": backend_registry,
             "api_key": "swordfish"
         }),
         (r"/(.*)", IndexAwareStaticFileHandler, {"path": dirname}),

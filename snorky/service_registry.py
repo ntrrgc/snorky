@@ -3,7 +3,7 @@ from snorky.hashable import make_hashable
 import json
 
 
-class MessageHandler(object):
+class ServiceRegistry(object):
     def __init__(self, services=None):
         self.registered_services = {}
         if services:

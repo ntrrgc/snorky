@@ -3,7 +3,7 @@ import os
 from argparse import ArgumentParser
 from tornado.ioloop import IOLoop
 from tornado.web import Application, StaticFileHandler
-from snorky.message_handler import MessageHandler
+from snorky.service_registry import ServiceRegistry
 
 from snorky.request_handlers.sockjs import SnorkySockJSHandler
 
@@ -25,12 +25,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     io_loop = IOLoop.instance()
-    message_handler = MessageHandler()
-    message_handler.register_service(MessagingService("messaging"))
+    service_registry = ServiceRegistry()
+    service_registry.register_service(MessagingService("messaging"))
 
     dirname = os.path.dirname(__file__)
     application = Application(
-        SnorkySockJSHandler.get_routes(message_handler, "/sockjs") +
+        SnorkySockJSHandler.get_routes(service_registry, "/sockjs") +
         [(r"/(.*)", IndexAwareStaticFileHandler, {"path": dirname})]
     )
     application.listen(args.port)

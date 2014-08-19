@@ -1,4 +1,4 @@
-from snorky.message_handler import MessageHandler
+from snorky.service_registry import ServiceRegistry
 from snorky.services.base import Service
 from snorky.client import Client
 from tornado.testing import ExpectLog
@@ -22,15 +22,15 @@ class MockClient(Client):
         self.test.msg = msg
 
 
-class TestMessageHandler(unittest.TestCase):
+class TestServiceRegistry(unittest.TestCase):
     def setUp(self):
         self.client = MockClient(self)
-        self.mh = MessageHandler()
+        self.mh = ServiceRegistry()
         self.mh.register_service(EchoService("echo"))
         self.msg = None
 
     def test_initialize_with_services(self):
-        self.mh = MessageHandler([EchoService("echo")])
+        self.mh = ServiceRegistry([EchoService("echo")])
 
         self.test_call()
 

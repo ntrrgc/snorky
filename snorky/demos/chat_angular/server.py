@@ -1,7 +1,7 @@
 import os
 from tornado.ioloop import IOLoop
 from tornado.web import Application, StaticFileHandler
-from snorky.message_handler import MessageHandler
+from snorky.service_registry import ServiceRegistry
 from snorky.request_handlers.websocket import SnorkyWebSocketHandler
 
 from snorky.services.messaging import MessagingService
@@ -16,12 +16,12 @@ class IndexAwareStaticFileHandler(StaticFileHandler):
 
 if __name__ == "__main__":
     io_loop = IOLoop.instance()
-    message_handler = MessageHandler()
-    message_handler.register_service(MessagingService("messaging"))
+    service_registry = ServiceRegistry()
+    service_registry.register_service(MessagingService("messaging"))
 
     dirname = os.path.dirname(__file__)
     application = Application([
-        SnorkyWebSocketHandler.get_route(message_handler, "/ws"),
+        SnorkyWebSocketHandler.get_route(service_registry, "/ws"),
         (r"/(.*)", IndexAwareStaticFileHandler, {"path": dirname}),
     ])
     application.listen(5800)

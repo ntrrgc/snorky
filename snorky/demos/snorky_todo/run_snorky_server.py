@@ -6,7 +6,7 @@ from snorky.services.datasync import DataSyncService, DataSyncBackend
 from snorky.services.datasync.dealers import BroadcastDealer
 from snorky.request_handlers.websocket import SnorkyWebSocketHandler
 from snorky.request_handlers.http import BackendHTTPHandler
-from snorky import MessageHandler
+from snorky import ServiceRegistry
 
 
 #-----------------------------------------------------------------------------#
@@ -28,8 +28,8 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     # Register the frontend and backend services in different handlers
-    frontend = MessageHandler([datasync])
-    backend = MessageHandler([datasync_backend])
+    frontend = ServiceRegistry([datasync])
+    backend = ServiceRegistry([datasync_backend])
 
     # Create a WebSocket frontend
     app_frontend = Application([
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     # Create a backend, set a secret key, port and address
     app_backend = Application([
         ("/backend", BackendHTTPHandler, {
-            "message_handler": backend,
+            "service_registry": backend,
             "api_key": "swordfish"
         })
     ])

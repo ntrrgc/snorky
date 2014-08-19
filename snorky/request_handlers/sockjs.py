@@ -17,27 +17,27 @@ class SockJSClient(Client):
 
 
 class SnorkySockJSHandler(SockJSConnection):
-    def __init__(self, message_handler, *args, **kwargs):
-        self.message_handler = message_handler
+    def __init__(self, service_registry, *args, **kwargs):
+        self.service_registry = service_registry
         self.client = SockJSClient(req_handler=self)
 
         SockJSConnection.__init__(self, *args, **kwargs)
 
     def on_open(self, info):
-        self.message_handler.client_connected(self.client)
+        self.service_registry.client_connected(self.client)
 
     def on_message(self, message):
-        self.message_handler.process_message_raw(self.client, message)
+        self.service_registry.process_message_raw(self.client, message)
 
     def on_close(self):
-        self.message_handler.client_disconnected(self.client)
+        self.service_registry.client_disconnected(self.client)
 
     @classmethod
-    def get_routes(cls, message_handler, path=""):
+    def get_routes(cls, service_registry, path=""):
         # Since SockJS does not provide (AFAIK) a mechanism to pass arguments
         # to the SockJSConnection constructor, we use an ad-hoc subclass
         class ThisSockJSHandler(cls):
             def __init__(self, *args, **kwargs):
-                cls.__init__(self, message_handler, *args, **kwargs)
+                cls.__init__(self, service_registry, *args, **kwargs)
 
         return SockJSRouter(ThisSockJSHandler, path).urls

@@ -21,7 +21,7 @@ class HTTPClient(Client):
 class BackendHTTPHandler(RequestHandler):
     def __init__(self, *args, **kwargs):
         self.api_key = kwargs.pop("api_key")
-        self.message_handler = kwargs.pop("message_handler")
+        self.service_registry = kwargs.pop("service_registry")
         self.client = HTTPClient(self)
         super(BackendHTTPHandler, self).__init__(*args, **kwargs)
 
@@ -36,7 +36,7 @@ class BackendHTTPHandler(RequestHandler):
             raise HTTPError(400, "Invalid JSON")
 
         # TODO Close request on error
-        self.message_handler.process_message_from(self.client, msg)
+        self.service_registry.process_message_from(self.client, msg)
 
     def check_api_key(self):
         try:

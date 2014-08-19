@@ -18,7 +18,7 @@ class WebSocketClient(Client):
 
 class SnorkyWebSocketHandler(WebSocketHandler):
     def __init__(self, *args, **kwargs):
-        self.message_handler = kwargs.pop("message_handler")
+        self.service_registry = kwargs.pop("service_registry")
         self.client = WebSocketClient(req_handler=self)
         super(SnorkyWebSocketHandler, self).__init__(*args, **kwargs)
 
@@ -27,14 +27,14 @@ class SnorkyWebSocketHandler(WebSocketHandler):
         return True
 
     def open(self):
-        self.message_handler.client_connected(self.client)
+        self.service_registry.client_connected(self.client)
 
     def on_message(self, message):
-        self.message_handler.process_message_raw(self.client, message)
+        self.service_registry.process_message_raw(self.client, message)
 
     def on_close(self):
-        self.message_handler.client_disconnected(self.client)
+        self.service_registry.client_disconnected(self.client)
 
     @classmethod
-    def get_route(cls, message_handler, path="/"):
-        return (path, cls, {'message_handler': message_handler})
+    def get_route(cls, service_registry, path="/"):
+        return (path, cls, {'service_registry': service_registry})

@@ -1,1 +1,1 @@
-from snorky.message_handler import MessageHandler
+from snorky.service_registry import ServiceRegistry
