@@ -28,10 +28,11 @@ var Snorky = (function(Class) {
   };
 
   var Snorky = new Class({
-    constructor: function(socketClass, address, services, debug) {
+    constructor: function(socketClass, address, services, options) {
+      options = options || {};
       this.address = address;
       this.socketClass = socketClass;
-      this.debug = (debug !== undefined ? debug : false);
+      this.debug = (options.debug !== undefined ? options.debug : false);
       this.services = {};
 
       for (var serviceName in services) {
