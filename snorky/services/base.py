@@ -8,22 +8,51 @@ from snorky.types import with_metaclass
 
 
 class Service(object):
+    """Subclass this class and redefine ``process_message_from()`` in order to
+    create a new service.
+    """
     def __init__(self, name):
         self.name = name
 
     def process_message_from(self, client, msg):
+        """Called when a message is received.
+
+        ``msg`` contains the message as a JSON decoded entity. msg and all
+        their descedants are always hashable.
+        """
         raise NotImplemented
 
     def send_message_to(self, client, msg):
+        """Sends a message to a client through the current service.
+
+        Services should use this method instead of calling directly to
+        ``client.send()`` in order to add the service header.
+        """
         client.send({
             "service": self.name,
             "message": msg,
         })
 
     def client_connected(self, client):
+        """Called each time a client connects to Snorky through a channel which
+        is connected to the same :py:class:`snorky.ServiceRegistry` than this
+        service.
+
+        Exceptionally, this method is not called when a client connects from a
+        short-lived channel like
+        :py:class:`snorky.request_handlers.http.BackendHTTPHandler`.
+        """
         pass
 
     def client_disconnected(self, client):
+        """Called each time a client disconnects from Snorky through a channel
+        which is connected to the same :py:class:`snorky.ServiceRegistry` than
+        this service.
+
+        Exceptionally, this method is not called when a client connects from a
+        short-lived channel like
+        :py:class:`snorky.request_handlers.http.BackendHTTPHandler`.
+        """
         pass
 
 
@@ -48,6 +77,9 @@ def format_call(command, params):
     ))
 
 class Request(object):
+    """Represents a request against an RPC service and provides methods to
+    resolve it.
+    """
     __slots__ = ("service", "client", "command", "call_id", "params",
                  "resolved", "debug")
 
@@ -64,6 +96,11 @@ class Request(object):
             raise InvalidMessage
 
     def reply(self, data):
+        """Sends a successful response.
+
+        Each request can be resolved one time. Calling this method twice or
+        calling both ``reply()`` and ``error()`` will trigger a server error.
+        """
         if self.resolved:
             raise RuntimeError("This request has already been resolved")
 
@@ -79,6 +116,11 @@ class Request(object):
         self.resolved = True
 
     def error(self, msg):
+        """Sends an error response.
+
+        Each request can be resolved one time. Calling this method twice or
+        calling both ``reply()`` and ``error()`` will trigger a server error.
+        """
         if self.resolved:
             raise RuntimeError("This request has already been resolved")
 
@@ -122,6 +164,10 @@ class RPCMeta(type):
 
 
 class RPCService(with_metaclass(RPCMeta, Service)):
+    """Subclass this class to make RPC services.
+
+    RPC services expose a more convenient interface than bare Snorky services.
+    """
     rpc_commands = frozenset()
 
     def process_message_from(self, client, msg):
