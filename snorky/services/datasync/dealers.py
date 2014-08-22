@@ -130,7 +130,6 @@ class BroadcastDealer(Dealer):
 
 class SimpleDealer(Dealer):
     __slots__ = ('items_by_model_key',)
-    # TODO Use MultiDict
 
     def __init__(self):
         super(SimpleDealer, self).__init__()
