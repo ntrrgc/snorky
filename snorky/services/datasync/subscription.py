@@ -26,7 +26,7 @@ class Subscription(object):
       words, it has signed the contract). In order for a client to acquire a
       Subscription it needs to know its subscription_token.
 
-    * WaitingClient: No client has acquired the Subscription yet. The
+    * Awaiting client: No client has acquired the Subscription yet. The
       Subscription object will store any deltas for the subscription items and
       forward them to the Client when it acquires the Subscription.
 
