@@ -11,6 +11,9 @@ class BadQuery(Exception):
 
 
 class Dealer(object):
+    """Matches dealer data with subscriptions in order to deliver deltas to
+    clients.
+    """
     __metaclass__ = abc.ABCMeta
     __slots__ = tuple()
 
@@ -19,13 +22,29 @@ class Dealer(object):
         return self.__class__.__name__
 
     @abc.abstractmethod
-    def add_subscription_item(self, item): pass
+    def add_subscription_item(self, item):
+        """Called everytime a subscription item referring this Dealer is
+        authorized.
+        """
+        pass
 
     @abc.abstractmethod
-    def remove_subscription_item(self, item): pass
+    def remove_subscription_item(self, item):
+        """Called everytime a subscription is cancelled, once for each
+        subscription item which refers to this Dealer.
+        """
+        pass
 
     @abc.abstractmethod
-    def get_subscription_items_for_model(self, model): pass
+    def get_subscription_items_for_model(self, model):
+        """Called every time a delta arrives. If the delta is of ``update``
+        type, it's called twice, once with the old data and another time with
+        the new data.
+
+        It must return an iterable set of the subscription items which
+        represent subscriptions to the provided model.
+        """
+        pass
 
     def deliver_delta(self, delta):
         """Receives a delta, computes a set of destination subscriptions
