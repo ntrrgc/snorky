@@ -49,6 +49,11 @@ class DataSyncBackend(RPCService):
 
     @rpc_command
     def publishDeltas(self, req, deltas):
+        """Distributes one or more deltas to the appropriate dealers which, in
+        turn, will distribute them to browser clients.
+
+        :param list deltas: A list of deltas represented as dictionaries.
+        """
         # deltas = [{
         #    "type": "insert",
         #    "model": "player",
