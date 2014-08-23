@@ -129,6 +129,9 @@ class BroadcastDealer(Dealer):
 
 
 class SimpleDealer(Dealer):
+    """This dealer uses a key function in order to determine which subscription
+    items match which models.
+    """
     __slots__ = ('items_by_model_key',)
 
     def __init__(self):
@@ -136,7 +139,14 @@ class SimpleDealer(Dealer):
         self.items_by_model_key = MultiDict()
 
     @abc.abstractmethod
-    def get_key_for_model(self, model): pass
+    def get_key_for_model(self, model):
+        """A subclass must define a function here that for each model returns
+        a value, usually the value of a certain field.
+
+        The dealer will forward deltas to those subscriptions whose query
+        equals the value returned by this function.
+        """
+        pass
 
     def add_subscription_item(self, item):
         self.items_by_model_key.add(item.query, item)
