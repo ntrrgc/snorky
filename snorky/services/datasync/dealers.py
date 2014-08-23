@@ -182,7 +182,7 @@ FilterAssociation = namedtuple('FilterAssociation',
 Filter syntax
 =============
 
-['=', 'color', 'blue']
+['==', 'color', 'blue']
 color is 'blue'
 
 ['<', 'age', 21]
@@ -191,13 +191,13 @@ age is less than 21
 ['>=', 'age', 21]
 age is greater than or equal to 21
 
-['and', ['=', 'service', 'prosody'], ['>=', 'severity_level', 3]]
+['and', ['==', 'service', 'prosody'], ['>=', 'severity_level', 3]]
 service is 'prosody' and severity_level is greater than or equal to 3
 
-['or', ['not', ['=', 'service', 'java']], ['>=', 'severity_level', 3]]
+['or', ['not', ['==', 'service', 'java']], ['>=', 'severity_level', 3]]
 service is not 'java' or severity_level is greater than or equal to 3
 
-['=', 'player.color', 'blue']
+['==', 'player.color', 'blue']
 color of player is 'blue'
 """
 
