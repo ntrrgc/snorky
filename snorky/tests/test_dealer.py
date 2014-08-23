@@ -21,6 +21,7 @@ class FakeSubscriptionItem(object):
 
 class DummyDealer(Dealer):
     name = 'dummy'
+    model = 'foobar (unused)'
 
     def __init__(self, test_item):
         super(DummyDealer, self).__init__()
@@ -70,6 +71,8 @@ class TestDealer(unittest.TestCase):
 
 
 class AutomaticNameDealer(Dealer):
+    model = "foobar (unused)"
+
     def add_subscription_item(self, item):
         raise NotImplementedError
 

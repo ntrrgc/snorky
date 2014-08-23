@@ -21,6 +21,10 @@ class Dealer(object):
     def name(self):
         return self.__class__.__name__
 
+    @abc.abstractproperty
+    def model(self):
+        pass
+
     @abc.abstractmethod
     def add_subscription_item(self, item):
         """Called everytime a subscription item referring this Dealer is

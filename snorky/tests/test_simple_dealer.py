@@ -27,6 +27,7 @@ class DummyModel(object):
 
 class MyDealer(SimpleDealer):
     name = 'test_dealer'
+    model = 'dummy (unused)'
 
     def get_key_for_model(self, model):
         return model.prop

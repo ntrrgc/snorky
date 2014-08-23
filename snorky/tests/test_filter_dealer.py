@@ -27,6 +27,7 @@ class DummyModel(object):
 
 class MyDealer(FilterDealer):
     name = 'test_dealer'
+    model = 'Player'
 
     def get_key_for_model(self, model):
         return model.prop

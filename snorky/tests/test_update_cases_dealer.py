@@ -22,6 +22,7 @@ class FakeSubscriptionItem(object):
 
 class PlayersWithColorDealer(SimpleDealer):
     name = 'players_with_color'
+    model = 'Player'
 
     def get_key_for_model(self, model):
         return model['color']
