@@ -19,10 +19,16 @@ class Dealer(object):
 
     @property
     def name(self):
+        """The name of the dealer. If not provided will default to the name of
+        the class.
+        """
         return self.__class__.__name__
 
     @abc.abstractproperty
     def model(self):
+        """The name of the model class that is handled by this dealer. Usually
+        specified as an static attribute.
+        """
         pass
 
     @abc.abstractmethod
@@ -115,6 +121,9 @@ class Dealer(object):
 
 
 class BroadcastDealer(Dealer):
+    """Dealer that matches all deltas with all subscription items, without
+    filters.
+    """
     name = 'broadcast'
     __slots__ = ('items',)
 
