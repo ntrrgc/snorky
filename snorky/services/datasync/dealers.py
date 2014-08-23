@@ -315,4 +315,3 @@ class FilterDealer(Dealer):
         for subscription_item, filter in items(self.filters_by_item):
             if filter_matches(model, filter):
                 yield subscription_item
-
