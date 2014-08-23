@@ -9,6 +9,10 @@ class SubscribeModelMixin(object):
     dealer_query = None
 
     def get_dealer(self):
+        """Returns the dealer this model is associated with.
+
+        By default it returns the value of the property ``dealer``, if any.
+        """
         if self.dealer:
             return self.dealer
         elif hasattr(self, 'model') and self.model:
@@ -17,9 +21,20 @@ class SubscribeModelMixin(object):
             raise AttributeError("Missing dealer")
 
     def get_dealer_query(self):
+        """Returns the query which will be sent to the dealer.
+
+        By default it returns the value of the property ``dealer_query``.
+        """
         return self.dealer_query
 
     def get_subscription_items(self):
+        """Returns a list of dictionaries of dealer and queries which will be
+        sent to Snorky to authorize a subscription.
+
+        By default it returns a list of only one item, with
+        :py:func:`get_dealer` as dealer and :py:func:`get_dealer_query` as
+        query.
+        """
         return [{
             'dealer': self.get_dealer(),
             'query': self.get_dealer_query()
@@ -49,6 +64,8 @@ def subscription_in_response(method):
 
 class ListSubscribeModelMixin(SubscribeModelMixin,
                               mixins.ListModelMixin):
+    """Provides a ``list()`` method which understands the ``X-Snorky`` header.
+    """
     @subscription_in_response
     def list(self, request, *args, **kwargs):
         return super(ListSubscribeModelMixin, self).list(request, *args,
