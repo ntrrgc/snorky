@@ -22,6 +22,13 @@ class DataSyncBackend(RPCService):
 
     @rpc_command
     def authorizeSubscription(self, req, items):
+        """Requests a subscription authorization token.
+
+        :param dict items: Subscription items to be authorized.
+
+            Each item must be a dictionary with two properties: ``dealer`` and
+            ``query``.
+        """
         obj_items = []
         try:
             for item in items:
