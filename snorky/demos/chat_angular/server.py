@@ -1,9 +1,9 @@
 import os
 from tornado.ioloop import IOLoop
 from tornado.web import Application, StaticFileHandler
-from snorky.service_registry import ServiceRegistry
-from snorky.request_handlers.websocket import SnorkyWebSocketHandler
+from snorky import ServiceRegistry
 
+from snorky.request_handlers.websocket import SnorkyWebSocketHandler
 from snorky.services.messaging import MessagingService
 
 # Adapted from http://stackoverflow.com/a/23818878/1777162
@@ -24,7 +24,7 @@ if __name__ == "__main__":
         SnorkyWebSocketHandler.get_route(service_registry, "/ws"),
         (r"/(.*)", IndexAwareStaticFileHandler, {"path": dirname}),
     ])
-    application.listen(5800)
+    application.listen(5800, address="")
 
     try:
         print("Snorky running...")
