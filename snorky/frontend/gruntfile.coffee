@@ -9,6 +9,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-jasmine"
   grunt.loadNpmTasks "grunt-karma"
   grunt.loadNpmTasks "grunt-contrib-jshint"
+  grunt.loadNpmTasks "grunt-contrib-watch"
 
   libFiles = [
     "lib/*.js"
@@ -66,6 +67,13 @@ module.exports = (grunt) ->
       src:
         src: srcFiles
         dest: "build/snorky.js"
+    watch:
+      test:
+        files: ["src/**/*.js"]
+        tasks: ["jasmine"]
+        options:
+          spawn: false
+          atBegin: true
 
   grunt.registerTask "test", ["jshint", "jasmine"]
   grunt.registerTask "default", ["test"]
