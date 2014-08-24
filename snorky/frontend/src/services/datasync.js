@@ -28,8 +28,12 @@
 
   var CollectionDeltaProcessor = Snorky.DataSync.CollectionDeltaProcessor =
   new Class({
-    constructor: function(collections) {
+    constructor: function(collections, options) {
       this.collections = collections || {};
+      options = options || {};
+      if (options.itemsAreEqual) {
+        this.itemsAreEqual = options.itemsAreEqual;
+      }
     },
 
     itemsAreEqual: function(item, other, delta) {
