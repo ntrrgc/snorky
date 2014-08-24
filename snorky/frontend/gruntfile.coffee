@@ -23,10 +23,12 @@ module.exports = (grunt) ->
     "src/services/pubsub.js"
     "src/services/datasync.js"
     "src/services/chat.js"
+    "src/services/cursors.js"
   ]
 
   specUtils = [
-    "src/spec/utils/**.js"
+    "src/spec/utils/it-promise.js"
+    "src/spec/utils/spy-signal.js"
   ]
 
   specFiles = [
@@ -69,10 +71,9 @@ module.exports = (grunt) ->
         dest: "build/snorky.js"
     watch:
       test:
-        files: ["src/**/*.js"]
+        files: ["src/**/*.js", "gruntfile.coffee"]
         tasks: ["jasmine"]
         options:
-          spawn: false
           atBegin: true
 
   grunt.registerTask "test", ["jshint", "jasmine"]

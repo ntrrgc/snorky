@@ -24,6 +24,46 @@ var Snorky = (function(Class) {
         }
       }
       return object;
+    },
+    map: function(array, callback, thisArg) {
+      var ret = [];
+      _.each(array, function(val) {
+        ret.push(callback.call(thisArg, val));
+      });
+      return ret;
+    },
+    keys: function(obj) {
+      var keys = [];
+      for (var k in obj) {
+        keys.push(k);
+      }
+      return keys;
+    },
+    isArray: function(thing) {
+      return Object.prototype.toString.call(thing) === "[object Array]";
+    },
+    indexOf: function(haystack, needle) {
+      for (var i = 0; i < haystack.length; i++) {
+        if (haystack[i] === needle) {
+          return i;
+        }
+      }
+      return -1;
+    },
+    in: function(haystack, needle) {
+      if (_.isArray(haystack)) {
+        return _.indexOf(haystack, needle) != -1;
+      } else {
+        return (needle in haystack);
+      }
+    },
+    subset: function(object, allowedKeys, errorFn) {
+      errorFn = errorFn || function() {};
+      _.each(object, function(value, key) {
+        if (!_.in(allowedKeys, key)) {
+          errorFn(key, value);
+        }
+      });
     }
   };
 
