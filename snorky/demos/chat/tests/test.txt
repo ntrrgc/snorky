@@ -6,8 +6,6 @@ Suite Teardown  Close All Browsers
 *** Variables ***
 ${test_url}     http://localhost:5800/
 ${browser}      chrome
-aaaaaa->bbbb
-
 
 *** Test cases ***
 
