@@ -9,3 +9,6 @@ node_modules
 build
 db.sqlite3
 *.egg-info
+output.xml
+log.html
+report.html
