@@ -12,9 +12,8 @@
 
     beforeEach(function() {
       this.service = new Cursors("cursors", {});
-      // TODO rpcCall
       var self = this;
-      spyOn(this.service, "call").and.callFake(function() {
+      spyOn(this.service, "rpcCall").and.callFake(function() {
         return new Promise(function(success, error) {
           self.callPromise = { success: success, error: error };
         });
@@ -30,7 +29,7 @@
       expect(this).not.toBe(undefined);
       var promise = this.service.join({ document: "Sheet1" });
 
-      expect(this.service.call).toHaveBeenCalledWith("join", {
+      expect(this.service.rpcCall).toHaveBeenCalledWith("join", {
         document: "Sheet1"
       });
 
@@ -89,7 +88,7 @@
       this.cursor = cursor;
 
       // The RPC call has been made
-      expect(this.service.call).toHaveBeenCalledWith("createCursor", {
+      expect(this.service.rpcCall).toHaveBeenCalledWith("createCursor", {
         privateHandle: cursor.privateHandle,
         document: "Sheet1",
         position: cursor.position,
@@ -112,7 +111,7 @@
       expect(this.cursor.pendingPromiseCount).toEqual(0);
       expect(this.cursor.document).not.toBe(undefined);
       expect(this.cursor.document.service).toBe(this.service);
-      expect(this.cursor.document.service.call).not.toBe(undefined);
+      expect(this.cursor.document.service.rpcCall).not.toBe(undefined);
 
       var cursor = this.cursor;
       var promise = cursor.update({ position: 24 });
@@ -124,7 +123,7 @@
       // Promise count has increased
       expect(cursor.pendingPromiseCount).toEqual(1);
 
-      expect(this.service.call).toHaveBeenCalledWith("updateCursor", {
+      expect(this.service.rpcCall).toHaveBeenCalledWith("updateCursor", {
         privateHandle: cursor.privateHandle,
         newData: { position: 24 }
       });
@@ -144,7 +143,7 @@
       expect(cursor.removed).toEqual(true);
       expect(this.service.ownCursors[cursor.privateHandle]).toBe(undefined);
 
-      expect(this.service.call).toHaveBeenCalledWith("removeCursor", {
+      expect(this.service.rpcCall).toHaveBeenCalledWith("removeCursor", {
         privateHandle: cursor.privateHandle
       });
 

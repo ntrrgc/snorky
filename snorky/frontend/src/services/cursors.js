@@ -35,7 +35,7 @@
       });
       _.assign(this, newData);
 
-      return service.call("updateCursor", {
+      return service.rpcCall("updateCursor", {
         privateHandle: this.privateHandle,
         newData: newData
       }).then(function () {
@@ -51,7 +51,7 @@
 
       delete service.ownCursors[self.privateHandle];
 
-      return service.call("removeCursor", {
+      return service.rpcCall("removeCursor", {
         privateHandle: this.privateHandle
       }).then(function () {
         self.pendingPromiseCount -= 1;
@@ -87,7 +87,7 @@
         status: params.status
       });
 
-      var promise = this.service.call("createCursor", {
+      var promise = this.service.rpcCall("createCursor", {
         privateHandle: handle,
         document: this.name,
         position: params.position,
@@ -115,7 +115,7 @@
 
     join: function(params) {
       var self = this;
-      return this.call("join", params)
+      return this.rpcCall("join", params)
         .then(function(documentData) {
           var name = params.document;
           var document = new Snorky.Cursors.Document(

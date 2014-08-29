@@ -35,7 +35,7 @@
       this.notificationReceived = new Snorky.Signal();
     },
 
-    call: function(command, params) {
+    rpcCall: function(command, params) {
       var self = this;
       return new Snorky.Promise(function(resolve, reject) {
         var callId = self.nextCallId++;
@@ -88,7 +88,7 @@
           }
 
           cls.prototype[method] = function(params) {
-            return this.call(method, params || {});
+            return this.rpcCall(method, params || {});
           };
         });
       }
