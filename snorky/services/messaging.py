@@ -9,6 +9,10 @@ class MessagingService(RPCService):
 
     @rpc_command
     def registerParticipant(self, req, name):
+        """RPC method.
+
+        Assign the client a name for use in the messaging service.
+        """
         if name in self.participants:
             raise RPCError("Name already registered")
 
@@ -20,6 +24,10 @@ class MessagingService(RPCService):
 
     @rpc_command
     def unregisterParticipant(self, req, name):
+        """RPC method.
+
+        Free a name previously registered by the client.
+        """
         try:
             if self.participants[name] != req.client:
                 # Don't let clients unregister other participants
@@ -34,6 +42,10 @@ class MessagingService(RPCService):
 
     @rpc_command
     def listParticipants(self, req):
+        """RPC method.
+
+        Returns a list containing the names of the currently available users.
+        """
         return sorted(self.participants.keys())
 
     @rpc_command
@@ -60,6 +72,14 @@ class MessagingService(RPCService):
         })
 
     def is_name_allowed(self, client, name):
+        """Substitute this method in order to disallow names not
+        matching a set of rules you define.
+
+        It must return ``True`` if the specified name is acceptable for the
+        requester client.
+
+        By default it allows every name to all users.
+        """
         # Default policy: allow all names
         return True
 
