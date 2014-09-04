@@ -1,4 +1,4 @@
-import simplejson as json
+import json
 import unittest
 from mock import Mock
 from snorky.services.datasync.dealers import SimpleDealer
