@@ -202,7 +202,7 @@ latex_elements = {
         \renewcommand{\familydefault}{pbk}
         \linespread{1.125}\selectfont
     """,
-    "preamble": """
+    "preamble": r"""
         \usepackage[margin=2.9cm]{geometry}
         \usepackage{chemstyle}
         \frenchspacing
