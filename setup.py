@@ -5,9 +5,11 @@ import snorky
 
 from setuptools import setup, find_packages
 
+project_dir = os.path.dirname(__file__)
+
 def read(*paths):
     """Build a file path from *paths* and return the contents."""
-    with open(os.path.join(*paths), 'r') as f:
+    with open(os.path.join(project_dir, *paths), 'r') as f:
         return f.read()
 
 setup(
