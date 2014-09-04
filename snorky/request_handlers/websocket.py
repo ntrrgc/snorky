@@ -4,9 +4,7 @@ import json
 
 
 class WebSocketClient(Client):
-    """A WebSocket client.
-    """
-
+    """A WebSocket client."""
     def __init__(self, req_handler):
         super(WebSocketClient, self).__init__()
         self.req_handler = req_handler
