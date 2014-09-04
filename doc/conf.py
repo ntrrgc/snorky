@@ -207,15 +207,18 @@ latex_elements = {
         \usepackage{chemstyle}
         \frenchspacing
     """,
+    "printindex": "",
 }
 
 latex_show_urls = "footnote"
+
+latex_domain_indices = []
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'Snorky.tex', 'Snorky Documentation',
+  ('documentation', 'Snorky.tex', 'Snorky Documentation',
    'Juan Luis Boya García', 'manual'),
 ]
 
@@ -259,7 +262,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'Snorky', 'Snorky Documentation',
+  ('documentation', 'Snorky', 'Snorky Documentation',
    'Snorky Project', 'Snorky', 'A framework for developing WebSocket servers',
    'Miscellaneous'),
 ]
