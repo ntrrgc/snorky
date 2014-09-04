@@ -4,12 +4,14 @@ import json
 
 
 class SockJSClient(Client):
+    """A SockJS client."""
     def __init__(self, req_handler):
         super(SockJSClient, self).__init__()
         self.req_handler = req_handler
 
     @property
     def remote_address(self):
+        """IP address of the client"""
         return self.req_handler.request.remote_ip
 
     def send(self, msg):
@@ -17,6 +19,11 @@ class SockJSClient(Client):
 
 
 class SnorkySockJSHandler(SockJSConnection):
+    """Handles SockJS connections.
+
+    A ``service_registry`` parameter must be specified for instances of this
+    request handler.
+    """
     def __init__(self, service_registry, *args, **kwargs):
         self.service_registry = service_registry
         self.client = SockJSClient(req_handler=self)
@@ -34,6 +41,9 @@ class SnorkySockJSHandler(SockJSConnection):
 
     @classmethod
     def get_routes(cls, service_registry, path=""):
+        """Returns a list of routes matching this request handler,
+        suitable for use in :py:class:`tornado.web.Application`.
+        """
         # Since SockJS does not provide (AFAIK) a mechanism to pass arguments
         # to the SockJSConnection constructor, we use an ad-hoc subclass
         class ThisSockJSHandler(cls):

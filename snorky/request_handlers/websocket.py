@@ -4,12 +4,16 @@ import json
 
 
 class WebSocketClient(Client):
+    """A WebSocket client.
+    """
+
     def __init__(self, req_handler):
         super(WebSocketClient, self).__init__()
         self.req_handler = req_handler
 
     @property
     def remote_address(self):
+        """IP address of the client"""
         return self.req_handler.request.remote_ip
 
     def send(self, msg):
@@ -17,6 +21,11 @@ class WebSocketClient(Client):
 
 
 class SnorkyWebSocketHandler(WebSocketHandler):
+    """Handles WebSocket connections.
+
+    A ``service_registry`` parameter must be specified for instances of this
+    request handler.
+    """
     def __init__(self, *args, **kwargs):
         self.service_registry = kwargs.pop("service_registry")
         self.client = WebSocketClient(req_handler=self)
@@ -37,4 +46,7 @@ class SnorkyWebSocketHandler(WebSocketHandler):
 
     @classmethod
     def get_route(cls, service_registry, path="/"):
+        """Returns a route to this request handler, suitable for use in
+        :py:class:`tornado.web.Application`.
+        """
         return (path, cls, {'service_registry': service_registry})
