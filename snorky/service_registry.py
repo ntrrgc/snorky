@@ -4,6 +4,10 @@ import json
 
 
 class ServiceRegistry(object):
+    """Manages a set of services identified by name and delivers messages to
+    them.
+    """
+
     def __init__(self, services=None):
         self.registered_services = {}
         if services:
@@ -11,12 +15,17 @@ class ServiceRegistry(object):
                 self.register_service(service)
 
     def register_service(self, service):
+        """Adds a new service to this registry."""
         self.registered_services[service.name] = service
 
     def unregister_service(self, service):
+        """Removes a service from this registry."""
         del self.registered_services[service.name]
 
     def process_message_from(self, client, msg):
+        """Delivers a message to the destination service specified in it, which
+        should be associated with this registry.
+        """
         try:
             service_name = msg["service"]
             content = msg["message"]
@@ -36,6 +45,8 @@ class ServiceRegistry(object):
         service.process_message_from(client, content)
 
     def process_message_raw(self, client, msg):
+        """Decodes a message encoded as a JSON character string and sends it to
+        the destination service."""
         try:
             decoded_msg = make_hashable(json.loads(msg))
         except ValueError:
@@ -46,9 +57,15 @@ class ServiceRegistry(object):
         return self.process_message_from(client, decoded_msg)
 
     def client_connected(self, client):
+        """This method must be called every time a new client connects to the
+        server through a request handler associated with this registry.
+        """
         for service in self.registered_services.values():
             service.client_connected(client)
 
     def client_disconnected(self, client):
+        """This method must be called every time a client disconnects from the
+        server.
+        """
         for service in self.registered_services.values():
             service.client_disconnected(client)
