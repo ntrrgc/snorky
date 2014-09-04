@@ -52,6 +52,10 @@ def with_metaclass(meta, *bases):
     return metaclass('temporary_class', None, {})
 
 class MultiDict(dict):
+    """This class extends :py:class:`dict`, adding utility methods to deal with
+    dictionaries of sets.
+    """
+
     def add(self, key, value):
         """Adds a new item to the multidict."""
         values = self.setdefault(key, set())
