@@ -48,7 +48,7 @@ class SnorkyBackend(object):
             }
         })
 
-        # We"re only interested in the response from the service
+        # We're only interested in the response from the service
         response = response["message"]
 
         if response["type"] == "response":
