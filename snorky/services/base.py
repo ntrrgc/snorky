@@ -61,6 +61,8 @@ class InvalidMessage(Exception):
 
 
 class RPCError(Exception):
+    """An error response is sent to the client when this exception is thrown.
+    """
     pass
 
 def ellipsis(string, max_length=100):
@@ -182,6 +184,13 @@ class RPCService(with_metaclass(RPCMeta, Service)):
         return self.process_request(request)
 
     def process_request(self, request):
+        """Attends the request from the client, checking the requested command
+        exists and the signature is correct. If the request is well formed, the
+        command specified by the request is executed.
+
+        Exceptions are catched, triggering error responses being sent to the
+        client.
+        """
         if request.command not in self.rpc_commands:
             request.error("Unknown command")
             return
