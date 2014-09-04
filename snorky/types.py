@@ -25,6 +25,9 @@ else:
         return dict.values()
 
 def is_string(thing):
+    """Returns true if the value is a string, whether it is a character string
+    or a byte string.
+    """
     return isinstance(thing, StringTypes)
 
 # flask implementation of with_metaclass
@@ -50,22 +53,28 @@ def with_metaclass(meta, *bases):
 
 class MultiDict(dict):
     def add(self, key, value):
+        """Adds a new item to the multidict."""
         values = self.setdefault(key, set())
         values.add(value)
 
     def remove(self, key, value):
+        """Removes an item from the multidict"""
         values = self[key]
         values.remove(value)
         if len(values) == 0:
             del self[key]
 
     def get_set(self, key):
+        """Returns a set containing the items matching the specified key."""
         return self.get(key, set())
 
     def in_set(self, key, value):
+        """Returns true if there is an item with the specified key and value.
+        """
         values = self.get(key)
         return values is not None and value in values
 
     def clear_set(self, key):
+        """Deletes all items matching the specified key."""
         if key in self:
             del self[key]
