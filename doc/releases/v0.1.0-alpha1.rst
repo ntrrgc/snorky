@@ -1,0 +1,21 @@
+First release: Snorky 0.1.0-a1
+==============================
+
+Sep 4, 2014
+~~~~~~~~~~~
+
+First version, released as a final year project for the University of Salamanca.
+
+This version establishes the main components of the framework:
+
+ * Basic service architecture.
+
+ * Data synchronization with databases using ``DataSyncService``.
+
+ * JavaScript client-side connector.
+
+   * With additional support for AngularJS framework.
+
+ * Python server-side connector:
+
+   * With additional support for Django and Django REST Framework.

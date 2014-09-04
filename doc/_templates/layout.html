@@ -1,0 +1,20 @@
+{% extends "!layout.html" %}
+{% block extrahead %}
+<style>
+/* Not all table fields have the same text size */
+.field-list p {
+    font-size: 14px;
+}
+
+/* The first paragraph in argument explanations is break to a new line when
+ * there are several paragraphs to explain the same argument. */
+.field-body p:first-of-type {
+    display: inline;
+}
+
+/* Table cell paragraphs are not aligned with headers */
+.field-body p:nth-of-type(2) {
+    margin-top: 3px;
+}
+</style>
+{% endblock %}
