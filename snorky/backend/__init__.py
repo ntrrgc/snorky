@@ -4,14 +4,20 @@ import json
 websession = requests.session()
 
 class SnorkyError(Exception):
+    """An error triggered by the Snorky RPC system."""
     pass
 
 class SnorkyHTTPTransport(object):
+    """Defines how messages are sent to Snorky."""
     def __init__(self, url, key):
         self.url = url
         self.key = key
 
     def send(self, message, json=json):
+        """Sends a message to Snorky service, encoded in JSON with the
+        library provided in the optional ``json`` argument (by default it will
+        use the default :mod:`json` module).
+        """
         response = websession.post(self.url, headers={
             "X-Backend-Key": self.key,
             "Content-Type": "application/json",
@@ -32,14 +38,20 @@ class SnorkyHTTPTransport(object):
 
 
 class SnorkyBackend(object):
+    """Provides methods to send messanges and make calls against Snorky RPC
+    services."""
     def __init__(self, transport, json=json):
         self.transport = transport
         self.json = json
 
     def send(self, message):
+        """Send a bare message to Snorky."""
         return self.transport.send(message, json=self.json)
 
     def call(self, service, command, **params):
+        """Make an RPC call to a Snorky service.
+
+        Returns the returned value of the RPC call."""
         response = self.send({
             "service": service,
             "message": {

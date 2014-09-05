@@ -1,4 +1,10 @@
 class HashableList(list):
+    """A :class:`list` subclass with a :meth:`__hash__` method, therefore
+    allowing it to be used as key in a dictionary.
+
+    The hash will be static once it is computed, even if items of the list are
+    edited. Please abstain from doing so.
+    """
     def __init__(self, *args, **kwargs):
         list.__init__(self, *args, **kwargs)
         self._hash = None
@@ -10,6 +16,12 @@ class HashableList(list):
 
 
 class HashableDict(dict):
+    """A :class:`dict` subclass with a :meth:`__hash__` method, therefore
+    allowing it to be used as key in a dictionary.
+
+    The hash will be static once it is computed, even if items of the
+    dictionary are edited. Please abstain from doing so.
+    """
     def __init__(self, *args, **kwargs):
         dict.__init__(self, *args, **kwargs)
         self._hash = None
@@ -21,6 +33,13 @@ class HashableDict(dict):
 
 
 def make_hashable(json_object):
+    """Recursively transform a JSON decoded entity into a hashable one,
+    substituting all appearances of :class:`list` with :class:`HashableList`
+    and all appearances of :class:`dict` with :class:`HashableDict`. Other data
+    types are kept unchanged.
+
+    Returns a hashable JSON entity.
+    """
     if isinstance(json_object, dict):
         return HashableDict(
             (key, make_hashable(value))

@@ -15,6 +15,7 @@ class SockJSClient(Client):
         return self.req_handler.request.remote_ip
 
     def send(self, msg):
+        """Sends a message through the SockJS channel."""
         self.req_handler.send(json.dumps(msg))
 
 
@@ -31,12 +32,15 @@ class SnorkySockJSHandler(SockJSConnection):
         SockJSConnection.__init__(self, *args, **kwargs)
 
     def on_open(self, info):
+        """Executed when the connection is started."""
         self.service_registry.client_connected(self.client)
 
     def on_message(self, message):
+        """Called when a message is received."""
         self.service_registry.process_message_raw(self.client, message)
 
     def on_close(self):
+        """Called when the connection finalizes."""
         self.service_registry.client_disconnected(self.client)
 
     @classmethod

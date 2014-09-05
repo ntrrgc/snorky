@@ -7,25 +7,43 @@ from django.db.models.signals import pre_save, post_save, pre_delete, \
 
 SNORKY_DATASYNC_SERVICE = getattr(settings, "SNORKY_DATASYNC_SERVICE",
                                   "datasync_backend")
+"""The name of the DataSyncService instance registered in Snorky."""
 
 http_transport = SnorkyHTTPTransport(url=settings.SNORKY_BACKEND_URL,
                                      key=settings.SNORKY_API_KEY)
 snorky_backend = SnorkyBackend(http_transport)
 
 def publish_deltas(deltas):
+    """Send deltas to the Snorky server."""
     snorky_backend.call(SNORKY_DATASYNC_SERVICE,
                         "publishDeltas", deltas=deltas)
 
 def authorize_subscription(items):
+    """Authorize a subscription with the specified items.
+
+       :param items: A list of dictionaries containing the subscription
+       requests. Each dictionary must specify the fields ``dealer`` and
+       ``query``.
+    """
     try:
         response = snorky_backend.call(SNORKY_DATASYNC_SERVICE,
-                                       "authorizeSubscription", items=items)
+                                       "authorizeSubscription",
+                                       items=items)
         return response
     except SnorkyError as err:
         raise RuntimeError("Error from Snorky server: %s" % err.args[0])
 
 def handle_post_save(sender, instance, created, raw, using, update_fields,
         **kwargs):
+    """Called after a subscriptable model is saved.
+
+    If the item was created it publishes an insertion delta with the current
+    data (which will include also the ``id`` field even if it was not assigned
+    before saving).
+
+    If the item was updated it publishes the update delta stored in the
+    `_snorky_delta` property..
+    """
     if created:
         publish_deltas([{
             "type": "insert",
@@ -39,6 +57,12 @@ def handle_post_save(sender, instance, created, raw, using, update_fields,
 
 
 def handle_pre_save(sender, instance, raw, using, update_fields, **kwargs):
+    """Called when a subscriptable model is about to be saved.
+
+    Queries the database to get the old data. If no data is found the item is assumed to be new.
+
+    If the item did exist before, stores an update delta in ``_snorky_delta``.
+    """
     existent_object_query = sender.objects.filter(id=instance.id)
     created = (len(existent_object_query) == 0)
     if not created:
@@ -54,6 +78,10 @@ def handle_pre_save(sender, instance, raw, using, update_fields, **kwargs):
         instance._snorky_delta = delta
 
 def handle_pre_delete(sender, instance, using, **kwargs):
+    """Called when a subscriptable model is about to be deleted.
+
+    Fetches the current data of the object from the databases and stores it in
+    an internal property within the model, ``_snorky_delta``."""
     data = sender.objects.get(id=instance.id).jsonify()
     delta = {
         "type": "delete",
@@ -63,10 +91,16 @@ def handle_pre_delete(sender, instance, using, **kwargs):
     instance._snorky_delta = delta
 
 def handle_post_delete(sender, instance, using, **kwargs):
+    """Called after a subscriptable model is removed.
+
+    Publishes a deletion delta, using the data stored in ``_snorky_delta``.
+    """
     publish_deltas([instance._snorky_delta])
     instance._snorky_delta = None
 
 def rest_framework_jsonify(self):
+    """Serialize a model with the default serializer class of Django REST
+    Framework."""
     from rest_framework.settings import api_settings
     from rest_framework.renderers import UnicodeJSONRenderer
     default_serializer_base = api_settings.DEFAULT_MODEL_SERIALIZER_CLASS
@@ -80,6 +114,8 @@ def rest_framework_jsonify(self):
 
 
 def subscriptable(model_class):
+    """Decorator that adds signals to make a Django model class emit change
+    notifications automatically."""
     pre_save.connect(receiver=handle_pre_save, sender=model_class)
     post_save.connect(receiver=handle_post_save, sender=model_class)
     pre_delete.connect(receiver=handle_pre_delete, sender=model_class)

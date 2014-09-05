@@ -66,12 +66,19 @@ class RPCError(Exception):
     pass
 
 def ellipsis(string, max_length=100):
+    """Returns a length limited version of a string, up to ``max_length``
+    characters.
+
+    If the string is longer it will be cut preserving the starting part and an
+    ellipsis will be added.
+    """
     if len(string) <= max_length:
         return string
     else:
         return string[:max_length - 3] + "..."
 
 def format_call(command, params):
+    """Returns a short textual representation of a call."""
     return ellipsis("%s(%s)" % (
         command,
         json.dumps(params, sort_keys=True, ensure_ascii=False,
@@ -87,13 +94,21 @@ class Request(object):
 
     def __init__(self, service, client, msg):
         self.service = service
+        """The service instance this request was sent against."""
         self.client = client
+        """The client which initiated this requests."""
         self.resolved = False
+        """Whether the request has been resolved either with success or
+        failure."""
         self.debug = False
         try:
             self.call_id = msg.get("callId", None)
+            """An integer the client may set in order to associate each
+            response with the request that caused it."""
             self.command = msg["command"]
+            """The requested command."""
             self.params = msg["params"]
+            """The specified parameters as a dictionary."""
         except (KeyError, TypeError):
             raise InvalidMessage
 
@@ -134,20 +149,28 @@ class Request(object):
         self.resolved = True
 
     def format_call(self):
+        """Returns a short textual representation of the call."""
         return format_call(self.command, self.params)
 
 
 def rpc_command(method):
+    """Decorator to declare an RPC command."""
     method.is_rpc_command = True
     return method
 
 
 def rpc_asynchronous(method):
+    """Decorator to declare an asynchronous RPC command.
+
+    :func:`rpc_command` must also be used for this to make effect. The order in
+    which both decorators are applied is not important."""
     method.is_asynchronous = True
     return method
 
 
 class RPCMeta(type):
+    """Metaclass used to populate the ``rpc_commands`` set in :class:RPCService
+    subclasses."""
     def __new__(cls, name, bases, attrs):
         new_class = super(RPCMeta, cls).__new__(cls, name, bases, attrs)
 
@@ -173,6 +196,7 @@ class RPCService(with_metaclass(RPCMeta, Service)):
     rpc_commands = frozenset()
 
     def process_message_from(self, client, msg):
+        """Processes an incoming message, which should be an RPC request."""
         try:
             request = Request(self, client, msg)
         except InvalidMessage:

@@ -75,6 +75,7 @@ class ListSubscribeModelMixin(SubscribeModelMixin,
 class ListSubscribeAPIView(ListSubscribeModelMixin,
                            generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
+        """Returs a list of models."""
         return self.list(request, *args, **kwargs)
 
 
@@ -87,7 +88,9 @@ class ListSubscribeCreateAPIView(ListSubscribeModelMixin,
     Supports subscription.
     """
     def get(self, request, *args, **kwargs):
+        """Returs a list of models."""
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        """Creates a new instance of the model."""
         return self.create(request, *args, **kwargs)

@@ -1,4 +1,5 @@
 class Delta(object):
+    """Any kind of data change notification."""
     __slots__ = tuple()
 
     def __eq__(self, other):
@@ -7,13 +8,18 @@ class Delta(object):
 
 
 class InsertionDelta(Delta):
+    """An insertion notification."""
     __slots__ = ("model", "data")
 
     def __init__(self, model, data):
         self.model = model
+        """The model class name this change occured in."""
+
         self.data = data
+        """The inserted data."""
 
     def for_json(self):
+        """Returns this instance as a dictionary."""
         return {
             "type": "insert",
             "model": self.model,
@@ -22,14 +28,21 @@ class InsertionDelta(Delta):
 
 
 class UpdateDelta(Delta):
+    """An update notification."""
     __slots__ = ("model", "new_data", "old_data")
 
     def __init__(self, model, new_data, old_data):
         self.model = model
+        """The model class name this change occured in."""
+
         self.new_data = new_data
+        """The updated data."""
+
         self.old_data = old_data
+        """The data before the update."""
 
     def for_json(self):
+        """Returns this instance as a dictionary."""
         return {
             "type": "update",
             "model": self.model,
@@ -39,13 +52,18 @@ class UpdateDelta(Delta):
 
 
 class DeletionDelta(Delta):
+    """A deletion notification."""
     __slots__ = ("model", "data")
 
     def __init__(self, model, data):
         self.model = model
+        """The model class name this change occured in."""
+
         self.data = data
+        """The updated data."""
 
     def for_json(self):
+        """Returns this instance as a dictionary."""
         return {
             "type": "delete",
             "model": self.model,

@@ -9,19 +9,25 @@ if sys.version_info < (3, 0):
     ustr = unicode
 
     def items(dict):
+        """Returns an iterable object for the items in a dictionary."""
         return dict.iteritems()
     def keys(dict):
+        """Returns an iterable object for the keys in a dictionary."""
         return dict.iterkeys()
     def values(dict):
+        """Returns an iterable object for the values in a dictionary."""
         return dict.itervalues()
 else:
     StringTypes = (str)
     ustr = str
     def items(dict):
+        """Returns an iterable object for the items in a dictionary."""
         return dict.items()
     def keys(dict):
+        """Returns an iterable object for the keys in a dictionary."""
         return dict.keys()
     def values(dict):
+        """Returns an iterable object for the values in a dictionary."""
         return dict.values()
 
 def is_string(thing):
@@ -33,6 +39,7 @@ def is_string(thing):
 # flask implementation of with_metaclass
 # https://github.com/mitsuhiko/flask/blob/6ec83e18dca497a8fbfca6caca5999984bd32f2e/flask/_compat.py#L56-L73
 def with_metaclass(meta, *bases):
+    """Compatible metaclass declaration for both Python 2 and Python 3."""
     # This requires a bit of explanation: the basic idea is to make a
     # dummy metaclass for one level of class instantiation that replaces
     # itself with the actual metaclass. Because of internal type checks

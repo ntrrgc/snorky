@@ -132,12 +132,15 @@ class BroadcastDealer(Dealer):
         self.items = set()
 
     def add_subscription_item(self, item):
+        """Adds a subscription item."""
         self.items.add(item)
 
     def remove_subscription_item(self, item):
+        """Removes a subscription item."""
         self.items.remove(item)
 
     def get_subscription_items_for_model(self, model):
+        """Returns all the subscription items."""
         return self.items
 
 
@@ -162,12 +165,18 @@ class SimpleDealer(Dealer):
         pass
 
     def add_subscription_item(self, item):
+        """Adds a subscription item. The query must contain the desired value
+        of the model key which will cause this client to receive a
+        notification."""
         self.items_by_model_key.add(item.query, item)
 
     def remove_subscription_item(self, item):
+        """Removes a subscription item."""
         self.items_by_model_key.remove(item.query, item)
 
     def get_subscription_items_for_model(self, model):
+        """Returns the subscription items whose queries match the key of the
+        provided model."""
         query = self.get_key_for_model(model)
 
         # Return the set of items with this query, or an empty set if
@@ -214,6 +223,9 @@ def get_field(model, name):
     return prop
 
 def false_on_raise(function):
+    """Decorator to make a function return False when a :py:class:`KeyError` or
+    :py:class:`TypeError` is thrown.
+    """
     @wraps(function)
     def _false_on_raise(*args):
         try:
@@ -225,15 +237,19 @@ def false_on_raise(function):
     return _false_on_raise
 
 def orderable_types(a, b):
+    """The provided parameters are orderable if and only if both are number
+    types or both are string types."""
     return (isinstance(a, Number) and isinstance(b, Number)) or \
             (isinstance(a, StringTypes) and isinstance(b, StringTypes))
 
 @false_on_raise
 def filter_eq(model, field, value):
+    """Equality filter."""
     return get_field(model, field) == value
 
 @false_on_raise
 def filter_lt(model, field, value):
+    """*Less than* filter"""
     field_value = get_field(model, field)
     # Python3 does not allow to compare strings with numbers, emulate that.
     if PY2 and not orderable_types(field_value, value):
@@ -242,6 +258,7 @@ def filter_lt(model, field, value):
 
 @false_on_raise
 def filter_lte(model, field, value):
+    """*Less than or equal* filter"""
     field_value = get_field(model, field)
     # Python3 does not allow to compare strings with numbers, emulate that.
     if PY2 and not orderable_types(field_value, value):
@@ -250,6 +267,7 @@ def filter_lte(model, field, value):
 
 @false_on_raise
 def filter_gt(model, field, value):
+    """*Greater than* filter"""
     field_value = get_field(model, field)
     # Python3 does not allow to compare strings with numbers, emulate that.
     if PY2 and not orderable_types(field_value, value):
@@ -258,6 +276,7 @@ def filter_gt(model, field, value):
 
 @false_on_raise
 def filter_gte(model, field, value):
+    """*Greater or equal than* filter"""
     field_value = get_field(model, field)
     # Python3 does not allow to compare strings with numbers, emulate that.
     if PY2 and not orderable_types(field_value, value):
@@ -266,15 +285,18 @@ def filter_gte(model, field, value):
 
 @false_on_raise
 def filter_not(model, expr):
+    """*Not* filter."""
     return not filter_matches(model, expr)
 
 @false_on_raise
 def filter_and(model, *expressions):
+    """*And* filter. Accepts any number of expressions."""
     return all(filter_matches(model, expr)
                for expr in expressions)
 
 @false_on_raise
 def filter_or(model, *expressions):
+    """*Or* filter. Accepts any number of expressions."""
     return any(filter_matches(model, expr)
                for expr in expressions)
 
@@ -290,11 +312,14 @@ operator_functions = {
 }
 
 def filter_matches(model, filter):
+    """Returns true if a model matches the provided filter."""
     op = filter[0]
     args = filter[1:]
     return operator_functions[op](model, *args)
 
 class FilterDealer(Dealer):
+    """This dealer matches deltas against filters specified in subscription
+    queries."""
     __slots__ = ('filters_by_item',)
 
     def __init__(self):
@@ -302,6 +327,7 @@ class FilterDealer(Dealer):
         self.filters_by_item = {}
 
     def add_subscription_item(self, item):
+        """Adds a new subscription item. The query must be a filter."""
         if not isinstance(item.query, list):
             raise BadQuery
 
@@ -309,9 +335,11 @@ class FilterDealer(Dealer):
         self.filters_by_item[item] = filter
 
     def remove_subscription_item(self, item):
+        """Removes a subscription item."""
         del self.filters_by_item[item]
 
     def get_subscription_items_for_model(self, model):
+        """Returns the subscription items matching a filter."""
         for subscription_item, filter in items(self.filters_by_item):
             if filter_matches(model, filter):
                 yield subscription_item
