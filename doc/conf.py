@@ -203,31 +203,9 @@ latex_elements = {
         \linespread{1.125}\selectfont
     """,
     "preamble": r"""
-    \usepackage[margin=2.9cm]{geometry}
-    \usepackage[varioref=false]{chemstyle}
-    \usepackage{varwidth}
-    \linespread{1.15}\selectfont
-    \setlength{\parskip}{1.2em}
-    \setlength{\parindent}{0em}
-    \setcounter{tocdepth}{2}
-    \hyphenpenalty=2000
-    \frenchspacing
-
-    \definecolor{InnerLinkColor}{rgb}{0,0,0}
-    \definecolor{OuterLinkColor}{rgb}{0,0,0}
-    \definecolor{TitleColor}{rgb}{0,0,0}
-
-    \makeatletter
-      \fancypagestyle{normal}{
-        \fancyhf{}
-        \fancyfoot[LE,RO]{{\py@HeaderFamily\thepage}}
-        \fancyfoot[LO]{{\py@HeaderFamily\nouppercase{\rightmark}}}
-        \fancyfoot[RE]{{\py@HeaderFamily\nouppercase{\leftmark}}}
-        \fancyhead[LE,RO]{{\py@HeaderFamily \@title}} % Only title
-        \renewcommand{\headrulewidth}{0.4pt}
-        \renewcommand{\footrulewidth}{0.4pt}
-      }
-    \makeatother
+        \usepackage[margin=2.9cm]{geometry}
+        \usepackage{chemstyle}
+        \frenchspacing
     """,
     "printindex": "",
 }
@@ -236,14 +214,12 @@ latex_show_urls = "footnote"
 
 latex_domain_indices = []
 
-latex_additional_files =  ["custommanual.cls", "Logo_Usal_Hor_2012.pdf"]
-
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('documentation', 'Snorky.tex', u'Integración de características de tiempo real en aplicaciones web',
-   'Juan Luis Boya García', 'custommanual'),
+  ('documentation', 'Snorky.tex', 'Snorky Documentation',
+   'Juan Luis Boya García', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
