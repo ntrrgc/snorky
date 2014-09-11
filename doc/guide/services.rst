@@ -76,7 +76,7 @@ Writing services
 
     * If a client requests a non existing command, ``Unknown command`` is raised.
 
-    * If the request params don't fit the ones specified in the method, i.e. inexistent parameters are used or required parameters are ommited, ``Invalid params`` is raised.
+    * If the request params don't fit the ones specified in the method, i.e. nonexistent parameters are used or required parameters are ommited, ``Invalid params`` is raised.
 
     * If an exception different from :py:class:`RPCError` is raised while the command is being handled, ``Internal error`` is raised.
 
