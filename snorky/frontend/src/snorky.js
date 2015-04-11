@@ -39,6 +39,36 @@ var Snorky = (function(Class) {
       }
       return keys;
     },
+    findIndex: function(array, callback, thisArg) {
+      var ret;
+      _.each(array, function(value, index) {
+        if (callback.call(thisArg, value)) {
+          ret = index;
+          return false;
+        }
+      });
+      return ret;
+    },
+    find: function(array, callback, thisArg) {
+      var index = _.findIndex(array, callback, thisArg);
+      if (index !== undefined) {
+        return array[index];
+      }
+    },
+    remove: function(array, callback, thisArg) {
+      var removedItems = [];
+
+      for (var i = 0; i < array.length; i++) {
+        var value = array[i];
+        if (callback.call(thisArg, value)) {
+          removedItems.push(value);
+          array.splice(i, 1);
+          i--;
+        }
+      }
+
+      return removedItems;
+    },
     isArray: function(thing) {
       return Object.prototype.toString.call(thing) === "[object Array]";
     },
@@ -51,6 +81,7 @@ var Snorky = (function(Class) {
       return -1;
     },
     in: function(haystack, needle) {
+      // TODO: Rename to `contains`
       if (_.isArray(haystack)) {
         return _.indexOf(haystack, needle) != -1;
       } else {
@@ -64,6 +95,38 @@ var Snorky = (function(Class) {
           errorFn(key, value);
         }
       });
+    },
+    replace: function(array, newValue, callback, thisArg) {
+      // Replaces elements that make callback() return true with `newValue`.
+      var ret;
+      _.each(array, function(value, index) {
+        if (callback.call(thisArg, value)) {
+          array[index] = newValue;
+          ret = value;
+        }
+      });
+      return ret;
+    },
+    field: function(fieldName, object) {
+      // Returns a function that compares that takes an object as argument and
+      // compares it to `object` on the field `fieldName`.
+      return function(otherObject) {
+        return otherObject[fieldName] == object[fieldName];
+      };
+    },
+    replaceOnField: function(fieldName, array, newValue) {
+      return _.replace(array, newValue, _.field(fieldName, newValue));
+    },
+    removeOnField: function(fieldName, array, needle) {
+      _.remove(array, _.field(fieldName, needle));
+    },
+    isEqualRight: function(bigObject, smallObject) {
+      for (var key in smallObject) {
+        if (bigObject[key] !== smallObject[key]) {
+          return false;
+        }
+      }
+      return true;
     }
   };
 
