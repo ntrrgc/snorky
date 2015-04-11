@@ -1,0 +1,7 @@
+#!/bin/bash
+find snorky -name '*.py' \
+    -or -name '*.js' \
+    | grep -v node_modules \
+    | grep -v '/lib' \
+    | grep -v '/build' \
+    | xargs -d"\n" --max-args 20 ./add-license
