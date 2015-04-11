@@ -48,8 +48,8 @@
         expect(doc.service).toBe(self.service);
         expect(doc.name).toEqual("Sheet1");
 
-        expect(doc.foreignCursors.length).toEqual(1);
-        var cursor = doc.foreignCursors[0];
+        expect(doc.cursors.length).toEqual(1);
+        var cursor = doc.cursors[0];
         expect(cursor instanceof Cursor).toBe(true);
         expect(cursor instanceof ForeignCursor).toBe(true);
         expect(cursor.handle).toEqual(1);
@@ -85,6 +85,8 @@
       expect(cursor.publicHandle).toBe(undefined);
       expect(cursor.privateHandle).not.toBe(undefined);
       expect(this.service.ownCursors[cursor.privateHandle]).toBe(cursor);
+      expect(this.document.cursors.length).toEqual(2);
+      expect(this.document.cursors[1]).toBe(cursor);
       this.cursor = cursor;
 
       // The RPC call has been made
@@ -105,7 +107,7 @@
       });
     });
 
-    itP("can update cursor", createCursor, function() {
+    var updateCursor = itP("can update cursor", createCursor, function() {
       expect(this).not.toBe(undefined);
       expect(this.cursor).not.toBe(undefined);
       expect(this.cursor.pendingPromiseCount).toEqual(0);
@@ -122,6 +124,8 @@
       expect(cursor.status).toEqual("read");
       // Promise count has increased
       expect(cursor.pendingPromiseCount).toEqual(1);
+      // cursor is still available in the `cursors` array
+      expect(this.document.cursors[1]).toBe(cursor);
 
       expect(this.service.rpcCall).toHaveBeenCalledWith("updateCursor", {
         privateHandle: cursor.privateHandle,
@@ -135,6 +139,34 @@
       });
     });
 
+    itP("optimizes empty updates (same values)", updateCursor, function() {
+      var cursor = this.cursor;
+
+      this.service.rpcCall.calls.reset();
+      var promise = cursor.update({ position: 24, status: "read" });
+
+      expect(this.service.rpcCall).not.toHaveBeenCalled();
+
+      return promise.then(function() {
+        expect(cursor.position).toEqual(24);
+        expect(cursor.status).toEqual("read");
+      });
+    });
+
+    itP("optimizes empty updates (no elements)", updateCursor, function() {
+      var cursor = this.cursor;
+
+      this.service.rpcCall.calls.reset();
+      var promise = cursor.update({});
+
+      expect(this.service.rpcCall).not.toHaveBeenCalled();
+
+      return promise.then(function() {
+        expect(cursor.position).toEqual(24);
+        expect(cursor.status).toEqual("read");
+      });
+    });
+
     itP("can delete cursor", createCursor, function() {
       var cursor = this.cursor;
       var promise = cursor.remove();
@@ -142,6 +174,8 @@
       expect(cursor.pendingPromiseCount).toEqual(1);
       expect(cursor.removed).toEqual(true);
       expect(this.service.ownCursors[cursor.privateHandle]).toBe(undefined);
+      expect(this.document.cursors.length).toBe(1);
+      expect(this.document.cursors[1]).toBe(undefined);
 
       expect(this.service.rpcCall).toHaveBeenCalledWith("removeCursor", {
         privateHandle: cursor.privateHandle

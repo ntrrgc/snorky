@@ -33,14 +33,20 @@
       _.subset(newData, ["position", "status"], function(key) {
         throw new Error("Can't update '" + key + "' of cursor.");
       });
-      _.assign(this, newData);
 
-      return service.rpcCall("updateCursor", {
-        privateHandle: this.privateHandle,
-        newData: newData
-      }).then(function () {
-        self.pendingPromiseCount -= 1;
-      });
+      // Optimization: skip rpcCall if old data and new data are equal
+      if (_.isEqualRight(this, newData)) {
+        return new Promise(function(success) { success(); });
+      } else {
+        _.assign(this, newData);
+
+        return service.rpcCall("updateCursor", {
+          privateHandle: this.privateHandle,
+          newData: newData
+        }).then(function () {
+          self.pendingPromiseCount -= 1;
+        });
+      }
     },
 
     remove: function() {
@@ -50,6 +56,8 @@
       self.removed = true;
 
       delete service.ownCursors[self.privateHandle];
+      _.removeOnField("privateHandle", this.document.cursors,
+                      this.privateHandle);
 
       return service.rpcCall("removeCursor", {
         privateHandle: this.privateHandle
@@ -68,7 +76,7 @@
       this.service = service;
       this.name = name;
 
-      this.foreignCursors = _.map(cursors, function(cursor) {
+      this.cursors = _.map(cursors, function(cursor) {
         cursor.document = this;
         return new ForeignCursor(cursor);
       }, this);
@@ -76,6 +84,24 @@
       this.cursorAdded = new Snorky.Signal();
       this.cursorUpdated = new Snorky.Signal();
       this.cursorRemoved = new Snorky.Signal();
+    },
+
+    onCursorAdded: function(cursor) {
+      var fatCursor = new ForeignCursor(cursor);
+      this.cursors.push(fatCursor);
+
+      this.cursorAdded.dispatch(fatCursor)
+    },
+
+    onCursorUpdated: function(cursor) {
+      var fatCursor = _.replaceOnField("publicHandle", this.cursors,
+                                       cursor);
+      this.cursorUpdated.dispatch(fatCursor);
+    },
+
+    onCursorRemoved: function(cursor) {
+      _.removeOnField("publicHandle", this.cursors, cursor);
+      this.cursorRemoved.dispatch(cursor);
     },
 
     createCursor: function(params) {
@@ -98,6 +124,7 @@
       });
 
       this.service.ownCursors[handle] = cursor;
+      this.cursors.push(cursor);
 
       return [cursor, promise];
     }
@@ -126,18 +153,19 @@
     },
 
     onNotification: function(notification) {
-      var document = this.documents[stableStringify(notification.document)];
+      var cursor = notification.cursor;
+      var document = this.documents[stableStringify(cursor.document)];
       if (!document) {
         throw Error("Notification for unknown document: " +
                     stableStringify(notification.document));
       }
 
       if (notification.type == "cursorAdded") {
-        document.cursorsAdded.dispatch(notification);
+        document.onCursorAdded(cursor);
       } else if (notification.type == "cursorUpdated") {
-        document.cursorUpdated.dispatch(notification);
+        document.onCursorUpdated(cursor);
       } else if (notification.type == "cursorRemoved") {
-        document.cursorRemoved.dispatch(notification);
+        document.onCursorRemoved(cursor);
       }
     },
 
