@@ -5,7 +5,7 @@
 /*global angular */
 
 /**
- * Services that persists and retrieves TODOs from localStorage
+ * Services that persists and retrieves tasks from Django API
  */
 angular.module('todomvc')
   .config(function(RestangularProvider) {
