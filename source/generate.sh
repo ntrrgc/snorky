@@ -7,4 +7,4 @@ else
   source ./env/bin/activate
 fi
 
-python generate.py
+python generate.py && git add ../index.html && git commit -m 'Build' && git push
