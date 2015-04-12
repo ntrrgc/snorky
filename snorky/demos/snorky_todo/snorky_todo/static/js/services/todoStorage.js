@@ -56,31 +56,53 @@ angular.module('todomvc')
     });
     var deltaProcessor = new Snorky.DataSync.CollectionDeltaProcessor();
     snorky.services.datasync.onDelta = function(delta) {
+      // Called each time a data change notification (delta) is received.
+      // CollectionDeltaProcessor is a class that applies these deltas
+      // in a collection (usually an array).
       deltaProcessor.processDelta(delta);
-    }
+
+      // Here we could also inspect the delta element and show alerts to the
+      // user or play a sound when data changes.
+    };
 
     var tasks = Restangular.all("tasks").getListAndSubscription()
     .then(function(response) {
-      // Tell Snorky where to put the updated data
-      deltaProcessor.collections["Task"] =
-        new Snorky.DataSync.ArrayCollection(response.data, {
-          transformItem: function(item) {
-            // We use fat ORM-style objects, so we need to specify a
-            // transformation function that constructs one of our fat objects
-            // from a simple JSON one.
-            return Restangular.restangularizeElement(
-              null, item, "tasks", true, response.data, null
-            );
-          }
-        });
+      var taskArray = response.data;
 
-      // Send our new subscription token to Snorky
+      // A collection wraps an array over an interface which is understood
+      // by deltaProcessor.
+      //
+      // e.g. when an insertion delta is received, deltaProcessor will push
+      // an element in the collection.
+      //
+      // It also allows us to specify a transformation
+      // function.
+      var taskCollection = new Snorky.DataSync.ArrayCollection(taskArray, {
+        transformItem: function(item) {
+          // Allows us to define how a data element received from a delta as
+          // simple JSON will be translated to an element of this array.
+
+          // This is useful if we use fat elements (e.g. each element has a
+          // .delete() method).
+          return Restangular.restangularizeElement(
+            null, item, "tasks", true, response.data, null
+          );
+        }
+      })
+
+      // Tell the collection delta processor: updates of elements of class Task
+      // should be applied to taskCollection.
+      deltaProcessor.collections["Task"] = taskCollection;
+
+      // Send our new subscription token to Snorky, so that we can receive
+      // notifications for changes in tasks.
       snorky.services.datasync.acquireSubscription({
         token: response.subscriptionToken
       });
 
-      // Return the data naively
-      return response.data;
+      // Return the array, which will be automatically updated thanks to
+      // Snorky deltaProcessor.
+      return taskArray;
     });
 
     return tasks;
