@@ -28,6 +28,7 @@ setup(
     ],
     tests_require=["mock"],
     include_package_data=False,
+    license='MPL 2.0',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -39,6 +40,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 )
