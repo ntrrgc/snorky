@@ -4,15 +4,32 @@ concat = ->
     tmp = tmp.concat(array)
   tmp
 
+bannerBundle = '''
+/*! Snorky JS connector (bundle) | http://snorkyproject.org/ | MPL License
+ *  Includes other software:
+ *   - my.class.js | https://github.com/jiem/my-class | MIT License
+ *   - js-signals | http://millermedeiros.github.io/js-signals/ | MIT License */
+'''
+bannerStandalone = '''
+/*! Snorky JS connector | http://snorkyproject.org/ | MPL License */
+'''
+
 module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-concat"
   grunt.loadNpmTasks "grunt-contrib-jasmine"
   grunt.loadNpmTasks "grunt-karma"
   grunt.loadNpmTasks "grunt-contrib-jshint"
   grunt.loadNpmTasks "grunt-contrib-watch"
+  grunt.loadNpmTasks "grunt-contrib-uglify"
 
   libFiles = [
     "lib/*.js"
+  ]
+
+  modernLibFiles = [
+    "lib/my.class.js"
+    "lib/promise.js"
+    "lib/signals.js"
   ]
 
   srcFiles = [
@@ -66,16 +83,33 @@ module.exports = (grunt) ->
       options:
         force: true
     concat:
-      src:
+      standalone:
         src: srcFiles
         dest: "build/snorky.js"
         options:
           stripBanners:
             line: yes
-          banner: '''
-          /*! Snorky JS connector | http://snorkyproject.org/ | MPL License */
-
-          '''
+          banner: bannerStandalone
+      bundle:
+        src: concat(modernLibFiles, srcFiles)
+        dest: "build/snorky.bundle.js"
+        options:
+          stripBanners:
+            line: yes
+          banner: bannerBundle
+    uglify:
+      standalone:
+        files:
+          "build/snorky.min.js": srcFiles
+        options:
+          sourceMap: yes
+          banner: bannerStandalone
+      bundle:
+        files:
+          "build/snorky.bundle.min.js": concat(modernLibFiles, srcFiles)
+        options:
+          sourceMap: yes
+          banner: bannerBundle
     watch:
       test:
         files: ["src/**/*.js", "gruntfile.coffee"]
@@ -85,5 +119,10 @@ module.exports = (grunt) ->
 
   grunt.registerTask "test", ["jshint", "jasmine"]
   grunt.registerTask "default", ["test"]
-  grunt.registerTask "build", ["concat:src"]
+  grunt.registerTask "build", [
+    "concat:standalone"
+    "concat:bundle"
+    "uglify:standalone"
+    "uglify:bundle"
+  ]
   return
