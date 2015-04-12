@@ -16,6 +16,7 @@ setup(
     name='snorky',
     version=snorky.version,
     description='Framework for developing WebSocket servers',
+    url='http://snorkyproject.org',
     long_description=read('README.rst'),
     author='Juan Luis Boya García',
     author_email='ntrrgc@gmail.com',
