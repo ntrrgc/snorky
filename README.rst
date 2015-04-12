@@ -1,3 +1,5 @@
+.. image:: https://raw.githubusercontent.com/ntrrgc/snorky/master/doc/logo.png
+
 Snorky is a framework for building WebSocket servers based on patterns.
 
 Snorky runs on top of `Tornado <http://www.tornadoweb.org/>`_ a fast, performant, asynchronous web server. Snorky is intended to run as a separated process, therefore being able to communicate with web applications written in any programming language or web framework.
@@ -18,6 +20,11 @@ You can install Snorky from the Python package index:
 .. code:: bash
 
     pip install snorky
+
+Documentation
+=============
+
+Snorky documentation is hosted in *Read the Docs*: http://snorky.readthedocs.org/
 
 Simple PubSub server
 ====================
