@@ -85,7 +85,7 @@ class DataSyncService(RPCService):
         self.sm.unregister_subscription(subscription)
 
     def deliver_delta(self, client, delta):
-        """Deliver a delta to the subscripted clients."""
+        """Deliver a delta to the subscribed clients."""
         self.send_message_to(client, {
             "type": "delta",
             "delta": delta.for_json()

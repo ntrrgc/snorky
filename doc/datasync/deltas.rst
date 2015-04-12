@@ -1,7 +1,7 @@
 Sending change notifications
 ============================
 
-Change notifications, also called *deltas*, must be sent to Snorky for each change that may be subscripted by a user.
+Change notifications, also called *deltas*, must be sent to Snorky for each change that may be subscribed by a user.
 
 These notifications must be sent to the :py:class:`snorky.services.datasync.DataSyncBackend` service, which must be connected to a :py:class:`snorky.services.datasync.DataSyncService`.
 
@@ -46,7 +46,7 @@ Each delta dictionary must have the following fields:
 
   * ``oldData``: The object as a JSON object, before the update was made. It must contain at least enough fields to identify the element that was updated.
 
-    If the model can be subscripted filtered by some fields, the fields used as filter must also be present in order for Snorky to be able to know whether the matched the filters before and after the update.
+    If the model can be subscribed filtered by some fields, the fields used as filter must also be present in order for Snorky to be able to know whether the matched the filters before and after the update.
 
 When to send deltas
 ~~~~~~~~~~~~~~~~~~~

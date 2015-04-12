@@ -24,6 +24,6 @@ In order to use DataSync in your system you need to fulfill the following requir
 
   On the Snorky side, in order to work, the only thing that matters is that the change notifications arrive, no matter where they come from.
 
-* Write the :doc:`dealers <dealers>`. These are small Snorky classes that receive both the data change notifications and client subscriptions. They job is to match every change notification to the adequate subscripted clients.
+* Write the :doc:`dealers <dealers>`. These are small Snorky classes that receive both the data change notifications and client subscriptions. They job is to match every change notification to the adequate subscribed clients.
 
 * Make subscription endpoints in your web application. Browser clients cannot ask Snorky directly for a subscription. Instead, they should ask the server which has access to the database. It's the duty of this server to only allow subscriptions to data the client has access right to access.

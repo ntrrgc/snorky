@@ -74,7 +74,7 @@ class Dealer(object):
         We may also have a dealer named 'Players with color' that uses the
         `color` attribute to filter players.
 
-        A client maybe subscripted to players with color red, showing them in a
+        A client maybe subscribed to players with color red, showing them in a
         list. Now, if Alice changes its color to red, this client will receive
         a insertion delta instead of an update one because they had no previous
         knowledge of Alice's model and will have to render it as a new row.

@@ -57,7 +57,7 @@ class TestPubSub(RPCTestMixin, TestCase):
         self.assertEqual(data, None)
         self.msg_alice = None
 
-        # Send a message to the unsubscripted channel
+        # Send a message to the unsubscribed channel
         data = self.rpcCall(self.service, self.bob,
                             "publish", channel="offtopic", message="Hello")
         self.assertEqual(data, None)

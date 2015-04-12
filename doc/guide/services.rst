@@ -126,7 +126,7 @@ Writing services
 
     Messages which are neither of type ``response`` or ``error`` are called *notifications*.
 
-    The following example shows a simple PubSub service in which any client can publish a message to every client subscripted (including itself):
+    The following example shows a simple PubSub service in which any client can publish a message to every client subscribed (including itself):
 
     .. literalinclude:: /examples/simple_pubsub.py
 

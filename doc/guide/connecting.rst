@@ -203,7 +203,7 @@ The following example connects to an Snorky server with the ``SimplePubSub`` ser
 
     snorky.services.pubsub.subscribe({ /* no parameters */ })
       .then(function (returnValue) {
-        console.log("Subscripted!");
+        console.log("Subscribed!");
       });
 
 .. note::

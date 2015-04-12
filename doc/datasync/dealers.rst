@@ -8,7 +8,7 @@ What is a dealer
 
 Dealers are classes which track client subscriptions to certain kinds of models.
 
-Dealers also manage the delivery of deltas, by determining which clients are subscripted to the information that they carry.
+Dealers also manage the delivery of deltas, by determining which clients are subscribed to the information that they carry.
 
 What is a subscription
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -37,7 +37,7 @@ Simple dealers
 
 Often your dealer only has to filter models by a certain field which clients subscribe to.
 
-For example, the ``CommentsByBlogEntry`` dealer would receive subscriptions that specify a blog entry id as query, and each time it receives a delta of model ``Comment``, it would look which blog entry id it is for, and forward it to those clients which subscripted to it.
+For example, the ``CommentsByBlogEntry`` dealer would receive subscriptions that specify a blog entry id as query, and each time it receives a delta of model ``Comment``, it would look which blog entry id it is for, and forward it to those clients which subscribed to it.
 
 .. automodule:: snorky.services.datasync.dealers
 
