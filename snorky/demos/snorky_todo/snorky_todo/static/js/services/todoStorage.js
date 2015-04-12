@@ -75,8 +75,6 @@ angular.module('todomvc')
       // e.g. when an insertion delta is received, deltaProcessor will push
       // an element in the collection.
       //
-      // It also allows us to specify a transformation
-      // function.
       var taskCollection = new Snorky.DataSync.ArrayCollection(taskArray, {
         transformItem: function(item) {
           // Allows us to define how a data element received from a delta as
