@@ -69,6 +69,13 @@ module.exports = (grunt) ->
       src:
         src: srcFiles
         dest: "build/snorky.js"
+        options:
+          stripBanners:
+            line: yes
+          banner: '''
+          /*! Snorky JS connector | http://snorkyproject.org/ | MPL License */
+
+          '''
     watch:
       test:
         files: ["src/**/*.js", "gruntfile.coffee"]
