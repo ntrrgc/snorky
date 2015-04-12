@@ -94,7 +94,7 @@
       var fatCursor = new ForeignCursor(cursor);
       this.cursors.push(fatCursor);
 
-      this.cursorAdded.dispatch(fatCursor)
+      this.cursorAdded.dispatch(fatCursor);
     },
 
     onCursorUpdated: function(cursor) {
