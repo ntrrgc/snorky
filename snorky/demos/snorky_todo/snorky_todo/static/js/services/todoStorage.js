@@ -5,7 +5,7 @@
 /*global angular */
 
 /**
- * Services that persists and retrieves tasks from Django API
+ * Service that persists and retrieves tasks from Django API
  */
 angular.module('todomvc')
   .config(function(RestangularProvider) {
@@ -65,7 +65,7 @@ angular.module('todomvc')
       deltaProcessor.collections["Task"] =
         new Snorky.DataSync.ArrayCollection(response.data, {
           transformItem: function(item) {
-            // We use fat ORM - style objects, so we need to specify a
+            // We use fat ORM-style objects, so we need to specify a
             // transformation function that constructs one of our fat objects
             // from a simple JSON one.
             return Restangular.restangularizeElement(
@@ -74,12 +74,12 @@ angular.module('todomvc')
           }
         });
 
-      // Tell Snorky our new subscription token
+      // Send our new subscription token to Snorky
       snorky.services.datasync.acquireSubscription({
         token: response.subscriptionToken
       });
 
-      // Return the data innocently
+      // Return the data naively
       return response.data;
     });
 
