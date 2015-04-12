@@ -4,7 +4,6 @@ __pycache__
 *.pyc
 *.pyo
 .coverage
-miau/doc/build
 node_modules
 build
 _build
@@ -13,3 +12,5 @@ db.sqlite3
 output.xml
 log.html
 report.html
+env
+dist
