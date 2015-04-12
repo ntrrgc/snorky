@@ -11,7 +11,7 @@
     init: function() {
       Snorky.RPCService.prototype.init.call(this);
 
-      this.notificationReceived.add(this.onNotification);
+      this.notificationReceived.add(this.onNotification, this);
       this.messagePublished = new Snorky.Signal();
     },
 
