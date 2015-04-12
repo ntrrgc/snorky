@@ -39,7 +39,7 @@ def authorize_subscription(items):
 
 def handle_post_save(sender, instance, created, raw, using, update_fields,
         **kwargs):
-    """Called after a subscriptable model is saved.
+    """Called after a subscribable model is saved.
 
     If the item was created it publishes an insertion delta with the current
     data (which will include also the ``id`` field even if it was not assigned
@@ -61,7 +61,7 @@ def handle_post_save(sender, instance, created, raw, using, update_fields,
 
 
 def handle_pre_save(sender, instance, raw, using, update_fields, **kwargs):
-    """Called when a subscriptable model is about to be saved.
+    """Called when a subscribable model is about to be saved.
 
     Queries the database to get the old data. If no data is found the item is assumed to be new.
 
@@ -82,7 +82,7 @@ def handle_pre_save(sender, instance, raw, using, update_fields, **kwargs):
         instance._snorky_delta = delta
 
 def handle_pre_delete(sender, instance, using, **kwargs):
-    """Called when a subscriptable model is about to be deleted.
+    """Called when a subscribable model is about to be deleted.
 
     Fetches the current data of the object from the databases and stores it in
     an internal property within the model, ``_snorky_delta``."""
@@ -95,7 +95,7 @@ def handle_pre_delete(sender, instance, using, **kwargs):
     instance._snorky_delta = delta
 
 def handle_post_delete(sender, instance, using, **kwargs):
-    """Called after a subscriptable model is removed.
+    """Called after a subscribable model is removed.
 
     Publishes a deletion delta, using the data stored in ``_snorky_delta``.
     """
@@ -117,7 +117,7 @@ def rest_framework_jsonify(self):
     return data
 
 
-def subscriptable(model_class):
+def subscribable(model_class):
     """Decorator that adds signals to make a Django model class emit change
     notifications automatically."""
     pre_save.connect(receiver=handle_pre_save, sender=model_class)

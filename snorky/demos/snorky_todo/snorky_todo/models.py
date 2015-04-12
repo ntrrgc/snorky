@@ -3,10 +3,10 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from django.db import models
-from snorky.backend.django import subscriptable
+from snorky.backend.django import subscribable
 
 
-@subscriptable
+@subscribable
 class Task(models.Model):
     title = models.CharField(max_length=100)
     completed = models.BooleanField(default=False)

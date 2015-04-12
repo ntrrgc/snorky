@@ -3,10 +3,10 @@ Using Snorky with Django
 
 Snorky comes with a Django connector which can prove useful if you develop the server side of your application using Django.
 
-Subscriptable models
-~~~~~~~~~~~~~~~~~~~~
+Subscribable models
+~~~~~~~~~~~~~~~~~~~
 
-Adding the :py:func:`snorky.backend.django.subscriptable` decorator to a model class will automatically take care of sending notifications to Snorky with each change.
+Adding the :py:func:`snorky.backend.django.subscribable` decorator to a model class will automatically take care of sending notifications to Snorky with each change.
 
 You only need to provide a ``jsonify()`` method in the model which returns the representation of the model in a format which can be transformed into JSON.
 
@@ -16,9 +16,9 @@ Example
 .. code-block:: python
 
     from django.db import models
-    from snorky.backend.django import subscriptable
+    from snorky.backend.django import subscribable
 
-    @subscriptable
+    @subscribable
     class Task(models.Model):
         title = models.CharField(max_length=100)
         completed = models.BooleanField(default=False)
@@ -30,8 +30,8 @@ Example
             }
 
 
-Subscriptable REST views
-~~~~~~~~~~~~~~~~~~~~~~~~
+Subscribable REST views
+~~~~~~~~~~~~~~~~~~~~~~~
 
 If you use `Django REST Framework <http://www.django-rest-framework.org/>`_ for offering a REST API, you can also use the :py:class:`ListSubscribeModelMixin` which extends ``ListModelMixin`` to provide Snorky subscription support.
 
