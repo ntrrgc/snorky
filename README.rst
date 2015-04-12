@@ -4,7 +4,7 @@ Snorky runs on top of `Tornado <http://www.tornadoweb.org/>`_ a fast, performant
 
 You can use Snorky DataSync service to synchronize a server-side database with a web view. You only need to add hooks somewhere (e.g. in an ORM layer) so that Snorky is notified of them. Clients need a *subscription token* in order to get data from Snorky.
 
-Snorky integrates in the server side with Django ORM and Django REST Framework in order to streamline this process, but you can use it with any server technology with a bit more coding. On the client side, Snorky provides a JavaScript library that handles connections and notifications. You can also connect it easily with client-side MVC-like frameworks like `AngularJS <https://angularjs.org/>`_ in order to close the gap between server and client MVC.
+Snorky integrates in the server side with `Django <https://www.djangoproject.com/>`_ ORM and `Django REST Framework <http://www.django-rest-framework.org/>`_ in order to streamline this process, but you can use it with any server technology with a bit more coding. On the client side, Snorky provides a JavaScript library that handles connections and notifications. You can also connect it easily with client-side MVC-like frameworks like `AngularJS <https://angularjs.org/>`_ in order to close the gap between server and client MVC.
 
 You can use the Snorky architecture of self-contained services with an RPC over JSON interface to add new functionality other than data entities synchronization: e.g. PubSub, person to person chat or cursor synchronization.
 
