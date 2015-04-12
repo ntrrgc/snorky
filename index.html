@@ -1,1 +1,205 @@
-Hello Page
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Snorky Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/static/favicon.png">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/static/style.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Snorky</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="//snorky.readthedocs.org/">Docs</a></li>
+            <li><a href="https://github.com/ntrrgc/snorky">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      
+
+<div class="jumbotron">
+  <h1>Own your data, in real time!</h1>
+  <p>Synchronize your web views with remote databases and more.</p>
+  <p class="license"><a href="https://www.mozilla.org/MPL/2.0/">MPL 2.0 Licensed</a></p>
+  <a class="button" href="https://github.com/ntrrgc/snorky/archive/v0.1.0-a2.tar.gz">Download version 0.1.0-a2</a>
+  <a class="button" href="https://github.com/ntrrgc/snorky/archive/v0.1.0-a2.tar.gz">Check in GitHub</a>
+</div>
+
+<div class="showcase">
+<div class="showcase-text">
+<h2>Write WebSocket services more easily!</h2>
+
+<p>Snorky adds a thin layer above WebSocket that allows each server to offer different <strong><em>services</em></strong>. A built-in JSON-based RPC-like interface helps you doing more with less code.</p>
+
+<p>Snorky uses <strong>Python</strong>, a succint language widely used in web development.</p>
+</div>
+
+<div class="showcase-picture">
+  <div class="codehilite"><pre><span class="k">class</span> <span class="nc">MyChatService</span><span class="p">(</span><span class="n">RPCService</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clients</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="nd">@rpc_command</span>
+    <span class="k">def</span> <span class="nf">join</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">client</span><span class="p">)</span>
+
+    <span class="nd">@rpc_command</span>
+    <span class="k">def</span> <span class="nf">send_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">client</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">send_message_to</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;chatMessage&quot;</span><span class="p">,</span>
+                <span class="s">&quot;body&quot;</span><span class="p">:</span> <span class="n">body</span>
+            <span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">client_disconnected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clients</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">client</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+
+<div class="showcase">
+<div class="showcase-text">
+<h2>Replaceable protocols</h2>
+
+<p>Snorky components are designed to be replaceable. Therefore, although WebSocket is the most frequent protocol, you can add more without touching a line of code of the services.</p>
+
+<p>There are three protocols built-in: <strong>WebSocket</strong>, <strong>SockJS</strong> &mdash; an alternative protocol that provides fallback real-time channels for old browsers which do not support WebSocket, and <strong>HTTP</strong> &mdash; a simple API to interact with your services from other nodes of your system.</p>
+</div>
+
+<div class="showcase-picture"><img src="/static/img/protocols.png"></div>
+</div>
+
+<div class="showcase">
+<div class="showcase-text">
+<h2>Wire up a backend</h2>
+
+<p>You don&#39;t have to expose the same interface for outsiders that you expose for other servers in your datacenter. Snorky can listen on several ports and different protocols, exposing potentially different services in each case.</p>
+
+<p>A common pattern is to feed data from a trusted server, which connects to Snorky through a <strong><em>backend channel</em></strong> (usually over HTTP), to all your users around the world which are connected through a <strong><em>frontend channel</em></strong> (usually over WebSocket).</p>
+</div>
+
+<div class="showcase-picture"><img src="/static/img/backend2.png"></div>
+</div>
+
+<div class="datasync">
+<h1>Enjoy DataSync</h1>
+
+<p>Snorky DataSync is a Snorky service that allows your web users to receive <strong>notifications of events that occur in your database</strong>.</p>
+
+<p>DataSync does not force you to use a specific database software or to host your data in third party servers.</p>
+</div>
+
+<div class="showcase">
+<div class="showcase-text">
+<h2>Notify Snorky</h2>
+
+<p>In order to use DataSync, you have to make sure each time a change occurs in your database, <strong>whatever your database is</strong> &mdash; Snorky does not care whether you are using a relational SQL database, a MongoDB instance or plain text files, the application sends a notification to Snorky DataSyncBackend.</p>
+
+<p>This notification shall specify whether the change is an insertion, update or deletion and the data before and after the change. That&#39;s all.</p>
+</div>
+<div class="showcase-picture">
+  <div class="codehilite"><pre><span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="c"># Insert</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">get_db</span><span class="p">()</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">    INSERT INTO Players (id, name, color)</span>
+<span class="s">    VALUES (:id, :name, :color)&#39;&#39;&#39;</span><span class="p">,</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">lastrowid</span>
+    <span class="n">get_db</span><span class="p">()</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="c"># First commit, then notify.</span>
+    <span class="n">snorky_backend</span><span class="o">.</span><span class="n">publish_deltas</span><span class="p">([{</span>
+        <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;insert&#39;</span><span class="p">,</span>
+        <span class="s">&#39;model&#39;</span><span class="p">:</span> <span class="s">&#39;Player&#39;</span><span class="p">,</span>
+        <span class="s">&#39;data&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">,</span>
+    <span class="p">}])</span>
+</pre></div>
+
+</div>
+</div>
+
+
+<div class="showcase">
+<div class="showcase-text">
+<h2>Authorize subscriptions</h2>
+
+<p>In order for clients to receive notifications from Snorky, they need a <em><strong>subscription</strong></em><strong>.</strong> Subscriptions must be authorized by the server side.</p>
+
+<p>Usually clients request both data and a subscription at the same time. Snorky has an idiom for this in REST APIs: the <strong><em>X-Snorky</em></strong> and <strong><em>X-Subscription-Token</em></strong> headers.</p>
+</div>
+
+<div class="showcase-picture">
+<div class="codehilite"><pre>
+<span class="">&gt; GET /api/tasks
+&gt; Accept: application/json
+&gt; X-Snorky: Subscribe</span>
+
+<span class="nt">&lt; 200 OK
+&lt; Content-Type: application/json
+&lt; X-Subscription-Token: oirvarwptrk7wgz7sv</span>
+
+<span class="p">[{</span>
+  <span class="s">"id"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s">"title"</span><span class="p">:</span> <span class="s">"Learn Snorky"</span><span class="p">,</span>
+  <span class="s">"completed"</span><span class="p">:</span> <span class="n">true</span>
+<span class="p">}]</span>
+</pre></div>
+</div>
+</div>
+
+<div class="showcase">
+<div class="showcase-text">
+<h2>Handle events</h2>
+
+<p>Once you&#39;ve got a subscription token, you can pass it to the Snorky Javascript library, which will <strong>trigger an event for each notification</strong> you are subscripted to.</p>
+
+<p>In response to these events you may do whatever you want: reload the page, insert the new data with jQuery transformations, show notifications on the screen or take the approach of the following point.</p>
+</div>
+
+<div class="showcase-picture">
+  <img src="/static/img/notification.png">
+</div>
+</div>
+
+<div class="showcase">
+<div class="showcase-text">
+<h2>Leverage Distributed MVC</h2>
+
+<p>Many Javascript libraries provide client-side templating, allowing you to put your data models in JS code and separately write templates that are rendered into HTML code by the browser. <a href="https://angularjs.org/">AngularJS</a> and <a href="http://knockoutjs.com/">Knockout</a> are popular examples, but there are many.</p>
+
+<p>Snorky provides handy JS adapters that you can plug to these libraries in order to <strong>update your client-side models automatically</strong>. This means you can write HTML template code for a list of elements and every time a new element comes into existance it will appear instantly without waits or reloads.</p>
+</div>
+
+<div class="showcase-picture">
+  <img src="/static/img/angular.png">
+</div>
+</div>
+
+<div class="footer">
+  <a id="email-link">Juan Luis Boya</a> &copy; 2014
+</div>
+
+
+    </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="/static/quirks.js"></script>
+  </body>
+</html>
+

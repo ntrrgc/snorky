@@ -1,0 +1,38 @@
+{% load staticfiles %}<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}Snorky Project{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{% static "favicon.png" %}">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{% static "style.css" %}">
+  </head>
+  <body>
+    <div class="container">
+      <div class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Snorky</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="//snorky.readthedocs.org/">Docs</a></li>
+            <li><a href="https://github.com/ntrrgc/snorky">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+      {% block content %}
+      {% endblock content %}
+    </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="{% static "quirks.js" %}"></script>
+  </body>
+</html>
+

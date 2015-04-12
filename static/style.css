@@ -1,0 +1,241 @@
+body {
+    font-family: "Open Sans";
+}
+
+b, strong, h1, h2, h3 {
+    font-weight: 400;
+}
+
+.container .jumbotron {
+    background: #FFF url(img/dolphin.png) no-repeat right 20px center;
+    background-size: auto 200px;
+    border-radius: 0px !important;
+}
+
+.container {
+    background: #E7F7FC;
+    padding: 0;
+}
+
+@media all and (min-width: 992px) {
+    .showcase {
+        display: table;
+    }
+    .showcase-picture {
+        display: table-cell;
+        vertical-align: middle;
+        width: 440px;
+        text-align: center;
+    }
+    .showcase-text {
+        display: table-cell;
+        padding-right: 20px;
+    
+        vertical-align: middle;
+    }
+    .showcase.even .showcase-text {
+        padding-left: 20px;
+        padding-right: 0px;
+    }
+    .showcase-title {
+        display: table-row;
+    }
+
+    .showcase-picture img, .showcase-picture {
+        width: 360px;
+    }
+
+    .container {
+        border-right: 7px solid #55B5D4;
+        border-left: 7px solid #55B5D4;
+    }
+    .showcase {
+        margin: 40px 40px;
+    }
+    .datasync {
+        padding: 40px 40px;
+    }
+    body {
+        background: #A2DEF1 url(img/stripes.png) fixed;
+    }
+    .navbar-brand {
+        margin-left: 20px;
+    }
+}
+
+@media all and (min-width: 768px) {
+    .container {
+        border-right: 7px solid #55B5D4;
+        border-left: 7px solid #55B5D4;
+    }
+}
+
+@media all and (min-width: 768px) and (max-width: 991px) {
+    .showcase-picture img, .showcase-picture {
+        width: 360px;
+    }
+}
+
+@media all and (max-width: 991px) {
+    .showcase-picture {
+        text-align: center;
+        margin: 20px auto;
+    }
+    .showcase {
+        margin: 40px 15px;
+    }
+    .datasync {
+        padding: 5px 15px 20px 15px;
+    }
+    body {
+        background: #A2DEF1;
+    }
+}
+
+@media all and (max-width: 767px) {
+    .showcase-picture pre {
+        font-size: 12px;
+    }
+    body {
+        font-size: 17px;
+        font-weight: 300;
+    }
+    .showcase-picture img, .showcase-picture {
+        width: 330px;
+    }
+}
+
+@media all and (min-width: 768px) and (max-width: 1199px) {
+    body {
+        font-size: 18px;
+        font-weight: 300;
+    }
+}
+
+@media all and (min-width: 1200px) {
+    body {
+        font-size: 22px;
+        font-weight: 300;
+    }
+    p, h2 {
+        margin-bottom: 20px;
+    }
+    .showcase-text {
+        padding-right: 30px;
+    }
+    .showcase.even .showcase-text {
+        padding-left: 30px;
+    }
+    .navbar-brand {
+        margin-left: 30px;
+    }
+}
+
+pre {
+    text-align: left;
+    background-color: #1A1A1A;
+    color: white;
+}
+
+.codehilite code,.codehilite pre{color:#fdce93;background-color:#3f3f3f}.codehilite .hll{background-color:#222}.codehilite .c{color:#7f9f7f}.codehilite .err{color:#e37170;background-color:#3d3535}.codehilite .g{color:#7f9f7f}.codehilite .k{color:#f0dfaf}.codehilite .l{color:#ccc}.codehilite .n{color:#dcdccc}.codehilite .o{color:#f0efd0}.codehilite .x{color:#ccc}.codehilite .p{color:#41706f}.codehilite .cm{color:#7f9f7f}.codehilite .cp{color:#7f9f7f}.codehilite .c1{color:#7f9f7f}.codehilite .cs{color:#cd0000;font-weight:bold}.codehilite .gd{color:#cd0000}.codehilite .ge{color:#ccc;font-style:italic}.codehilite .gr{color:red}.codehilite .gh{color:#dcdccc;font-weight:bold}.codehilite .gi{color:#00cd00}.codehilite .go{color:gray}.codehilite .gp{color:#dcdccc;font-weight:bold}.codehilite .gs{color:#ccc;font-weight:bold}.codehilite .gu{color:purple;font-weight:bold}.codehilite .gt{color:#0040D0}.codehilite .kc{color:#dca3a3}.codehilite .kd{color:#ffff86}.codehilite .kn{color:#dfaf8f;font-weight:bold}.codehilite .kp{color:#cdcf99}.codehilite .kr{color:#cdcd00}.codehilite .kt{color:#00cd00}.codehilite .ld{color:#cc9393}.codehilite .m{color:#8cd0d3}.codehilite .s{color:#cc9393}.codehilite .na{color:#9ac39f}.codehilite .nb{color:#efef8f}.codehilite .nc{color:#efef8f}.codehilite .no{color:#ccc}.codehilite .nd{color:#ccc}.codehilite .ni{color:#c28182}.codehilite .ne{color:#c3bf9f;font-weight:bold}.codehilite .nf{color:#efef8f}.codehilite .nl{color:#ccc}.codehilite .nn{color:#8fbede}.codehilite .nx{color:#ccc}.codehilite .py{color:#ccc}.codehilite .nt{color:#9ac39f}.codehilite .nv{color:#dcdccc}.codehilite .ow{color:#f0efd0}.codehilite .w{color:#ccc}.codehilite .mf{color:#8cd0d3}.codehilite .mh{color:#8cd0d3}.codehilite .mi{color:#8cd0d3}.codehilite .mo{color:#8cd0d3}.codehilite .sb{color:#cc9393}.codehilite .sc{color:#cc9393}.codehilite .sd{color:#cc9393}.codehilite .s2{color:#cc9393}.codehilite .se{color:#cc9393}.codehilite .sh{color:#cc9393}.codehilite .si{color:#cc9393}.codehilite .sx{color:#cc9393}.codehilite .sr{color:#cc9393}.codehilite .s1{color:#cc9393}.codehilite .ss{color:#cc9393}.codehilite .bp{color:#efef8f}.codehilite .vc{color:#efef8f}.codehilite .vg{color:#dcdccc}.codehilite .vi{color:#ffffc7}.codehilite .il{color:#8cd0d3}
+
+img.wide {
+    width: 100%;
+}
+
+.nav a {
+    font-size: 18px;
+}
+
+h1, h2, h3 {
+    font-family: "Open Sans";
+}
+
+.navbar {
+    background: #55B5D4;
+    border: none;
+    box-shadow: none;
+    position: relative;
+    border-radius: 0;
+}
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-nav > li > a {
+    color: #FFF;
+    text-shadow: none;
+}
+
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus,
+.navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus
+{
+    color: white;
+    background-color: #5EABC3;
+}
+
+.under-development {
+    background: #F7EDC5;
+    color: #614747;
+    border-top: 5px solid orange;
+    border-bottom: 5px solid orange;
+}
+
+@media all and (min-width: 768px) {
+    .under-development {
+        padding: 60px 40px;
+        margin: 50px 0;
+    }
+}
+
+@media all and (max-width: 767px) {
+    .under-development {
+        padding: 20px 20px;
+        margin: 70px 0 50px 0;
+    }
+}
+
+.footer {
+    padding: 20px;
+    font-size: 15px;
+    background: #55B5D4;
+    color: white;
+}
+
+.footer a {
+    color: white;
+    font-style: italic;
+}
+
+.datasync {
+    background: #F1F1CD;
+    border-top: 5px solid #FDECB5;
+}
+
+.datasync h1 {
+    margin-bottom: 30px;
+}
+
+.navbar-default .navbar-toggle {
+    border-color: white;
+}
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: white;
+}
+.navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+    background-color: #A6D2DD;
+}
+
+a.button {
+    background: #5DB6D3;
+    padding: 10px;
+    color: white;
+}
+a.button:hover {
+    background: #8CC7DB;
+    text-decoration: none;
+}
+
+.license {
+    margin-top: 0px;
+    font-size: 80%;
+    color: gray;
+}

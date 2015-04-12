@@ -1,0 +1,4 @@
+Django==1.6.11
+django-classy-tags==0.6.1
+django-sekizai==0.8.1
+Pygments==2.0.2
