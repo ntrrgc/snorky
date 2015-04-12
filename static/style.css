@@ -105,6 +105,12 @@ b, strong, h1, h2, h3 {
     }
 }
 
+@media all and (max-width: 340px) {
+    .showcase-picture img, .showcase-picture {
+        width: 100%;
+    }
+}
+
 @media all and (min-width: 768px) and (max-width: 1199px) {
     body {
         font-size: 18px;
