@@ -19,3 +19,4 @@ This version establishes the main components of the framework:
  * Python server-side connector:
 
    * With additional support for Django and Django REST Framework.
+
