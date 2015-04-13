@@ -45,8 +45,8 @@ class DataSyncBackend(RPCService):
 
                 obj_item = SubscriptionItem(dealer_name, item["query"])
                 obj_items.append(obj_item)
-        except KeyError:
-            raise RPCError("Missing field")
+        except KeyError as field:
+            raise RPCError("Missing field %s" % field)
 
         subscription = Subscription(obj_items, self.frontend)
         token = self.frontend.sm.register_subscription(subscription)
