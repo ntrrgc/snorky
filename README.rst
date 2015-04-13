@@ -33,7 +33,6 @@ Snorky groups functionality in *services*, which are classes intended to attend 
 
 .. code:: python
 
-    import os
     from tornado.ioloop import IOLoop
     from tornado.web import Application
     from snorky import ServiceRegistry
