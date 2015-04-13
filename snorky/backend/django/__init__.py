@@ -3,6 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 from __future__ import absolute_import
+import json
 from snorky.backend import SnorkyHTTPTransport, SnorkyBackend, SnorkyError
 from django.conf import settings
 from django.utils.module_loading import import_by_path
@@ -13,9 +14,25 @@ SNORKY_DATASYNC_SERVICE = getattr(settings, "SNORKY_DATASYNC_SERVICE",
                                   "datasync_backend")
 """The name of the DataSyncService instance registered in Snorky."""
 
+SNORKY_JSON_ENCODER = getattr(settings, 'SNORKY_JSON_ENCODER',
+                              json.JSONEncoder)
+SNORKY_JSON_ENCODER = import_by_path(SNORKY_JSON_ENCODER)
+"""JSON encoder class used to send messages to Snorky, by default it is
+`json.JSONEncoder`."""
+
+class JSONModule(object):
+    @staticmethod
+    def dumps(obj, *args, **kwargs):
+        kwargs['cls'] = SNORKY_JSON_ENCODER
+        return json.dumps(obj, *args, **kwargs)
+
+    @staticmethod
+    def loads(obj, *args, **kwargs):
+        return json.loads(obj, *args, **kwargs)
+
 http_transport = SnorkyHTTPTransport(url=settings.SNORKY_BACKEND_URL,
                                      key=settings.SNORKY_API_KEY)
-snorky_backend = SnorkyBackend(http_transport)
+snorky_backend = SnorkyBackend(http_transport, json=JSONModule)
 
 def publish_deltas(deltas):
     """Send deltas to the Snorky server."""
