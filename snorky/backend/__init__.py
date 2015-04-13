@@ -4,7 +4,9 @@
 
 import requests
 import json
+import logging
 
+log = logging.getLogger('snorky')
 websession = requests.session()
 
 class SnorkyError(Exception):
@@ -56,6 +58,7 @@ class SnorkyBackend(object):
         """Make an RPC call to a Snorky service.
 
         Returns the returned value of the RPC call."""
+        log.debug("Service: %s, Call: %s %s", service, command, params)
         response = self.send({
             "service": service,
             "message": {
@@ -68,8 +71,10 @@ class SnorkyBackend(object):
         response = response["message"]
 
         if response["type"] == "response":
+            log.debug("Response: %s", response["data"])
             return response["data"]
         elif response["type"] == "error":
+            log.debug("Error: %s", response["message"])
             raise SnorkyError(response["message"])
         else:
             raise RuntimeError
