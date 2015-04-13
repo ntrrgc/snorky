@@ -1,6 +1,10 @@
 What's new in Snorky 0.1.0-a3 (prerelease)
 ==========================================
 
+* ``compare_digest``, a function that provides constant-time string comparison in Python 2.7.7+ and Python 3.3+ has been replaced with `streql <https://pypi.python.org/pypi/streql/3.0.2`_, a third party module that performs the same task, but it is compatible with older Python versions.
+
+  This is required to use Snorky in CentOS 7 with Python 2 without building the interpreter from source.
+
 * Added a ``SNORKY_JSON_ENCODER`` setting in the Django connector, allowing to change the JSON encoder class (as if ``cls`` parameter of ``json.dumps()`` was specified).
 
 * Added debug logging to the Python backend connector. The logging channel is 'snorky'. If the logging level is ``DEBUG`` it will emit a line for each message sent or received between the client and Snorky.

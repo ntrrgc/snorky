@@ -26,6 +26,7 @@ setup(
         "requests",
         "funcsigs",
         "python-dateutil",
+        "streql",
     ],
     tests_require=["mock"],
     include_package_data=False,

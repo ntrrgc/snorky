@@ -4,7 +4,7 @@
 
 from tornado.web import RequestHandler, HTTPError, asynchronous
 from snorky.client import Client
-from hmac import compare_digest
+from streql import equals # constant time string comparison
 import json
 
 
@@ -73,5 +73,5 @@ class BackendHTTPHandler(RequestHandler):
         except KeyError:
             raise HTTPError(401, "Missing X-Backend-Key header")
 
-        if not compare_digest(key, self.api_key):
+        if not equals(key, self.api_key):
             raise HTTPError(401, "Invalid API key")
