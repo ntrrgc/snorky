@@ -1,0 +1,9 @@
+What's new in Snorky 0.1.0-a3 (prerelease)
+==========================================
+
+* Added a ``SNORKY_JSON_ENCODER`` setting in the Django connector, allowing to change the JSON encoder class (as if ``cls`` parameter of ``json.dumps()`` was specified).
+
+* Added debug logging to the Python backend connector. The logging channel is 'snorky'. If the logging level is ``DEBUG`` it will emit a line for each message sent or received between the client and Snorky.
+
+* When ``DataSyncBackend`` does not receive a field now it will include its name in the error message (before only *Missing field* was returned).
+
