@@ -246,8 +246,9 @@ class RPCService(with_metaclass(RPCMeta, Service)):
                 request.reply(None)
         except RPCError as ex:
             error_name = ex.args[0] if len(ex.args) > 0 else "Exception"
-            snorky_log.info("%s in RPC service \"%s\""
-                         % (error_name, self.name))
+            snorky_log.info("%s in RPC service \"%s\", call: %s %s"
+                         % (error_name, self.name, request.command,
+                            request.params))
             request.error(error_name)
         except:
             if request.debug:
