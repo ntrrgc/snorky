@@ -113,7 +113,7 @@ class TestDataSync(RPCTestMixin, TestCase):
                                       "foo": "bar",
                                       "query": "meow",
                                   }])
-        self.assertEqual(msg, "Missing field")
+        self.assertIn("Missing field", msg)
 
     def test_authorize_subscription_unknown_dealer(self):
         msg = self.rpcExpectError(self.backend, None,
