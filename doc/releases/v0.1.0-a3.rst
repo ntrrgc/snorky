@@ -11,3 +11,13 @@ What's new in Snorky 0.1.0-a3 (prerelease)
 
 * When ``DataSyncBackend`` does not receive a field now it will include its name in the error message (before only *Missing field* was returned).
 
+* Now ``SnorkyWebSocketHandler`` pings clients each 90 seconds by default. This is needed in order to not let NAT routers drop long lived otherwise inactive connections.
+
+  The interval can be customized with the ``ping_pong_interval`` option of ``SnorkyWebSocketHandler``. For example, in order to ping the clients with a frequency of 3 minutes (180 seconds) you could use this code:
+
+  .. code:: python
+
+      app_frontend = Application([
+          SnorkyWebSocketHandler.get_route(frontend, "/ws",
+                ping_pong_interval=180),
+      ])
