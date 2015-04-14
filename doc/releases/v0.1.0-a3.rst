@@ -1,5 +1,10 @@
-What's new in Snorky 0.1.0-a3 (prerelease)
-==========================================
+What's new in Snorky 0.1.0-a3
+=============================
+
+Apr 14, 2014
+~~~~~~~~~~~~
+
+Here is a new release with new features.
 
 * ``compare_digest``, a function that provides constant-time string comparison in Python 2.7.7+ and Python 3.3+ has been replaced with `streql <https://pypi.python.org/pypi/streql/3.0.2>`_, a third party module that performs the same task, but it is compatible with older Python versions.
 

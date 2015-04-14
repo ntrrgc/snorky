@@ -4,4 +4,4 @@
 
 from snorky.service_registry import ServiceRegistry
 
-version = "0.1.0-a2"
+version = "0.1.0-a3"
