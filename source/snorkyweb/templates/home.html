@@ -5,9 +5,12 @@
 <div class="jumbotron">
   <h1>Own your data, in real time!</h1>
   <p>Synchronize your web views with remote databases and more.</p>
-  <p class="license"><a href="https://www.mozilla.org/MPL/2.0/">MPL 2.0 Licensed</a></p>
-  <a class="button" href="https://github.com/ntrrgc/snorky/archive/v{{ version }}.tar.gz">Download version {{ version }}</a>
-  <a class="button" href="https://github.com/ntrrgc/snorky">Check in GitHub</a>
+  <p class="license"><a onclick="_gaq.push(['_trackEvent', 'License', 'Jumbotron'])"
+    href="https://www.mozilla.org/MPL/2.0/">MPL 2.0 Licensed</a></p>
+  <a class="button" onclick="_gaq.push(['_trackEvent', 'Download', 'Jumbotron'])"
+    href="https://github.com/ntrrgc/snorky/archive/v{{ version }}.tar.gz">Download version {{ version }}</a>
+  <a class="button" onclick="_gaq.push(['_trackEvent', 'GitHub', 'Jumbotron'])"
+    href="https://github.com/ntrrgc/snorky">Check in GitHub</a>
 </div>
 
 <div class="showcase">
@@ -73,6 +76,9 @@ class MyChatService(RPCService):
 <p>Snorky DataSync is a Snorky service that allows your web users to receive <strong>notifications of events that occur in your database</strong>.</p>
 
 <p>DataSync does not force you to use a specific database software or to host your data in third party servers.</p>
+
+<a class="button" href="https://try.snorkyproject.org/" target="_blank">Try it live!</a>
+
 </div>
 
 <div class="showcase">
