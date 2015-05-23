@@ -1,7 +1,7 @@
 What's new in Snorky 0.1.0-a3
 =============================
 
-Apr 14, 2014
+Apr 14, 2015
 ~~~~~~~~~~~~
 
 Here is a new release with new features.
