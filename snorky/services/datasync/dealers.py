@@ -128,7 +128,6 @@ class BroadcastDealer(Dealer):
     """Dealer that matches all deltas with all subscription items, without
     filters.
     """
-    name = 'broadcast'
     __slots__ = ('items',)
 
     def __init__(self):

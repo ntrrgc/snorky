@@ -16,7 +16,7 @@ class TestBroadcastDealer(unittest.TestCase):
     def test_name(self):
         dealer = FooBroadcastDealer()
 
-        self.assertEqual(dealer.name, 'broadcast')
+        self.assertEqual(dealer.name, 'FooBroadcastDealer')
 
     def test_items(self):
         dealer = FooBroadcastDealer()

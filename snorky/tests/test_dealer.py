@@ -4,7 +4,7 @@
 
 import unittest
 from mock import Mock
-from snorky.services.datasync.dealers import Dealer
+from snorky.services.datasync.dealers import Dealer, BroadcastDealer
 from snorky.services.datasync.delta import \
         Delta, InsertionDelta, UpdateDelta, DeletionDelta
 
@@ -22,6 +22,8 @@ class FakeSubscriptionItem(object):
     def __init__(self):
         self.subscription = FakeSubscription()
 
+class DealerDefaultName(BroadcastDealer):
+    pass
 
 class DummyDealer(Dealer):
     name = 'dummy'
@@ -52,6 +54,9 @@ class TestDealer(unittest.TestCase):
 
     def test_name(self):
         self.assertEqual(self.dealer.name, 'dummy')
+
+    def test_default_name(self):
+        self.assertEqual(DealerDefaultName().name, "DealerDefaultName")
 
     def test_insertion(self):
         insertion = InsertionDelta('foo', {'id': 1, 'name': 'Alice'})
