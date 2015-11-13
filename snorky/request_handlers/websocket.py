@@ -58,7 +58,7 @@ class SnorkyWebSocketHandler(WebSocketHandler):
         # Still alive?
         if self.ws_connection:
             # Send a ping frame
-            self.ping('')
+            self.ping(b'')
 
             # Repeat
             if self.ping_pong_interval:
