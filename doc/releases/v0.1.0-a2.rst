@@ -1,7 +1,7 @@
 What's new in Snorky 0.1.0-a2
 =============================
 
-Apr 12, 2014
+Apr 12, 2015
 ~~~~~~~~~~~~
 
 Updated and finally published in the open!
