@@ -227,7 +227,7 @@ latex_domain_indices = []
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('documentation', 'Snorky.tex', 'Snorky Documentation',
-   'Juan Luis Boya García', 'manual'),
+   u'Juan Luis Boya García', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -257,7 +257,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'snorky', 'Snorky Documentation',
-     ['Juan Luis Boya García'], 1)
+     [u'Juan Luis Boya García'], 1)
 ]
 
 # If true, show URL addresses after external links.
