@@ -3,6 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 import abc
+from snorky.types import with_metaclass
 from collections import namedtuple
 from functools import wraps
 from snorky.types import PY2, StringTypes, Number, MultiDict, items
@@ -14,11 +15,10 @@ class BadQuery(Exception):
     pass
 
 
-class Dealer(object):
+class Dealer(with_metaclass(abc.ABCMeta, object)):
     """Matches dealer data with subscriptions in order to deliver deltas to
     clients.
     """
-    __metaclass__ = abc.ABCMeta
     __slots__ = tuple()
 
     @property
