@@ -24,7 +24,8 @@ sys.path.insert(0, os.path.abspath('..'))
 # Mock libraries so this builds on ReadTheDocs
 import mock
 
-MOCK_MODULES = ['funcsigs', 'requests', 'tornado', 'streql', 'dateutil']
+MOCK_MODULES = ['funcsigs', 'requests', 'tornado', 'streql', 'dateutil',
+                'tornado.ioloop']
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
