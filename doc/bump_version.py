@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
+import sys
 import os
 import re
-import snorky
 from subprocess import call
 from shlex import split as sh
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+import snorky
 
 new_version = snorky.version
 
