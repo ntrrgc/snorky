@@ -1,0 +1,7 @@
+What's new in Snorky 0.1.0-a4
+=============================
+
+Jan 30, 2016
+~~~~~~~~~~~~
+
+Bugfix release, which handles a ``bytes`` vs ``str`` issue in the ping pong feature introduced in ``0.1.0-a3`` when running in Python 3.
