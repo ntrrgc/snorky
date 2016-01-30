@@ -69,7 +69,7 @@ If you use Python 3.4 or later, you already have it installed. Otherwise you can
 Installing Snorky from the tarball
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Download and the `last Snorky package </download>`_ and extract it. In a terminal, change to the directory where you extracted the package and run the following command.
+Download and the `last Snorky package <http://snorkyproject.org/>`_ and extract it. In a terminal, change to the directory where you extracted the package and run the following command.
 
 .. code-block:: bash
 
