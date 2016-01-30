@@ -23,7 +23,7 @@ class FakeSubscriptionItem(object):
         self.subscription = FakeSubscription()
 
 class DealerDefaultName(BroadcastDealer):
-    pass
+    model = 'DummyModel'
 
 class DummyDealer(Dealer):
     name = 'dummy'
