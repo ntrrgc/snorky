@@ -6,7 +6,10 @@ from __future__ import absolute_import
 import json
 from snorky.backend import SnorkyHTTPTransport, SnorkyBackend, SnorkyError
 from django.conf import settings
-from django.utils.module_loading import import_by_path
+try:
+    from django.utils.module_loading import import_by_path
+except ImportError:
+    from django.utils.module_loading import import_string
 from django.db.models.signals import pre_save, post_save, pre_delete, \
         post_delete
 
