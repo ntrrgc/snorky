@@ -13,7 +13,7 @@ Snorky runs on top of `Tornado <http://www.tornadoweb.org/>`_ a fast, performant
 Quick links
 ===========
 
-* Download version 0.1.0-a1: `snorky-0.1.0-a1.tar.gz <snorky-0.1.0-a1.tar.gz>`_ (:doc:`release notes <releases>`)
+* Download version 0.1.0-a4: `snorky-0.1.0-a4.tar.gz <snorky-0.1.0-a4.tar.gz>`_ (:doc:`release notes <releases>`)
 
 * :doc:`guide`
 
