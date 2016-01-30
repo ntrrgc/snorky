@@ -40,6 +40,7 @@ Often your dealer only has to filter models by a certain field which clients sub
 For example, the ``CommentsByBlogEntry`` dealer would receive subscriptions that specify a blog entry id as query, and each time it receives a delta of model ``Comment``, it would look which blog entry id it is for, and forward it to those clients which subscribed to it.
 
 .. automodule:: snorky.services.datasync.dealers
+    :noindex:
 
     Snorky comes with a :py:class:`SimpleDealer` class that leverages this pattern.
 
@@ -65,6 +66,7 @@ Broadcast dealers
 ~~~~~~~~~~~~~~~~~
 
 .. automodule:: snorky.services.datasync.dealers
+    :noindex:
 
     Sometimes you want the clients to receive all deltas for a certain model class, unfiltered. For this purpose there is the :py:class:`BroadcastDealer` class.
 
@@ -85,6 +87,7 @@ Filter dealers
 ~~~~~~~~~~~~~~
 
 .. automodule:: snorky.services.datasync.dealers
+    :noindex:
 
     For cases where clients need to ask for data filtered to complex criteria :py:class:`FilterDealer` provides an advanced dealer which supports complex filter expressions.
 
