@@ -24,7 +24,7 @@ You can install Snorky from the Python package index:
 Documentation
 =============
 
-Snorky documentation is hosted in *Read the Docs*. You can check it out at http://snorky.readthedocs.org/.
+Snorky documentation is hosted in *Read the Docs*. You can check it out at http://docs.snorkyproject.org/.
 
 Simple PubSub server
 ====================
