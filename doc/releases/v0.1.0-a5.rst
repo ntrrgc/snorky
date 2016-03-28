@@ -1,4 +1,4 @@
-What's new in Snorky 0.1.0-a4
+What's new in Snorky 0.1.0-a5
 =============================
 
 March 28, 2016
@@ -8,7 +8,7 @@ March 28, 2016
 
 * Fixed bug `#3 <https://github.com/ntrrgc/snorky/issues/3>`_ that affected Django 1.8+ integration.
 
-* Added a new React.js demo, courtesy of `@Alternhuman <https://github.com/Alternhuman>`_.
+* Added a new React.js demo.
 
 On top of that:
 
