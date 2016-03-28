@@ -1,0 +1,17 @@
+What's new in Snorky 0.1.0-a4
+=============================
+
+March 28, 2016
+~~~~~~~~~~~~~~
+
+`@Alternhuman <https://github.com/Alternhuman>`_ contributed several features and bug fixes:
+
+* Fixed bug `#3 <https://github.com/ntrrgc/snorky/issues/3>`_ that affected Django 1.8+ integration.
+
+* Added a new React.js demo, courtesy of `@Alternhuman <https://github.com/Alternhuman>`_.
+
+On top of that:
+
+* Both ToDo demo applications have been updated to Django 1.9 and Django REST Framework 3.3.
+
+  This also has allowed them to work in Python 3.5, which is incompatible with older Django versions.
