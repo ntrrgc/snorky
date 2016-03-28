@@ -43,9 +43,7 @@ Snorky works in either:
 
 * Python 3.3 or later
 
-* Python 2.7.7 or later. **Note it does not work with 2.7.6 or any other earlier version!**
-
-This version requirement is because :py:func:`hmac.compare_digest` is new in Python 2.7.7. That function is needed in order to perform time attack-resilient string comparison.
+* Python 2.7 or later.
 
 You can check what version of Python you have writing ``python --version`` in a command shell.
 
