@@ -11,7 +11,6 @@ import snorky.backend.django.rest_framework as snorky
 
 class TaskViewSet(snorky.ListSubscribeModelMixin,
                   viewsets.ModelViewSet):
-    model = models.Task
     queryset = models.Task.objects.all()
     dealer = "AllTasks"
     serializer_class = serializers.TaskSerializer
