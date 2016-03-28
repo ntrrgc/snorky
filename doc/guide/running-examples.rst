@@ -8,7 +8,7 @@ You can find them in ``snorky/demos`` inside the project root.
 Snorky ToDo demo
 ~~~~~~~~~~~~~~~~
 
-In ``snorky/demos/snorky_todo`` you can find a simple note taking application. The demo is based in `TodoMVC <http://todomvc.com/>`_. It works with Django and AngularJS.
+In ``snorky/demos/snorky_todo_angular`` you can find a simple note taking application. The demo is based in `TodoMVC <http://todomvc.com/>`_. It works with Django and AngularJS.
 
 In order to run it, first you must install its dependencies (e.g. Django). To do so you can run the following command:
 

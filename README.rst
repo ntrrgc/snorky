@@ -275,7 +275,7 @@ The following code shows how this array of tasks could be used in an AngularJS t
       </li>
     </ul>
 
-The full demo code is available in `snorky/demos/snorky_todo`, based on `TodoMVC <http://todomvc.com/>`_.
+The full demo code is available in `snorky/demos/snorky_todo_angular`, based on `TodoMVC <http://todomvc.com/>`_.
 
 Other protocols
 ===============
