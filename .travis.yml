@@ -1,0 +1,21 @@
+language: python
+env:
+  - DJANGO_VERSION=1.6.11
+  - DJANGO_VERSION=1.7.8
+  - DJANGO_VERSION=1.8.2
+  - DJANGO_VERSION=1.9.4
+python:
+    # there are several unsupported versions here
+    - "2.6"
+    - "2.7.0"
+    - "2.7.7"
+    - "3.2"
+    - "3.3"
+    - "3.4"
+    - "3.5"
+    - "nightly"
+install: 
+    - pip install -r requirements-devel.txt 
+    - pip install -q Django==$DJANGO_VERSION
+    - python setup.py install"
+script: "python -m unittest discover snorky.tests"
