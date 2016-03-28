@@ -18,4 +18,5 @@ install:
     - pip install -r requirements-devel.txt 
     - pip install -q Django==$DJANGO_VERSION
     - python setup.py install"
-script: "python -m unittest discover snorky.tests"
+script: 
+    - python -m unittest discover snorky.tests
