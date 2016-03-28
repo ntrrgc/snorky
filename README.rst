@@ -1,9 +1,12 @@
 .. image:: https://raw.githubusercontent.com/ntrrgc/snorky/master/doc/logo.png
 
+Snorky is a framework for building WebSocket servers based on patterns.
+
 .. image:: https://travis-ci.org/ntrrgc/snorky.svg?branch=master
     :target: https://travis-ci.org/ntrrgc/snorky
 
-Snorky is a framework for building WebSocket servers based on patterns.
+.. image:: https://readthedocs.org/projects/snorky/badge/?version=latest
+    :target: http://docs.snorkyproject.org/en/latest/
 
 Snorky runs on top of `Tornado <http://www.tornadoweb.org/>`_ a fast, performant, asynchronous web server. Snorky is intended to run as a separated process, therefore being able to communicate with web applications written in any programming language or web framework.
 
