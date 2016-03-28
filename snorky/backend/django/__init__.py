@@ -9,7 +9,7 @@ from django.conf import settings
 try:
     from django.utils.module_loading import import_by_path
 except ImportError:
-    from django.utils.module_loading import import_string
+    from django.utils.module_loading import import_string as import_by_path
 from django.db.models.signals import pre_save, post_save, pre_delete, \
         post_delete
 
