@@ -1,2 +1,7 @@
+snorky/demos/chat_angular/lib linguist-vendored
+snorky/demos/chat/lib linguist-vendored
+snorky/demos/pubsub_backend/lib linguist-vendored
+snorky/demos/pubsub_readme/lib linguist-vendored
+snorky/frontend/node_modules/karma/lib linguist-vendored
 snorky/frontend/lib linguist-vendored
-lib linguist-vendored
+snorky/demos/snorky_todo_react/snorky_todo/static linguist-vendored
