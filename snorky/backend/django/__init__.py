@@ -87,7 +87,7 @@ def handle_pre_save(sender, instance, raw, using, update_fields, **kwargs):
 
     If the item did exist before, stores an update delta in ``_snorky_delta``.
     """
-    existent_object_query = sender.objects.filter(id=instance.id)
+    existent_object_query = sender.objects.filter(pk=instance.pk)
     created = (len(existent_object_query) == 0)
     if not created:
         new_data = instance.jsonify()
